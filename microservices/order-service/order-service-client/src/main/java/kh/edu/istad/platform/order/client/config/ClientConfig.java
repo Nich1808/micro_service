@@ -3,7 +3,7 @@ package kh.edu.istad.platform.order.client.config;
 import kh.edu.istad.platform.order.client.exception.DownStreamServiceException;
 import kh.edu.istad.platform.order.client.httpclient.BusinessHttpClient;
 import kh.edu.istad.platform.order.client.httpclient.CustomerHttpClient;
-import kh.edu.istad.platform.order.domain.entity.Business;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -4,8 +4,10 @@ java-language-version = "25"
 spring-boot-gradle-plugin = "4.1.1"
 dependency-management-plugin = "1.1.7"
 spring-doc-openapi = "3.2.0"
+protobuf-gradle-plugin = "0.10.1"
 
 [libraries]
+protobuf-gradle-plugin = { module = "com.google.protobuf:com.google.protobuf.gradle.plugin", version.ref = "protobuf-gradle-plugin" }
 spring-boot-gradle-plugin = {module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "spring-boot-gradle-plugin"}
 dependency-management-plugin = {module = "io.spring.gradle:dependency-management-plugin", version.ref = "dependency-management-plugin"}
 spring-boot-starter-data-r2dbc = {module = "org.springframework.boot:spring-boot-starter-data-r2dbc" }

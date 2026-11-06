@@ -1,0 +1,49 @@
+plugins {
+    id 'java-library'
+    id 'spring-boot-common-conventions'
+    id 'com.google.protobuf'
+}
+
+group = 'kh.edu.istad'
+version = '1.0.0'
+
+
+
+repositories {
+    mavenCentral()
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:4.31.1'
+    }
+
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.72.0'
+        }
+    }
+
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}
+
+
+dependencies {
+    api 'com.google.protobuf:protobuf-java:4.31.1'
+    api 'io.grpc:grpc-stub:1.72.0'
+    api 'io.grpc:grpc-protobuf:1.72.0'
+
+    compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
+}

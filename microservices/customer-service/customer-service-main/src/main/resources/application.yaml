@@ -13,7 +13,7 @@ spring:
 
   mongodb:
     host: localhost
-    port: 2026
+    port: 2027
     username: mongod
     database: db_customer
     authentication-database: admin

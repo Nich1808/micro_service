@@ -16,6 +16,7 @@
                 <projects>
                   <project path="$PROJECT_DIR$/istad-common" />
                   <project path="$PROJECT_DIR$/istad-common/istad-common-domain" />
+                  <project path="$PROJECT_DIR$/istad-common/istad-common-grpc" />
                   <project path="$PROJECT_DIR$/istad-common/istad-common-restapi" />
                   <project path="$PROJECT_DIR$/istad-common/istad-common-swagger" />
                   <project path="$PROJECT_DIR$/istad-common/istad-common-webflux" />
@@ -37,6 +38,7 @@
                   <project path="$PROJECT_DIR$/microservices/customer-service/customer-service-domain" />
                   <project path="$PROJECT_DIR$/microservices/customer-service/customer-service-domain/customer-application-service" />
                   <project path="$PROJECT_DIR$/microservices/customer-service/customer-service-domain/customer-domain-core" />
+                  <project path="$PROJECT_DIR$/microservices/customer-service/customer-service-grpc" />
                   <project path="$PROJECT_DIR$/microservices/customer-service/customer-service-main" />
                   <project path="$PROJECT_DIR$/microservices/customer-service/customer-service-message" />
                   <project path="$PROJECT_DIR$/microservices/customer-service/customer-service-persistence" />
@@ -74,6 +76,7 @@
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/istad-common" />
             <option value="$PROJECT_DIR$/istad-common/istad-common-domain" />
+            <option value="$PROJECT_DIR$/istad-common/istad-common-grpc" />
             <option value="$PROJECT_DIR$/istad-common/istad-common-restapi" />
             <option value="$PROJECT_DIR$/istad-common/istad-common-swagger" />
             <option value="$PROJECT_DIR$/istad-common/istad-common-webflux" />
@@ -83,6 +86,7 @@
             <option value="$PROJECT_DIR$/microservices/customer-service/customer-service-domain" />
             <option value="$PROJECT_DIR$/microservices/customer-service/customer-service-domain/customer-application-service" />
             <option value="$PROJECT_DIR$/microservices/customer-service/customer-service-domain/customer-domain-core" />
+            <option value="$PROJECT_DIR$/microservices/customer-service/customer-service-grpc" />
             <option value="$PROJECT_DIR$/microservices/customer-service/customer-service-main" />
             <option value="$PROJECT_DIR$/microservices/customer-service/customer-service-message" />
             <option value="$PROJECT_DIR$/microservices/customer-service/customer-service-persistence" />
@@ -98,7 +102,6 @@
             <option value="$PROJECT_DIR$/microservices/order-service/order-service-persistence" />
           </set>
         </option>
-        <option name="myGradleHome" value="" />
       </GradleProjectSettings>
     </option>
   </component>

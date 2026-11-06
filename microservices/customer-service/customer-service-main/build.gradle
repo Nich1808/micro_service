@@ -8,11 +8,13 @@ dependencies {
     implementation "kh.edu.istad:istad-common-swagger"
     implementation 'org.springframework.cloud:spring-cloud-starter-consul-discovery'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'kh.edu.istad:customer-domain-core:1.1'
-    implementation 'kh.edu.istad:customer-application-service'
-    implementation 'kh.edu.istad:customer-service-message'
-    implementation 'kh.edu.istad:customer-service-persistence'
-    implementation 'kh.edu.istad:customer-service-restapi'
+    implementation project(':customer-service-domain:customer-domain-core')
+    implementation project(':customer-service-domain:customer-application-service')
+    implementation project(':customer-service-message')
+    implementation project(':customer-service-persistence')
+    implementation project(':customer-service-restapi')
+    implementation project(':customer-service-grpc')
 
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-grpc-client'
 }

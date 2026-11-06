@@ -9,4 +9,8 @@ repositories {
 
 dependencies {
     implementation libs.bundles.gradle.dependency.management
+    dependencies {
+        implementation libs.bundles.gradle.dependency.management
+        implementation libs.protobuf.gradle.plugin
+    }
 }

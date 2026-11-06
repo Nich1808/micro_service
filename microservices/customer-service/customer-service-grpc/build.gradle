@@ -1,0 +1,32 @@
+//plugins {
+//    id 'java-common-conventions'
+//}
+//
+//dependencies {
+//    implementation 'kh.edu.istad:istad-common-grpc'
+//    implementation 'kh.edu.istad:customer-application-service'
+//    compileOnly 'org.projectlombok:lombok'
+//    annotationProcessor 'org.projectlombok:lombok'
+//
+////    implementation 'io.grpc:grpc-netty-shaded:1.85.0'
+//
+//}
+
+
+plugins {
+    id 'spring-common-conventions'
+}
+
+dependencies {
+    implementation 'kh.edu.istad:istad-common-grpc'
+
+    implementation project(
+            ':customer-service-domain:customer-application-service'
+    )
+
+    implementation 'org.springframework:spring-context'
+    implementation 'io.projectreactor:reactor-core'
+
+    implementation 'io.grpc:grpc-netty-shaded:1.72.0'
+    implementation 'io.grpc:grpc-services'
+}
