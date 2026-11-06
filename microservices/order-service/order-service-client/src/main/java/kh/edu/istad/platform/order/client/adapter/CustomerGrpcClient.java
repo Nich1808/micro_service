@@ -6,8 +6,10 @@ import kh.edu.istad.grpc.customer.CustomerResponse;
 import kh.edu.istad.grpc.customer.CustomerServiceGrpc;
 import kh.edu.istad.grpc.customer.GetCustomerRequest;
 import kh.edu.istad.grpc.customer.GetCustomersRequest;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 
+@Slf4j
 public class CustomerGrpcClient {
 
     private final CustomerServiceGrpc.CustomerServiceBlockingStub blockingStub;
@@ -22,14 +24,30 @@ public class CustomerGrpcClient {
     }
 
     public CustomerResponse getCustomer(String customerId) {
+
+        log.info("Calling Customer gRPC getCustomer, customerId={}", customerId);
+
         GetCustomerRequest request = GetCustomerRequest.newBuilder()
                 .setCustomerId(customerId)
                 .build();
 
-        return blockingStub.getCustomer(request);
+        try {
+            CustomerResponse response = blockingStub.getCustomer(request);
+
+            log.info("gRPC getCustomer SUCCESS: {}", response);
+
+            return response;
+
+        } catch (Exception e) {
+            log.error("gRPC getCustomer FAILED: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     public Flux<CustomerResponse> getCustomers() {
+
+        log.info("Calling Customer gRPC getCustomers");
+
         return Flux.create(sink -> {
             GetCustomersRequest request = GetCustomersRequest.newBuilder()
                     .build();
@@ -38,16 +56,19 @@ public class CustomerGrpcClient {
 
                 @Override
                 public void onNext(CustomerResponse response) {
+                    log.info("gRPC received customer: {}", response);
                     sink.next(response);
                 }
 
                 @Override
                 public void onError(Throwable error) {
+                    log.error("gRPC getCustomers FAILED: {}", error.getMessage(), error);
                     sink.error(error);
                 }
 
                 @Override
                 public void onCompleted() {
+                    log.info("gRPC getCustomers COMPLETED successfully");
                     sink.complete();
                 }
             });
