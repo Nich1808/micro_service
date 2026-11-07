@@ -2,7 +2,7 @@ package kh.edu.istad.platform.order.client.config;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import kh.edu.istad.grpc.customer.CustomerServiceGrpc;
+import build.buf.gen.customer.CustomerServiceGrpc;
 import kh.edu.istad.platform.order.client.adapter.CustomerGrpcClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

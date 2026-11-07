@@ -3,10 +3,10 @@ package kh.edu.istad.platform.customer.grpc;
 
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
-import kh.edu.istad.grpc.customer.CustomerResponse;
-import kh.edu.istad.grpc.customer.CustomerServiceGrpc;
-import kh.edu.istad.grpc.customer.GetCustomerRequest;
-import kh.edu.istad.grpc.customer.GetCustomersRequest;
+import build.buf.gen.customer.CustomerResponse;
+import build.buf.gen.customer.CustomerServiceGrpc;
+import build.buf.gen.customer.GetCustomerRequest;
+import build.buf.gen.customer.GetCustomersRequest;
 import kh.edu.istad.platform.customer.domain.usecase.QueryCustomerUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -27,6 +27,8 @@ dependencies {
     implementation 'org.springframework:spring-context'
     implementation 'io.projectreactor:reactor-core'
 
-    implementation 'io.grpc:grpc-netty-shaded:1.72.0'
-    implementation 'io.grpc:grpc-services'
+    implementation 'io.grpc:grpc-netty-shaded:1.85.1'
+    implementation 'io.grpc:grpc-services:1.85.1'
+
+    implementation 'com.google.protobuf:protobuf-java:4.36.2'
 }

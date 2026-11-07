@@ -10,6 +10,28 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-webclient'
     implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+
+    implementation 'io.grpc:grpc-netty-shaded:1.85.1'
+
+    implementation 'com.google.protobuf:protobuf-java:4.36.2'
+    implementation 'com.google.protobuf:protobuf-java-util:4.36.2'
+
     testImplementation 'io.projectreactor:reactor-test'
-    implementation 'io.grpc:grpc-netty-shaded:1.83.1'
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}
+
+configurations.configureEach {
+    resolutionStrategy {
+        force(
+                'com.google.protobuf:protobuf-java:4.36.2',
+                'com.google.protobuf:protobuf-java-util:4.36.2'
+        )
+    }
 }

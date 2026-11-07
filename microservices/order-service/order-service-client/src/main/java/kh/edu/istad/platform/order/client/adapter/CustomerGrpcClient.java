@@ -2,10 +2,10 @@
 package kh.edu.istad.platform.order.client.adapter;
 
 import io.grpc.stub.StreamObserver;
-import kh.edu.istad.grpc.customer.CustomerResponse;
-import kh.edu.istad.grpc.customer.CustomerServiceGrpc;
-import kh.edu.istad.grpc.customer.GetCustomerRequest;
-import kh.edu.istad.grpc.customer.GetCustomersRequest;
+import build.buf.gen.customer.CustomerResponse;
+import build.buf.gen.customer.CustomerServiceGrpc;
+import build.buf.gen.customer.GetCustomerRequest;
+import build.buf.gen.customer.GetCustomersRequest;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 
