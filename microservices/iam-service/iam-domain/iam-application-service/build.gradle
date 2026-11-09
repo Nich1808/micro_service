@@ -1,0 +1,17 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'kh.edu.istad'
+version = '0.0.1-SNAPSHOT'
+description = 'iam-application-service'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+dependencies {
+    api project(':iam-domain:iam-domain-core')
+}

@@ -1,0 +1,973 @@
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/identity/FindOrProvisionFederatedUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.identity;
+
+import kh.edu.istad.platform.iamapplicationservice.command.identity.FederatedIdentityCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.user.AuthUserResult;
+
+public interface FindOrProvisionFederatedUserUseCase {
+    AuthUserResult execute(FederatedIdentityCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/identity/LinkIdentityUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.identity;
+
+import kh.edu.istad.platform.iamapplicationservice.command.identity.FederatedIdentityCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.identity.IdentityResult;
+import java.util.UUID;
+
+public interface LinkIdentityUseCase {
+    IdentityResult execute(UUID userUuid, FederatedIdentityCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/identity/ListUserIdentitiesUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.identity;
+
+import kh.edu.istad.platform.iamapplicationservice.result.identity.IdentityResult;
+import java.util.List;
+import java.util.UUID;
+
+public interface ListUserIdentitiesUseCase {
+    List<IdentityResult> execute(UUID userUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/identity/UnlinkIdentityUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.identity;
+
+import java.util.UUID;
+
+public interface UnlinkIdentityUseCase {
+    void execute(UUID userUuid, UUID identityUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/permission/ActivatePermissionUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import java.util.UUID;
+
+public interface ActivatePermissionUseCase {
+    void execute(UUID permissionUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/permission/CreatePermissionUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import kh.edu.istad.platform.iamapplicationservice.command.permission.CreatePermissionCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.permission.PermissionResult;
+
+public interface CreatePermissionUseCase {
+    PermissionResult execute(CreatePermissionCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/permission/DeactivatePermissionUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import java.util.UUID;
+
+public interface DeactivatePermissionUseCase {
+    void execute(UUID permissionUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/permission/DeletePermissionUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import java.util.UUID;
+
+public interface DeletePermissionUseCase {
+    void execute(UUID permissionUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/permission/GetPermissionUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import kh.edu.istad.platform.iamapplicationservice.result.permission.PermissionResult;
+import java.util.UUID;
+
+public interface GetPermissionUseCase {
+    PermissionResult execute(UUID permissionUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/permission/ListPermissionsUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import kh.edu.istad.platform.iamapplicationservice.query.permission.PermissionFilterQuery;
+import kh.edu.istad.platform.iamapplicationservice.result.common.PageResult;
+import kh.edu.istad.platform.iamapplicationservice.result.permission.PermissionResult;
+
+public interface ListPermissionsUseCase {
+    PageResult<PermissionResult> execute(PermissionFilterQuery query);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/permission/UpdatePermissionUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import kh.edu.istad.platform.iamapplicationservice.command.permission.UpdatePermissionCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.permission.PermissionResult;
+
+public interface UpdatePermissionUseCase {
+    PermissionResult execute(UpdatePermissionCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/role/ActivateRoleUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import java.util.UUID;
+
+public interface ActivateRoleUseCase {
+    void execute(UUID roleUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/role/AssignPermissionsToRoleUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import kh.edu.istad.platform.iamapplicationservice.command.role.AssignPermissionsToRoleCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.role.PermissionAssignmentResult;
+import java.util.List;
+
+public interface AssignPermissionsToRoleUseCase {
+    List<PermissionAssignmentResult> execute(AssignPermissionsToRoleCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/role/CreateRoleUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import kh.edu.istad.platform.iamapplicationservice.command.role.CreateRoleCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.role.RoleResult;
+
+public interface CreateRoleUseCase {
+    RoleResult execute(CreateRoleCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/role/DeactivateRoleUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import java.util.UUID;
+
+public interface DeactivateRoleUseCase {
+    void execute(UUID roleUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/role/DeleteRoleUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import java.util.UUID;
+
+public interface DeleteRoleUseCase {
+    void execute(UUID roleUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/role/GetRoleUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import kh.edu.istad.platform.iamapplicationservice.result.role.RoleResult;
+import java.util.UUID;
+
+public interface GetRoleUseCase {
+    RoleResult execute(UUID roleUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/role/ListRolesUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import kh.edu.istad.platform.iamapplicationservice.query.role.RoleFilterQuery;
+import kh.edu.istad.platform.iamapplicationservice.result.common.PageResult;
+import kh.edu.istad.platform.iamapplicationservice.result.role.RoleSummary;
+
+public interface ListRolesUseCase {
+    PageResult<RoleSummary> execute(RoleFilterQuery query);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/role/RevokePermissionFromRoleUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import java.util.UUID;
+
+public interface RevokePermissionFromRoleUseCase {
+    void execute(UUID roleUuid, UUID permissionUuid, String reason);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/role/UpdateRoleUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import kh.edu.istad.platform.iamapplicationservice.command.role.UpdateRoleCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.role.RoleResult;
+
+public interface UpdateRoleUseCase {
+    RoleResult execute(UpdateRoleCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/AssignRolesToUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.AssignRolesToUserCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.user.RoleAssignmentResult;
+import java.util.List;
+
+public interface AssignRolesToUserUseCase {
+    List<RoleAssignmentResult> execute(AssignRolesToUserCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/ChangePasswordUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.ChangePasswordCommand;
+
+public interface ChangePasswordUseCase {
+    void execute(ChangePasswordCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/CreateUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.CreateUserCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserResult;
+
+public interface CreateUserUseCase {
+    UserResult execute(CreateUserCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/DeleteUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import java.util.UUID;
+
+public interface DeleteUserUseCase {
+    void execute(UUID userUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/DisableUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import java.util.UUID;
+
+public interface DisableUserUseCase {
+    void execute(UUID userUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/EnableUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import java.util.UUID;
+
+public interface EnableUserUseCase {
+    void execute(UUID userUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/GetUserAuthoritiesUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserAuthoritiesResult;
+import java.util.UUID;
+
+public interface GetUserAuthoritiesUseCase {
+    UserAuthoritiesResult execute(UUID userUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/GetUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserResult;
+import java.util.UUID;
+
+public interface GetUserUseCase {
+    UserResult execute(UUID userUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/GrantPermissionsToUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.GrantPermissionsToUserCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.user.PermissionGrantResult;
+import java.util.List;
+
+public interface GrantPermissionsToUserUseCase {
+    List<PermissionGrantResult> execute(GrantPermissionsToUserCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/ListUsersUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.query.user.UserFilterQuery;
+import kh.edu.istad.platform.iamapplicationservice.result.common.PageResult;
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserSummary;
+
+public interface ListUsersUseCase {
+    PageResult<UserSummary> execute(UserFilterQuery query);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/LoadUserForAuthenticationUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.result.user.AuthUserResult;
+
+public interface LoadUserForAuthenticationUseCase {
+    AuthUserResult execute(String usernameOrEmail);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/LockUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import java.util.UUID;
+
+public interface LockUserUseCase {
+    void execute(UUID userUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/RecordLoginAttemptUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+public interface RecordLoginAttemptUseCase {
+    void execute(String usernameOrEmail, boolean success);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/RegisterUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.RegisterUserCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserResult;
+
+public interface RegisterUserUseCase {
+    UserResult execute(RegisterUserCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/ResetUserPasswordUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.ResetUserPasswordCommand;
+
+public interface ResetUserPasswordUseCase {
+    void execute(ResetUserPasswordCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/RevokePermissionFromUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import java.util.UUID;
+
+public interface RevokePermissionFromUserUseCase {
+    void execute(UUID userUuid, UUID permissionUuid, String reason);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/RevokeRoleFromUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import java.util.UUID;
+
+public interface RevokeRoleFromUserUseCase {
+    void execute(UUID userUuid, UUID roleUuid, String reason);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/UnlockUserUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import java.util.UUID;
+
+public interface UnlockUserUseCase {
+    void execute(UUID userUuid);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/usecase/user/UpdateUserProfileUseCase.java ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.UpdateUserProfileCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserResult;
+
+public interface UpdateUserProfileUseCase {
+    UserResult execute(UpdateUserProfileCommand command);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/identity/FederatedIdentityCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.identity;
+
+import kh.edu.istad.platform.iamdomaincore.enums.IdentityProvider;
+
+import java.util.Map;
+
+public record FederatedIdentityCommand(
+        IdentityProvider provider,
+        String providerSubject,
+        String email,
+        boolean emailVerified,
+        String displayName,
+        String username,
+        String pictureUrl,
+        Map<String, Object> attributes
+) {
+    public FederatedIdentityCommand {
+        attributes = attributes == null ? Map.of() : Map.copyOf(attributes);
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/permission/CreatePermissionCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.permission;
+
+public record CreatePermissionCommand(
+        String resource,
+        String action,
+        String description
+) {}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/permission/UpdatePermissionCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.permission;
+
+import java.util.UUID;
+
+public record UpdatePermissionCommand(
+        UUID permissionUuid,
+        String resource,
+        String action,
+        String description
+) {}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/role/AssignPermissionsToRoleCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.role;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+public record AssignPermissionsToRoleCommand(
+        UUID roleUuid,
+        List<UUID> permissionUuids,
+        OffsetDateTime expiresAt,
+        String reason
+) {
+    public AssignPermissionsToRoleCommand {
+        permissionUuids = List.copyOf(permissionUuids);
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/role/CreateRoleCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.role;
+
+import java.util.List;
+import java.util.UUID;
+
+public record CreateRoleCommand(
+        String name,
+        String description,
+        List<UUID> permissionUuids
+) {
+    public CreateRoleCommand {
+        permissionUuids = permissionUuids == null
+                ? List.of()
+                : List.copyOf(permissionUuids);
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/role/UpdateRoleCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.role;
+
+import java.util.UUID;
+
+public record UpdateRoleCommand(
+        UUID roleUuid,
+        String name,
+        String description
+) {}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/AssignRolesToUserCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+public record AssignRolesToUserCommand(
+        UUID userUuid,
+        List<UUID> roleUuids,
+        OffsetDateTime expiresAt,
+        String reason
+) {
+    public AssignRolesToUserCommand {
+        roleUuids = List.copyOf(roleUuids);
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/ChangePasswordCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+import java.util.UUID;
+
+public record ChangePasswordCommand(
+        UUID userUuid,
+        String currentPassword,
+        String newPassword
+) {
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/CreateUserCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+public record CreateUserCommand(
+        String username,
+        String email,
+        String rawPassword,
+        String givenName,
+        String familyName
+) {
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/GrantPermissionsToUserCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+import kh.edu.istad.platform.iamdomaincore.enums.PermissionEffect;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+public record GrantPermissionsToUserCommand(
+        UUID userUuid,
+        List<UUID> permissionUuids,
+        PermissionEffect effect,
+        OffsetDateTime expiresAt,
+        String reason
+) {
+    public GrantPermissionsToUserCommand {
+        permissionUuids = List.copyOf(permissionUuids);
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/RegisterUserCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+public record RegisterUserCommand(
+        String username,
+        String email,
+        String rawPassword,
+        String givenName,
+        String familyName
+) {
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/ResetUserPasswordCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+import java.util.UUID;
+
+public record ResetUserPasswordCommand(
+        UUID userUuid,
+        String newPassword
+) {
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/UpdateUserProfileCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+public record UpdateUserProfileCommand(
+        UUID userUuid,
+        String givenName,
+        String familyName,
+        String middleName,
+        String nickname,
+        String gender,
+        LocalDate birthdate,
+        String profileUrl,
+        String pictureUrl,
+        String websiteUrl,
+        String zoneinfo,
+        String locale,
+        String phoneNumber,
+        String streetAddress,
+        String locality,
+        String region,
+        String postalCode,
+        String country
+) {
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/query/permission/PermissionFilterQuery.java ==========
+package kh.edu.istad.platform.iamapplicationservice.query.permission;
+
+public record PermissionFilterQuery(
+        int page,
+        int size,
+        String sort
+) {
+    public PermissionFilterQuery {
+        if (page < 0 || size < 1) {
+            throw new IllegalArgumentException("Invalid pagination values");
+        }
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/query/role/RoleFilterQuery.java ==========
+package kh.edu.istad.platform.iamapplicationservice.query.role;
+
+public record RoleFilterQuery(
+        int page,
+        int size,
+        String sort
+) {
+    public RoleFilterQuery {
+        if (page < 0 || size < 1) {
+            throw new IllegalArgumentException("Invalid pagination values");
+        }
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/query/user/UserFilterQuery.java ==========
+package kh.edu.istad.platform.iamapplicationservice.query.user;
+
+public record UserFilterQuery(
+        int page,
+        int size,
+        String sort
+) {
+    public UserFilterQuery {
+        if (page < 0 || size < 1) {
+            throw new IllegalArgumentException("Invalid pagination values");
+        }
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/common/PageResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.common;
+
+import java.util.List;
+
+public record PageResult<T>(
+        List<T> content,
+        Page page
+) {
+    public PageResult {
+        content = List.copyOf(content);
+    }
+
+    public record Page(
+            int number,
+            int size,
+            long totalElements,
+            int totalPages
+    ) {
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/identity/IdentityResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.identity;
+
+import kh.edu.istad.platform.iamdomaincore.enums.IdentityProvider;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record IdentityResult(
+        UUID uuid,
+        IdentityProvider provider,
+        String email,
+        String displayName,
+        OffsetDateTime linkedAt
+) {
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/permission/PermissionResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.permission;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record PermissionResult(
+        UUID uuid,
+        String name,
+        String resource,
+        String action,
+        String description,
+        boolean system,
+        boolean active,
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt
+) {}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/role/PermissionAssignmentResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.role;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record PermissionAssignmentResult(
+        UUID permissionUuid,
+        String permissionName,
+        OffsetDateTime assignedAt,
+        String assignedBy,
+        OffsetDateTime expiresAt
+) {}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/role/RoleResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.role;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record RoleResult(
+        UUID uuid,
+        String name,
+        String description,
+        boolean system,
+        boolean active,
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt
+) {}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/role/RoleSummary.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.role;
+
+import java.util.UUID;
+
+public record RoleSummary(
+        UUID uuid,
+        String name,
+        boolean active
+) {
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/user/AuthUserResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.user;
+
+import java.util.List;
+import java.util.UUID;
+
+public record AuthUserResult(
+        UUID uuid,
+        String username,
+        String passwordHash,
+        boolean enabled,
+        boolean accountNonExpired,
+        boolean accountNonLocked,
+        boolean credentialsNonExpired,
+        List<String> authorities
+) {
+    public AuthUserResult {
+        authorities = List.copyOf(authorities);
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/user/PermissionGrantResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.user;
+
+import kh.edu.istad.platform.iamdomaincore.enums.PermissionEffect;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record PermissionGrantResult(
+        UUID permissionUuid,
+        String permissionName,
+        PermissionEffect effect,
+        OffsetDateTime assignedAt,
+        String assignedBy,
+        OffsetDateTime expiresAt
+) {}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/user/RoleAssignmentResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.user;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record RoleAssignmentResult(
+        UUID roleUuid,
+        String roleName,
+        OffsetDateTime assignedAt,
+        String assignedBy,
+        OffsetDateTime expiresAt
+) {}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/user/UserAuthoritiesResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.user;
+
+import kh.edu.istad.platform.iamdomaincore.enums.PermissionEffect;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+public record UserAuthoritiesResult(
+        List<RoleAuthority> roles,
+        List<DirectPermission> directPermissions,
+        List<String> effectivePermissions
+) {
+    public UserAuthoritiesResult {
+        roles = List.copyOf(roles);
+        directPermissions = List.copyOf(directPermissions);
+        effectivePermissions = List.copyOf(effectivePermissions);
+    }
+
+    public record RoleAuthority(
+            UUID uuid,
+            String name,
+            OffsetDateTime expiresAt
+    ) {
+    }
+
+    public record DirectPermission(
+            String name,
+            PermissionEffect effect
+    ) {
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/user/UserResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.user;
+
+import kh.edu.istad.platform.iamapplicationservice.result.role.RoleSummary;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+public record UserResult(
+        UUID uuid,
+        String username,
+        String email,
+        boolean emailVerified,
+        String name,
+        String locale,
+        boolean enabled,
+        List<RoleSummary> roles,
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt
+) {
+    public UserResult {
+        roles = List.copyOf(roles);
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/user/UserSummary.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.user;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record UserSummary(
+        UUID uuid,
+        String username,
+        String email,
+        String name,
+        boolean enabled,
+        OffsetDateTime createdAt
+) {}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/CurrentActorProvider.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+public interface CurrentActorProvider {
+
+    String getCurrentActor();
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/PasswordHasher.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+public interface PasswordHasher {
+
+    String hash(String rawPassword);
+
+    boolean matches(String rawPassword, String encodedPassword);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/PermissionRepository.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+import kh.edu.istad.platform.iamdomaincore.model.Permission;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface PermissionRepository {
+
+    Permission save(Permission permission);
+
+    Optional<Permission> findById(Long id);
+
+    Optional<Permission> findByUuid(UUID uuid);
+
+    Optional<Permission> findByName(String name);
+
+    boolean existsByName(String name);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/RolePermissionRepository.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+import kh.edu.istad.platform.iamdomaincore.model.RolePermission;
+
+import java.util.List;
+
+public interface RolePermissionRepository {
+
+    List<RolePermission> findAllByRoleId(Long roleId);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/RoleRepository.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+import kh.edu.istad.platform.iamdomaincore.model.Role;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface RoleRepository {
+
+    Role save(Role role);
+
+    Optional<Role> findById(Long id);
+
+    Optional<Role> findByUuid(UUID uuid);
+
+    Optional<Role> findByName(String name);
+
+    boolean existsByName(String name);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/UserPermissionRepository.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+import kh.edu.istad.platform.iamdomaincore.model.UserPermission;
+
+import java.util.List;
+
+public interface UserPermissionRepository {
+
+    List<UserPermission> findAllByUserId(Long userId);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/UserRepository.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+import kh.edu.istad.platform.iamdomaincore.model.User;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface UserRepository {
+
+    User save(User user);
+
+    Optional<User> findByUuid(UUID uuid);
+
+    Optional<User> findByUsername(String username);
+
+    Optional<User> findByEmail(String email);
+
+    Optional<User> findByUsernameOrEmail(String usernameOrEmail);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/UserRoleRepository.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+import kh.edu.istad.platform.iamdomaincore.model.UserRole;
+
+import java.util.List;
+
+public interface UserRoleRepository {
+
+    List<UserRole> findAllByUserId(Long userId);
+}

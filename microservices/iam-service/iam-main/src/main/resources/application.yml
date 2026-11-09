@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: iam-main
+
+  datasource:
+    url: jdbc:postgresql://localhost:9543/db_iam
+    username: ${DB_USERNAME:iteuser}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  liquibase:
+    change-log: classpath:/db/changelog/iam-master.yaml

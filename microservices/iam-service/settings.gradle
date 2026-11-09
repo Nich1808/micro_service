@@ -1,4 +1,10 @@
+
 pluginManagement {
+    plugins {
+        id 'org.springframework.boot' version '4.1.1'
+        id 'io.spring.dependency-management' version '1.1.7'
+    }
+
     includeBuild('../../build-logic')
 
     repositories {
@@ -19,4 +25,13 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name="iam-service"
+rootProject.name = 'iam-service'
+
+include 'iam-domain:iam-domain-core'
+include 'iam-domain:iam-application-service'
+
+include 'iam-persistence'
+include 'iam-infrastructure'
+include 'iam-rest-api'
+include 'iam-web'
+include 'iam-main'

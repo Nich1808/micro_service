@@ -1,0 +1,1076 @@
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/adapter/PermissionPersistenceAdapter.java ==========
+package kh.edu.istad.platform.iampersistence.adapter;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.PermissionRepository;
+import kh.edu.istad.platform.iamdomaincore.model.Permission;
+import kh.edu.istad.platform.iampersistence.entity.PermissionEntity;
+import kh.edu.istad.platform.iampersistence.repository.PermissionJpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public class PermissionPersistenceAdapter implements PermissionRepository {
+
+    private final PermissionJpaRepository repository;
+
+    public PermissionPersistenceAdapter(PermissionJpaRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public Permission save(Permission permission) {
+        PermissionEntity entity = repository.findByUuid(permission.uuid())
+                .orElseGet(PermissionEntity::new);
+
+        entity.uuid = permission.uuid();
+        entity.name = permission.name();
+        entity.resource = permission.resource();
+        entity.action = permission.action();
+        entity.description = permission.description();
+        entity.system = permission.system();
+        entity.active = permission.active();
+        entity.deleted = permission.deleted();
+        entity.deletedAt = permission.deletedAt();
+        entity.deletedBy = permission.deletedBy();
+        entity.createdAt = permission.createdAt();
+        entity.createdBy = permission.createdBy();
+        entity.updatedAt = permission.updatedAt();
+        entity.updatedBy = permission.updatedBy();
+
+        return toDomain(repository.save(entity));
+    }
+
+    @Override
+    public Optional<Permission> findById(Long id) {
+        return repository.findById(id).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<Permission> findByUuid(UUID uuid) {
+        return repository.findByUuid(uuid).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<Permission> findByName(String name) {
+        return repository.findByName(name).map(this::toDomain);
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return repository.existsByName(name);
+    }
+
+    private Permission toDomain(PermissionEntity entity) {
+        return new Permission(
+                entity.id,
+                entity.uuid,
+                entity.name,
+                entity.resource,
+                entity.action,
+                entity.description,
+                entity.system,
+                entity.active,
+                entity.deleted,
+                entity.deletedAt,
+                entity.deletedBy,
+                entity.createdAt,
+                entity.createdBy,
+                entity.updatedAt,
+                entity.updatedBy,
+                entity.version
+        );
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/adapter/RolePermissionPersistenceAdapter.java ==========
+package kh.edu.istad.platform.iampersistence.adapter;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.RolePermissionRepository;
+import kh.edu.istad.platform.iamdomaincore.model.RolePermission;
+import kh.edu.istad.platform.iampersistence.repository.RolePermissionJpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Repository
+public class RolePermissionPersistenceAdapter implements RolePermissionRepository {
+
+    private final RolePermissionJpaRepository repository;
+
+    public RolePermissionPersistenceAdapter(RolePermissionJpaRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RolePermission> findAllByRoleId(Long roleId) {
+        return repository.findAllByRole_Id(roleId)
+                .stream()
+                .map(entity -> new RolePermission(
+                        entity.id,
+                        entity.role.id,
+                        entity.permission.id,
+                        entity.assignedAt,
+                        entity.assignedBy,
+                        entity.expiresAt,
+                        entity.revokedAt,
+                        entity.revokedBy,
+                        entity.reason
+                ))
+                .toList();
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/adapter/RolePersistenceAdapter.java ==========
+package kh.edu.istad.platform.iampersistence.adapter;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.RoleRepository;
+import kh.edu.istad.platform.iamdomaincore.model.Role;
+import kh.edu.istad.platform.iampersistence.entity.RoleEntity;
+import kh.edu.istad.platform.iampersistence.repository.RoleJpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public class RolePersistenceAdapter implements RoleRepository {
+
+    private final RoleJpaRepository repository;
+
+    public RolePersistenceAdapter(RoleJpaRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public Role save(Role role) {
+        RoleEntity entity = repository.findByUuid(role.uuid())
+                .orElseGet(RoleEntity::new);
+
+        entity.uuid = role.uuid();
+        entity.name = role.name();
+        entity.description = role.description();
+        entity.system = role.system();
+        entity.active = role.active();
+        entity.deleted = role.deleted();
+        entity.deletedAt = role.deletedAt();
+        entity.deletedBy = role.deletedBy();
+        entity.createdAt = role.createdAt();
+        entity.createdBy = role.createdBy();
+        entity.updatedAt = role.updatedAt();
+        entity.updatedBy = role.updatedBy();
+
+        return toDomain(repository.save(entity));
+    }
+
+    @Override
+    public Optional<Role> findById(Long id) {
+        return repository.findById(id).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<Role> findByUuid(UUID uuid) {
+        return repository.findByUuid(uuid).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<Role> findByName(String name) {
+        return repository.findByName(name).map(this::toDomain);
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return repository.existsByName(name);
+    }
+
+    private Role toDomain(RoleEntity entity) {
+        return new Role(
+                entity.id,
+                entity.uuid,
+                entity.name,
+                entity.description,
+                entity.system,
+                entity.active,
+                entity.deleted,
+                entity.deletedAt,
+                entity.deletedBy,
+                entity.createdAt,
+                entity.createdBy,
+                entity.updatedAt,
+                entity.updatedBy,
+                entity.version
+        );
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/adapter/UserPermissionPersistenceAdapter.java ==========
+package kh.edu.istad.platform.iampersistence.adapter;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserPermissionRepository;
+import kh.edu.istad.platform.iamdomaincore.model.UserPermission;
+import kh.edu.istad.platform.iampersistence.repository.UserPermissionJpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Repository
+public class UserPermissionPersistenceAdapter implements UserPermissionRepository {
+
+    private final UserPermissionJpaRepository repository;
+
+    public UserPermissionPersistenceAdapter(UserPermissionJpaRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserPermission> findAllByUserId(Long userId) {
+        return repository.findAllByUser_Id(userId)
+                .stream()
+                .map(entity -> new UserPermission(
+                        entity.id,
+                        entity.user.id,
+                        entity.permission.id,
+                        entity.effect,
+                        entity.assignedAt,
+                        entity.assignedBy,
+                        entity.expiresAt,
+                        entity.revokedAt,
+                        entity.revokedBy,
+                        entity.reason
+                ))
+                .toList();
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/adapter/UserPersistenceAdapter.java ==========
+package kh.edu.istad.platform.iampersistence.adapter;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
+import kh.edu.istad.platform.iamdomaincore.model.User;
+import kh.edu.istad.platform.iampersistence.entity.UserEntity;
+import kh.edu.istad.platform.iampersistence.repository.UserJpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public class UserPersistenceAdapter implements UserRepository {
+
+    private final UserJpaRepository repository;
+
+    public UserPersistenceAdapter(UserJpaRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public User save(User user) {
+        UserEntity entity = repository.findByUuid(user.uuid())
+                .orElseGet(UserEntity::new);
+
+        entity.uuid = user.uuid();
+        entity.username = user.username();
+        entity.email = user.email();
+        entity.emailVerified = user.emailVerified();
+        entity.passwordHash = user.passwordHash();
+
+        entity.givenName = user.givenName();
+        entity.familyName = user.familyName();
+        entity.middleName = user.middleName();
+        entity.nickname = user.nickname();
+        entity.gender = user.gender();
+        entity.birthdate = user.birthdate();
+        entity.profileUrl = user.profileUrl();
+        entity.pictureUrl = user.pictureUrl();
+        entity.websiteUrl = user.websiteUrl();
+        entity.zoneinfo = user.zoneinfo();
+        entity.locale = user.locale();
+
+        entity.phoneNumber = user.phoneNumber();
+        entity.phoneNumberVerified = user.phoneNumberVerified();
+
+        entity.streetAddress = user.streetAddress();
+        entity.locality = user.locality();
+        entity.region = user.region();
+        entity.postalCode = user.postalCode();
+        entity.country = user.country();
+
+        entity.enabled = user.enabled();
+        entity.accountNonExpired = user.accountNonExpired();
+        entity.accountNonLocked = user.accountNonLocked();
+        entity.credentialsNonExpired = user.credentialsNonExpired();
+
+        entity.failedLoginAttempts = user.failedLoginAttempts();
+        entity.lastLoginAt = user.lastLoginAt();
+        entity.passwordChangedAt = user.passwordChangedAt();
+
+        entity.deleted = user.deleted();
+        entity.deletedAt = user.deletedAt();
+        entity.deletedBy = user.deletedBy();
+
+        entity.createdAt = user.createdAt();
+        entity.createdBy = user.createdBy();
+        entity.updatedAt = user.updatedAt();
+        entity.updatedBy = user.updatedBy();
+
+        return toDomain(repository.save(entity));
+    }
+
+    @Override
+    public Optional<User> findByUuid(UUID uuid) {
+        return repository.findByUuid(uuid).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return repository.findByUsername(username).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return repository.findByEmail(email).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByUsernameOrEmail(String usernameOrEmail) {
+        return repository.findByUsernameOrEmail(usernameOrEmail)
+                .map(this::toDomain);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return repository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return repository.existsByEmail(email);
+    }
+
+    private User toDomain(UserEntity entity) {
+        return new User(
+                entity.id,
+                entity.uuid,
+                entity.username,
+                entity.email,
+                entity.emailVerified,
+                entity.passwordHash,
+                entity.givenName,
+                entity.familyName,
+                entity.middleName,
+                entity.nickname,
+                entity.gender,
+                entity.birthdate,
+                entity.profileUrl,
+                entity.pictureUrl,
+                entity.websiteUrl,
+                entity.zoneinfo,
+                entity.locale,
+                entity.phoneNumber,
+                entity.phoneNumberVerified,
+                entity.streetAddress,
+                entity.locality,
+                entity.region,
+                entity.postalCode,
+                entity.country,
+                entity.enabled,
+                entity.accountNonExpired,
+                entity.accountNonLocked,
+                entity.credentialsNonExpired,
+                entity.failedLoginAttempts,
+                entity.lastLoginAt,
+                entity.passwordChangedAt,
+                entity.deleted,
+                entity.deletedAt,
+                entity.deletedBy,
+                entity.createdAt,
+                entity.createdBy,
+                entity.updatedAt,
+                entity.updatedBy,
+                entity.version
+        );
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/adapter/UserRolePersistenceAdapter.java ==========
+package kh.edu.istad.platform.iampersistence.adapter;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserRoleRepository;
+import kh.edu.istad.platform.iamdomaincore.model.UserRole;
+import kh.edu.istad.platform.iampersistence.repository.UserRoleJpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Repository
+public class UserRolePersistenceAdapter implements UserRoleRepository {
+
+    private final UserRoleJpaRepository repository;
+
+    public UserRolePersistenceAdapter(UserRoleJpaRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserRole> findAllByUserId(Long userId) {
+        return repository.findAllByUser_Id(userId)
+                .stream()
+                .map(entity -> new UserRole(
+                        entity.id,
+                        entity.user.id,
+                        entity.role.id,
+                        entity.assignedAt,
+                        entity.assignedBy,
+                        entity.expiresAt,
+                        entity.revokedAt,
+                        entity.revokedBy,
+                        entity.reason
+                ))
+                .toList();
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/IdentityEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.time.OffsetDateTime;
+import java.util.Map;
+import java.util.UUID;
+
+@Entity
+@Table(
+    name = "iam_identities",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uk_iam_identity_provider_subject",
+            columnNames = {"provider", "provider_subject"}
+        )
+    }
+)
+public class IdentityEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    public UUID uuid;
+
+    @Column(name = "user_id", nullable = false)
+    public Long userId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    public kh.edu.istad.platform.iamdomaincore.enums.IdentityProvider provider;
+
+    @Column(name = "provider_subject", nullable = false, length = 255)
+    public String providerSubject;
+
+    @Column(length = 255)
+    public String email;
+
+    @Column(nullable = false)
+    public boolean emailVerified;
+
+    @Column(length = 255)
+    public String displayName;
+
+    @Column(length = 100)
+    public String username;
+
+    @Column(length = 500)
+    public String pictureUrl;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    public Map<String, Object> attributes;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime linkedAt;
+
+    public OffsetDateTime lastLoginAt;
+
+    @Column(nullable = false)
+    public boolean deleted;
+
+    public OffsetDateTime deletedAt;
+
+    @Column(length = 100)
+    public String deletedBy;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime createdAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String createdBy;
+
+    @Column(nullable = false)
+    public OffsetDateTime updatedAt;
+
+    @Column(nullable = false, length = 100)
+    public String updatedBy;
+
+    @Version
+    @Column(nullable = false)
+    public long version;
+
+    protected IdentityEntity() {
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/PermissionEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = "iam_permissions")
+public class PermissionEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    public UUID uuid;
+
+    @Column(nullable = false, unique = true, length = 100)
+    public String name;
+
+    @Column(nullable = false, length = 50)
+    public String resource;
+
+    @Column(nullable = false, length = 50)
+    public String action;
+
+    @Column(length = 255)
+    public String description;
+
+    @Column(nullable = false)
+    public boolean system;
+
+    @Column(nullable = false)
+    public boolean active;
+
+    @Column(nullable = false)
+    public boolean deleted;
+
+    public OffsetDateTime deletedAt;
+
+    @Column(length = 100)
+    public String deletedBy;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime createdAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String createdBy;
+
+    @Column(nullable = false)
+    public OffsetDateTime updatedAt;
+
+    @Column(nullable = false, length = 100)
+    public String updatedBy;
+
+    @Version
+    @Column(nullable = false)
+    public long version;
+
+    public PermissionEntity() {
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/RoleEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = "iam_roles")
+public class RoleEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    public UUID uuid;
+
+    @Column(nullable = false, unique = true, length = 50)
+    public String name;
+
+    @Column(length = 255)
+    public String description;
+
+    @Column(nullable = false)
+    public boolean system;
+
+    @Column(nullable = false)
+    public boolean active;
+
+    @Column(nullable = false)
+    public boolean deleted;
+
+    public OffsetDateTime deletedAt;
+
+    @Column(length = 100)
+    public String deletedBy;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime createdAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String createdBy;
+
+    @Column(nullable = false)
+    public OffsetDateTime updatedAt;
+
+    @Column(nullable = false, length = 100)
+    public String updatedBy;
+
+    @Version
+    @Column(nullable = false)
+    public long version;
+
+    public RoleEntity() {
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/RolePermissionEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
+
+@Entity
+@Table(name = "iam_role_permissions")
+public class RolePermissionEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "role_id", nullable = false)
+    public RoleEntity role;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "permission_id", nullable = false)
+    public PermissionEntity permission;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime assignedAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String assignedBy;
+
+    public OffsetDateTime expiresAt;
+
+    public OffsetDateTime revokedAt;
+
+    @Column(length = 100)
+    public String revokedBy;
+
+    @Column(length = 255)
+    public String reason;
+
+    protected RolePermissionEntity() {
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/UserEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = "iam_users")
+public class UserEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    public UUID uuid;
+
+    @Column(nullable = false, unique = true, length = 100)
+    public String username;
+
+    @Column(nullable = false, unique = true, length = 255)
+    public String email;
+
+    @Column(nullable = false)
+    public boolean emailVerified;
+
+    @Column(nullable = false, length = 255)
+    public String passwordHash;
+
+    @Column(nullable = false, length = 100)
+    public String givenName;
+
+    @Column(nullable = false, length = 100)
+    public String familyName;
+
+    @Column(length = 100)
+    public String middleName;
+
+    @Column(length = 100)
+    public String nickname;
+
+    @Column(length = 30)
+    public String gender;
+
+    public LocalDate birthdate;
+
+    @Column(length = 500)
+    public String profileUrl;
+
+    @Column(length = 500)
+    public String pictureUrl;
+
+    @Column(length = 500)
+    public String websiteUrl;
+
+    @Column(length = 100)
+    public String zoneinfo;
+
+    @Column(length = 20)
+    public String locale;
+
+    @Column(length = 30)
+    public String phoneNumber;
+
+    @Column(nullable = false)
+    public boolean phoneNumberVerified;
+
+    @Column(length = 255)
+    public String streetAddress;
+
+    @Column(length = 100)
+    public String locality;
+
+    @Column(length = 100)
+    public String region;
+
+    @Column(length = 30)
+    public String postalCode;
+
+    @Column(length = 100)
+    public String country;
+
+    @Column(nullable = false)
+    public boolean enabled;
+
+    @Column(nullable = false)
+    public boolean accountNonExpired;
+
+    @Column(nullable = false)
+    public boolean accountNonLocked;
+
+    @Column(nullable = false)
+    public boolean credentialsNonExpired;
+
+    @Column(nullable = false)
+    public int failedLoginAttempts;
+
+    public OffsetDateTime lastLoginAt;
+
+    public OffsetDateTime passwordChangedAt;
+
+    @Column(nullable = false)
+    public boolean deleted;
+
+    public OffsetDateTime deletedAt;
+
+    @Column(length = 100)
+    public String deletedBy;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime createdAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String createdBy;
+
+    @Column(nullable = false)
+    public OffsetDateTime updatedAt;
+
+    @Column(nullable = false, length = 100)
+    public String updatedBy;
+
+    @Version
+    @Column(nullable = false)
+    public long version;
+
+    public UserEntity() {
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/UserPermissionEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import kh.edu.istad.platform.iamdomaincore.enums.PermissionEffect;
+
+import java.time.OffsetDateTime;
+
+@Entity
+@Table(name = "iam_user_permissions")
+public class UserPermissionEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    public UserEntity user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "permission_id", nullable = false)
+    public PermissionEntity permission;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    public PermissionEffect effect;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime assignedAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String assignedBy;
+
+    public OffsetDateTime expiresAt;
+
+    public OffsetDateTime revokedAt;
+
+    @Column(length = 100)
+    public String revokedBy;
+
+    @Column(length = 255)
+    public String reason;
+
+    protected UserPermissionEntity() {
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/UserRoleEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
+
+@Entity
+@Table(name = "iam_user_roles")
+public class UserRoleEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    public UserEntity user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "role_id", nullable = false)
+    public RoleEntity role;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime assignedAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String assignedBy;
+
+    public OffsetDateTime expiresAt;
+
+    public OffsetDateTime revokedAt;
+
+    @Column(length = 100)
+    public String revokedBy;
+
+    @Column(length = 255)
+    public String reason;
+
+    protected UserRoleEntity() {
+    }
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/IdentityJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iamdomaincore.enums.IdentityProvider;
+import kh.edu.istad.platform.iampersistence.entity.IdentityEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+public interface IdentityJpaRepository extends JpaRepository<IdentityEntity, Long> {
+
+    Optional<IdentityEntity> findByUuid(UUID uuid);
+
+    Optional<IdentityEntity> findByProviderAndProviderSubjectAndDeletedFalse(
+            IdentityProvider provider,
+            String providerSubject
+    );
+
+    List<IdentityEntity> findAllByUserIdAndDeletedFalse(Long userId);
+
+    boolean existsByUserIdAndProviderAndDeletedFalse(
+            Long userId,
+            IdentityProvider provider
+    );
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/PermissionJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iampersistence.entity.PermissionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface PermissionJpaRepository extends JpaRepository<PermissionEntity, Long> {
+
+    Optional<PermissionEntity> findByUuid(UUID uuid);
+
+    Optional<PermissionEntity> findByName(String name);
+
+    boolean existsByName(String name);
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/RoleJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iampersistence.entity.RoleEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface RoleJpaRepository extends JpaRepository<RoleEntity, Long> {
+
+    Optional<RoleEntity> findByUuid(UUID uuid);
+
+    Optional<RoleEntity> findByName(String name);
+
+    boolean existsByName(String name);
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/RolePermissionJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iampersistence.entity.RolePermissionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface RolePermissionJpaRepository
+        extends JpaRepository<RolePermissionEntity, Long> {
+
+    List<RolePermissionEntity> findAllByRole_Id(Long roleId);
+
+    List<RolePermissionEntity> findAllByRole_IdAndRevokedAtIsNull(Long roleId);
+
+    Optional<RolePermissionEntity> findByRole_IdAndPermission_IdAndRevokedAtIsNull(
+            Long roleId,
+            Long permissionId
+    );
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/UserJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iampersistence.entity.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
+
+    Optional<UserEntity> findByUuid(UUID uuid);
+
+    Optional<UserEntity> findByUsername(String username);
+
+    Optional<UserEntity> findByEmail(String email);
+
+    @Query("""
+            select u
+            from UserEntity u
+            where u.username = :value or u.email = :value
+            """)
+    Optional<UserEntity> findByUsernameOrEmail(@Param("value") String value);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/UserPermissionJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iampersistence.entity.UserPermissionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface UserPermissionJpaRepository
+        extends JpaRepository<UserPermissionEntity, Long> {
+
+    List<UserPermissionEntity> findAllByUser_Id(Long userId);
+
+    List<UserPermissionEntity> findAllByUser_IdAndRevokedAtIsNull(Long userId);
+
+    Optional<UserPermissionEntity> findByUser_IdAndPermission_IdAndRevokedAtIsNull(
+            Long userId,
+            Long permissionId
+    );
+}
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/UserRoleJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iampersistence.entity.UserRoleEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface UserRoleJpaRepository extends JpaRepository<UserRoleEntity, Long> {
+
+    List<UserRoleEntity> findAllByUser_Id(Long userId);
+
+    List<UserRoleEntity> findAllByUser_IdAndRevokedAtIsNull(Long userId);
+
+    Optional<UserRoleEntity> findByUser_IdAndRole_IdAndRevokedAtIsNull(
+            Long userId,
+            Long roleId
+    );
+}

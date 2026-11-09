@@ -1,0 +1,2778 @@
+
+
+========== APPLICATION COMMANDS ==========
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/identity/FederatedIdentityCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.identity;
+
+import kh.edu.istad.platform.iamdomaincore.enums.IdentityProvider;
+
+import java.util.Map;
+
+public record FederatedIdentityCommand(
+        IdentityProvider provider,
+        String providerSubject,
+        String email,
+        boolean emailVerified,
+        String displayName,
+        String username,
+        String pictureUrl,
+        Map<String, Object> attributes
+) {
+    public FederatedIdentityCommand {
+        attributes = attributes == null ? Map.of() : Map.copyOf(attributes);
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/permission/CreatePermissionCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.permission;
+
+public record CreatePermissionCommand(
+        String resource,
+        String action,
+        String description
+) {}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/permission/UpdatePermissionCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.permission;
+
+import java.util.UUID;
+
+public record UpdatePermissionCommand(
+        UUID permissionUuid,
+        String resource,
+        String action,
+        String description
+) {}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/role/AssignPermissionsToRoleCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.role;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+public record AssignPermissionsToRoleCommand(
+        UUID roleUuid,
+        List<UUID> permissionUuids,
+        OffsetDateTime expiresAt,
+        String reason
+) {
+    public AssignPermissionsToRoleCommand {
+        permissionUuids = List.copyOf(permissionUuids);
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/role/CreateRoleCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.role;
+
+import java.util.List;
+import java.util.UUID;
+
+public record CreateRoleCommand(
+        String name,
+        String description,
+        List<UUID> permissionUuids
+) {
+    public CreateRoleCommand {
+        permissionUuids = permissionUuids == null
+                ? List.of()
+                : List.copyOf(permissionUuids);
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/role/UpdateRoleCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.role;
+
+import java.util.UUID;
+
+public record UpdateRoleCommand(
+        UUID roleUuid,
+        String name,
+        String description
+) {}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/AssignRolesToUserCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+public record AssignRolesToUserCommand(
+        UUID userUuid,
+        List<UUID> roleUuids,
+        OffsetDateTime expiresAt,
+        String reason
+) {
+    public AssignRolesToUserCommand {
+        roleUuids = List.copyOf(roleUuids);
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/ChangePasswordCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+import java.util.UUID;
+
+public record ChangePasswordCommand(
+        UUID userUuid,
+        String currentPassword,
+        String newPassword
+) {
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/CreateUserCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+public record CreateUserCommand(
+        String username,
+        String email,
+        String rawPassword,
+        String givenName,
+        String familyName
+) {
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/GrantPermissionsToUserCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+import kh.edu.istad.platform.iamdomaincore.enums.PermissionEffect;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+public record GrantPermissionsToUserCommand(
+        UUID userUuid,
+        List<UUID> permissionUuids,
+        PermissionEffect effect,
+        OffsetDateTime expiresAt,
+        String reason
+) {
+    public GrantPermissionsToUserCommand {
+        permissionUuids = List.copyOf(permissionUuids);
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/RegisterUserCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+public record RegisterUserCommand(
+        String username,
+        String email,
+        String rawPassword,
+        String givenName,
+        String familyName
+) {
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/ResetUserPasswordCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+import java.util.UUID;
+
+public record ResetUserPasswordCommand(
+        UUID userUuid,
+        String newPassword
+) {
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/command/user/UpdateUserProfileCommand.java ==========
+package kh.edu.istad.platform.iamapplicationservice.command.user;
+
+import java.time.LocalDate;
+import java.util.UUID;
+
+public record UpdateUserProfileCommand(
+        UUID userUuid,
+        String givenName,
+        String familyName,
+        String middleName,
+        String nickname,
+        String gender,
+        LocalDate birthdate,
+        String profileUrl,
+        String pictureUrl,
+        String websiteUrl,
+        String zoneinfo,
+        String locale,
+        String phoneNumber,
+        String streetAddress,
+        String locality,
+        String region,
+        String postalCode,
+        String country
+) {
+}
+
+
+========== APPLICATION QUERIES ==========
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/query/permission/PermissionFilterQuery.java ==========
+package kh.edu.istad.platform.iamapplicationservice.query.permission;
+
+public record PermissionFilterQuery(
+        int page,
+        int size,
+        String sort
+) {
+    public PermissionFilterQuery {
+        if (page < 0 || size < 1) {
+            throw new IllegalArgumentException("Invalid pagination values");
+        }
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/query/role/RoleFilterQuery.java ==========
+package kh.edu.istad.platform.iamapplicationservice.query.role;
+
+public record RoleFilterQuery(
+        int page,
+        int size,
+        String sort
+) {
+    public RoleFilterQuery {
+        if (page < 0 || size < 1) {
+            throw new IllegalArgumentException("Invalid pagination values");
+        }
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/query/user/UserFilterQuery.java ==========
+package kh.edu.istad.platform.iamapplicationservice.query.user;
+
+public record UserFilterQuery(
+        int page,
+        int size,
+        String sort
+) {
+    public UserFilterQuery {
+        if (page < 0 || size < 1) {
+            throw new IllegalArgumentException("Invalid pagination values");
+        }
+    }
+}
+
+
+========== APPLICATION RESULTS ==========
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/common/PageResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.common;
+
+import java.util.List;
+
+public record PageResult<T>(
+        List<T> content,
+        Page page
+) {
+    public PageResult {
+        content = List.copyOf(content);
+    }
+
+    public record Page(
+            int number,
+            int size,
+            long totalElements,
+            int totalPages
+    ) {
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/identity/IdentityResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.identity;
+
+import kh.edu.istad.platform.iamdomaincore.enums.IdentityProvider;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record IdentityResult(
+        UUID uuid,
+        IdentityProvider provider,
+        String email,
+        String displayName,
+        OffsetDateTime linkedAt
+) {
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/permission/PermissionResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.permission;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record PermissionResult(
+        UUID uuid,
+        String name,
+        String resource,
+        String action,
+        String description,
+        boolean system,
+        boolean active,
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt
+) {}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/role/PermissionAssignmentResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.role;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record PermissionAssignmentResult(
+        UUID permissionUuid,
+        String permissionName,
+        OffsetDateTime assignedAt,
+        String assignedBy,
+        OffsetDateTime expiresAt
+) {}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/role/RoleResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.role;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record RoleResult(
+        UUID uuid,
+        String name,
+        String description,
+        boolean system,
+        boolean active,
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt
+) {}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/role/RoleSummary.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.role;
+
+import java.util.UUID;
+
+public record RoleSummary(
+        UUID uuid,
+        String name,
+        boolean active
+) {
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/user/AuthUserResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.user;
+
+import java.util.List;
+import java.util.UUID;
+
+public record AuthUserResult(
+        UUID uuid,
+        String username,
+        String passwordHash,
+        boolean enabled,
+        boolean accountNonExpired,
+        boolean accountNonLocked,
+        boolean credentialsNonExpired,
+        List<String> authorities
+) {
+    public AuthUserResult {
+        authorities = List.copyOf(authorities);
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/user/PermissionGrantResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.user;
+
+import kh.edu.istad.platform.iamdomaincore.enums.PermissionEffect;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record PermissionGrantResult(
+        UUID permissionUuid,
+        String permissionName,
+        PermissionEffect effect,
+        OffsetDateTime assignedAt,
+        String assignedBy,
+        OffsetDateTime expiresAt
+) {}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/user/RoleAssignmentResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.user;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record RoleAssignmentResult(
+        UUID roleUuid,
+        String roleName,
+        OffsetDateTime assignedAt,
+        String assignedBy,
+        OffsetDateTime expiresAt
+) {}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/user/UserAuthoritiesResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.user;
+
+import kh.edu.istad.platform.iamdomaincore.enums.PermissionEffect;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+public record UserAuthoritiesResult(
+        List<RoleAuthority> roles,
+        List<DirectPermission> directPermissions,
+        List<String> effectivePermissions
+) {
+    public UserAuthoritiesResult {
+        roles = List.copyOf(roles);
+        directPermissions = List.copyOf(directPermissions);
+        effectivePermissions = List.copyOf(effectivePermissions);
+    }
+
+    public record RoleAuthority(
+            UUID uuid,
+            String name,
+            OffsetDateTime expiresAt
+    ) {
+    }
+
+    public record DirectPermission(
+            String name,
+            PermissionEffect effect
+    ) {
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/user/UserResult.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.user;
+
+import kh.edu.istad.platform.iamapplicationservice.result.role.RoleSummary;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+
+public record UserResult(
+        UUID uuid,
+        String username,
+        String email,
+        boolean emailVerified,
+        String name,
+        String locale,
+        boolean enabled,
+        List<RoleSummary> roles,
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt
+) {
+    public UserResult {
+        roles = List.copyOf(roles);
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/result/user/UserSummary.java ==========
+package kh.edu.istad.platform.iamapplicationservice.result.user;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public record UserSummary(
+        UUID uuid,
+        String username,
+        String email,
+        String name,
+        boolean enabled,
+        OffsetDateTime createdAt
+) {}
+
+
+========== DOMAIN MODELS AND ENUMS ==========
+
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/enums/IdentityProvider.java ==========
+package kh.edu.istad.platform.iamdomaincore.enums;
+
+public enum IdentityProvider {
+    GOOGLE,
+    GITHUB,
+    FACEBOOK,
+    TELEGRAM
+}
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/enums/PermissionEffect.java ==========
+package kh.edu.istad.platform.iamdomaincore.enums;
+
+public enum PermissionEffect {
+    GRANT,
+    DENY
+}
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/Identity.java ==========
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import kh.edu.istad.platform.iamdomaincore.enums.IdentityProvider;
+
+import java.time.OffsetDateTime;
+import java.util.Map;
+import java.util.UUID;
+
+public record Identity(
+        Long id,
+        UUID uuid,
+        Long userId,
+        IdentityProvider provider,
+        String providerSubject,
+        String email,
+        boolean emailVerified,
+        String displayName,
+        String username,
+        String pictureUrl,
+        Map<String, Object> attributes,
+        OffsetDateTime linkedAt,
+        OffsetDateTime lastLoginAt,
+        boolean deleted,
+        OffsetDateTime deletedAt,
+        String deletedBy,
+        OffsetDateTime createdAt,
+        String createdBy,
+        OffsetDateTime updatedAt,
+        String updatedBy,
+        long version
+) {
+
+    public Identity {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+
+        if (userId == null || userId <= 0) {
+            throw new IllegalArgumentException(
+                    "User ID is required"
+            );
+        }
+
+        if (provider == null) {
+            throw new IllegalArgumentException(
+                    "Identity provider is required"
+            );
+        }
+
+        if (providerSubject == null || providerSubject.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Provider subject is required"
+            );
+        }
+
+        providerSubject = providerSubject.trim();
+
+        if (providerSubject.length() > 255) {
+            throw new IllegalArgumentException(
+                    "Provider subject must not exceed 255 characters"
+            );
+        }
+
+        if (linkedAt == null) {
+            throw new IllegalArgumentException(
+                    "Linked time is required"
+            );
+        }
+
+        if (createdAt == null || updatedAt == null) {
+            throw new IllegalArgumentException(
+                    "Created time and updated time are required"
+            );
+        }
+
+        if (createdBy == null || createdBy.isBlank()
+                || updatedBy == null || updatedBy.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Created by and updated by are required"
+            );
+        }
+
+        if (version < 0) {
+            throw new IllegalArgumentException(
+                    "Version cannot be negative"
+            );
+        }
+
+        if (email != null) {
+            email = email.trim().toLowerCase();
+        }
+
+        if (deleted) {
+            if (deletedAt == null) {
+                throw new IllegalArgumentException(
+                        "Deleted time is required"
+                );
+            }
+
+            if (deletedBy == null || deletedBy.isBlank()) {
+                throw new IllegalArgumentException(
+                        "Deleted by is required"
+                );
+            }
+        } else if (deletedAt != null || deletedBy != null) {
+            throw new IllegalArgumentException(
+                    "Active identity cannot have deletion metadata"
+            );
+        }
+
+        attributes = attributes == null
+                ? Map.of()
+                : Map.copyOf(attributes);
+    }
+
+    public void validateUsable() {
+        if (deleted) {
+            throw new IllegalStateException(
+                    "Deleted identity cannot be used"
+            );
+        }
+    }
+
+    public Identity recordLogin(OffsetDateTime now) {
+        validateUsable();
+
+        if (now == null) {
+            throw new IllegalArgumentException(
+                    "Login timestamp is required"
+            );
+        }
+
+        return new Identity(
+                id, uuid, userId, provider, providerSubject,
+                email, emailVerified, displayName, username,
+                pictureUrl, attributes,
+                linkedAt, now,
+                false, null, null,
+                createdAt, createdBy,
+                now, updatedBy,
+                version + 1
+        );
+    }
+
+    public Identity softDelete(
+            String actor,
+            OffsetDateTime now
+    ) {
+        validateUsable();
+        validateActorAndTime(actor, now);
+
+        return new Identity(
+                id, uuid, userId, provider, providerSubject,
+                email, emailVerified, displayName, username,
+                pictureUrl, attributes,
+                linkedAt, lastLoginAt,
+                true, now, actor,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    private static void validateActorAndTime(
+            String actor,
+            OffsetDateTime now
+    ) {
+        if (actor == null || actor.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Actor is required"
+            );
+        }
+
+        if (now == null) {
+            throw new IllegalArgumentException(
+                    "Timestamp is required"
+            );
+        }
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/Permission.java ==========
+
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import java.time.OffsetDateTime;
+import java.util.Locale;
+import java.util.UUID;
+
+public record Permission(
+        Long id,
+        UUID uuid,
+        String name,
+        String resource,
+        String action,
+        String description,
+        boolean system,
+        boolean active,
+        boolean deleted,
+        OffsetDateTime deletedAt,
+        String deletedBy,
+        OffsetDateTime createdAt,
+        String createdBy,
+        OffsetDateTime updatedAt,
+        String updatedBy,
+        long version
+) {
+
+    public Permission {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+
+        resource = normalize(resource, "Resource");
+        action = normalize(action, "Action");
+
+        if (resource.length() > 50 || action.length() > 50) {
+            throw new IllegalArgumentException(
+                    "Resource and action must not exceed 50 characters"
+            );
+        }
+
+        String expectedName = resource + ":" + action;
+
+        if (name == null || name.isBlank()) {
+            name = expectedName;
+        } else {
+            name = name.trim().toLowerCase(Locale.ROOT);
+        }
+
+        if (!name.equals(expectedName)) {
+            throw new IllegalArgumentException(
+                    "Permission name must follow resource:action format"
+            );
+        }
+
+        if (name.length() > 100) {
+            throw new IllegalArgumentException(
+                    "Permission name must not exceed 100 characters"
+            );
+        }
+
+        if (createdAt == null || updatedAt == null) {
+            throw new IllegalArgumentException(
+                    "Created time and updated time are required"
+            );
+        }
+
+        if (createdBy == null || createdBy.isBlank()
+                || updatedBy == null || updatedBy.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Created by and updated by are required"
+            );
+        }
+
+        if (version < 0) {
+            throw new IllegalArgumentException(
+                    "Version cannot be negative"
+            );
+        }
+
+        if (deleted && deletedAt == null) {
+            throw new IllegalArgumentException(
+                    "Deleted time is required"
+            );
+        }
+    }
+
+    public String authority() {
+        return name;
+    }
+
+    public boolean isAssignable() {
+        return active && !deleted;
+    }
+
+    public void validateAssignable() {
+        if (!isAssignable()) {
+            throw new IllegalStateException(
+                    "Inactive or deleted permission cannot be assigned"
+            );
+        }
+    }
+
+    public void validateModifiable() {
+        if (system) {
+            throw new IllegalStateException(
+                    "System permission cannot be modified"
+            );
+        }
+
+        if (deleted) {
+            throw new IllegalStateException(
+                    "Deleted permission cannot be modified"
+            );
+        }
+    }
+
+    public void validateDeletable() {
+        validateModifiable();
+    }
+
+    public Permission activate(String actor, OffsetDateTime now) {
+        validateModifiable();
+        validateActorAndTime(actor, now);
+
+        return new Permission(
+                id, uuid, name, resource, action, description,
+                system, true, false,
+                null, null,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    public Permission deactivate(String actor, OffsetDateTime now) {
+        validateModifiable();
+        validateActorAndTime(actor, now);
+
+        return new Permission(
+                id, uuid, name, resource, action, description,
+                system, false, false,
+                null, null,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    public Permission softDelete(String actor, OffsetDateTime now) {
+        validateDeletable();
+        validateActorAndTime(actor, now);
+
+        return new Permission(
+                id, uuid, name, resource, action, description,
+                system, false, true,
+                now, actor,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    private static String normalize(String value, String field) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(field + " is required");
+        }
+
+        return value.trim().toLowerCase(Locale.ROOT);
+    }
+
+    private static void validateActorAndTime(
+            String actor,
+            OffsetDateTime now
+    ) {
+        if (actor == null || actor.isBlank()) {
+            throw new IllegalArgumentException("Actor is required");
+        }
+
+        if (now == null) {
+            throw new IllegalArgumentException("Timestamp is required");
+        }
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/Role.java ==========
+
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import java.time.OffsetDateTime;
+import java.util.Locale;
+import java.util.UUID;
+
+public record Role(
+        Long id,
+        UUID uuid,
+        String name,
+        String description,
+        boolean system,
+        boolean active,
+        boolean deleted,
+        OffsetDateTime deletedAt,
+        String deletedBy,
+        OffsetDateTime createdAt,
+        String createdBy,
+        OffsetDateTime updatedAt,
+        String updatedBy,
+        long version
+) {
+
+    public Role {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Role name is required");
+        }
+
+        name = name.trim().toUpperCase(Locale.ROOT);
+
+        if (name.length() > 50) {
+            throw new IllegalArgumentException(
+                    "Role name must not exceed 50 characters"
+            );
+        }
+
+        if (createdAt == null || updatedAt == null) {
+            throw new IllegalArgumentException(
+                    "Created time and updated time are required"
+            );
+        }
+
+        if (createdBy == null || createdBy.isBlank()
+                || updatedBy == null || updatedBy.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Created by and updated by are required"
+            );
+        }
+
+        if (version < 0) {
+            throw new IllegalArgumentException(
+                    "Version cannot be negative"
+            );
+        }
+
+        if (deleted && deletedAt == null) {
+            throw new IllegalArgumentException(
+                    "Deleted time is required"
+            );
+        }
+    }
+
+    public String authority() {
+        return "ROLE_" + name;
+    }
+
+    public boolean isAssignable() {
+        return active && !deleted;
+    }
+
+    public void validateAssignable() {
+        if (!isAssignable()) {
+            throw new IllegalStateException(
+                    "Inactive or deleted role cannot be assigned"
+            );
+        }
+    }
+
+    public void validateModifiable() {
+        if (system) {
+            throw new IllegalStateException(
+                    "System role cannot be modified"
+            );
+        }
+
+        if (deleted) {
+            throw new IllegalStateException(
+                    "Deleted role cannot be modified"
+            );
+        }
+    }
+
+    public void validateDeletable() {
+        validateModifiable();
+    }
+
+    public Role activate(String actor, OffsetDateTime now) {
+        validateModifiable();
+        validateActorAndTime(actor, now);
+
+        return new Role(
+                id, uuid, name, description,
+                system, true, false,
+                null, null,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    public Role deactivate(String actor, OffsetDateTime now) {
+        validateModifiable();
+        validateActorAndTime(actor, now);
+
+        return new Role(
+                id, uuid, name, description,
+                system, false, false,
+                null, null,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    public Role softDelete(String actor, OffsetDateTime now) {
+        validateDeletable();
+        validateActorAndTime(actor, now);
+
+        return new Role(
+                id, uuid, name, description,
+                system, false, true,
+                now, actor,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    private static void validateActorAndTime(
+            String actor,
+            OffsetDateTime now
+    ) {
+        if (actor == null || actor.isBlank()) {
+            throw new IllegalArgumentException("Actor is required");
+        }
+
+        if (now == null) {
+            throw new IllegalArgumentException("Timestamp is required");
+        }
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/RolePermission.java ==========
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import java.time.OffsetDateTime;
+
+public record RolePermission(
+        Long id,
+        Long roleId,
+        Long permissionId,
+        OffsetDateTime assignedAt,
+        String assignedBy,
+        OffsetDateTime expiresAt,
+        OffsetDateTime revokedAt,
+        String revokedBy,
+        String reason
+) {
+
+    public RolePermission {
+        if (roleId == null || roleId <= 0) {
+            throw new IllegalArgumentException("Role ID is required");
+        }
+
+        if (permissionId == null || permissionId <= 0) {
+            throw new IllegalArgumentException("Permission ID is required");
+        }
+
+        if (assignedAt == null || assignedBy == null || assignedBy.isBlank()) {
+            throw new IllegalArgumentException("Assignment time and actor are required");
+        }
+
+        if (expiresAt != null && !expiresAt.isAfter(assignedAt)) {
+            throw new IllegalArgumentException("Expiry must be after assignment");
+        }
+
+        if ((revokedAt == null) != (revokedBy == null)) {
+            throw new IllegalArgumentException("Revocation time and actor must both be provided");
+        }
+
+        if (revokedBy != null && revokedBy.isBlank()) {
+            throw new IllegalArgumentException("Revocation actor cannot be blank");
+        }
+
+        if (reason != null && reason.length() > 255) {
+            throw new IllegalArgumentException("Reason must not exceed 255 characters");
+        }
+    }
+
+    public boolean isActiveAt(OffsetDateTime now) {
+        return revokedAt == null
+                && (expiresAt == null || expiresAt.isAfter(now));
+    }
+
+    public RolePermission revoke(
+            String actor,
+            OffsetDateTime now,
+            String reason
+    ) {
+        if (revokedAt != null) {
+            throw new IllegalStateException("Permission assignment is already revoked");
+        }
+
+        if (actor == null || actor.isBlank() || now == null) {
+            throw new IllegalArgumentException("Actor and timestamp are required");
+        }
+
+        if (now.isBefore(assignedAt)) {
+            throw new IllegalArgumentException("Revocation cannot precede assignment");
+        }
+
+        return new RolePermission(
+                id, roleId, permissionId,
+                assignedAt, assignedBy, expiresAt,
+                now, actor, reason
+        );
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/User.java ==========
+
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.Locale;
+import java.util.UUID;
+
+public record User(
+        Long id,
+        UUID uuid,
+        String username,
+        String email,
+        boolean emailVerified,
+        String passwordHash,
+
+        String givenName,
+        String familyName,
+        String middleName,
+        String nickname,
+        String gender,
+        LocalDate birthdate,
+        String profileUrl,
+        String pictureUrl,
+        String websiteUrl,
+        String zoneinfo,
+        String locale,
+
+        String phoneNumber,
+        boolean phoneNumberVerified,
+
+        String streetAddress,
+        String locality,
+        String region,
+        String postalCode,
+        String country,
+
+        boolean enabled,
+        boolean accountNonExpired,
+        boolean accountNonLocked,
+        boolean credentialsNonExpired,
+
+        int failedLoginAttempts,
+        OffsetDateTime lastLoginAt,
+        OffsetDateTime passwordChangedAt,
+
+        boolean deleted,
+        OffsetDateTime deletedAt,
+        String deletedBy,
+
+        OffsetDateTime createdAt,
+        String createdBy,
+        OffsetDateTime updatedAt,
+        String updatedBy,
+
+        long version
+) {
+
+    public User {
+        // UUID
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+
+        // Username
+        if (username == null || username.isBlank()) {
+            throw new IllegalArgumentException("Username is required");
+        }
+
+        username = username.trim();
+
+        if (username.length() > 50) {
+            throw new IllegalArgumentException(
+                    "Username must not exceed 50 characters"
+            );
+        }
+
+        // Email
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+
+        email = email.trim().toLowerCase(Locale.ROOT);
+
+        if (email.length() > 255 ||
+                !email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+            throw new IllegalArgumentException("Invalid email address");
+        }
+
+        // Password
+        if (passwordHash != null && passwordHash.isBlank()) {
+            passwordHash = null;
+        }
+
+        // Profile
+        if (givenName == null || givenName.isBlank()) {
+            throw new IllegalArgumentException("Given name is required");
+        }
+
+        if (familyName == null || familyName.isBlank()) {
+            throw new IllegalArgumentException("Family name is required");
+        }
+
+        givenName = givenName.trim();
+        familyName = familyName.trim();
+
+        // Locale
+        if (locale == null || locale.isBlank()) {
+            locale = "en";
+        } else {
+            locale = locale.trim().toLowerCase(Locale.ROOT);
+        }
+
+        if (!locale.equals("en") && !locale.equals("km")) {
+            throw new IllegalArgumentException(
+                    "Locale must be en or km"
+            );
+        }
+
+        // Security
+        if (failedLoginAttempts < 0) {
+            throw new IllegalArgumentException(
+                    "Failed login attempts cannot be negative"
+            );
+        }
+
+        if (version < 0) {
+            throw new IllegalArgumentException(
+                    "Version cannot be negative"
+            );
+        }
+
+        // Soft delete
+        if (deleted) {
+            if (deletedAt == null) {
+                throw new IllegalArgumentException(
+                        "Deleted time is required"
+                );
+            }
+
+            if (deletedBy == null || deletedBy.isBlank()) {
+                throw new IllegalArgumentException(
+                        "Deleted by is required"
+                );
+            }
+        } else if (deletedAt != null || deletedBy != null) {
+            throw new IllegalArgumentException(
+                    "Active user cannot have deletion metadata"
+            );
+        }
+    }
+
+    // Full name
+    public String name() {
+        return (givenName + " " + familyName).trim();
+    }
+
+    // Account status
+    public boolean isAccountUsable() {
+        return !deleted
+                && enabled
+                && accountNonExpired
+                && accountNonLocked
+                && credentialsNonExpired;
+    }
+
+    public boolean isEnabled() {
+        return enabled && !deleted;
+    }
+
+    public void validateAccountUsable() {
+        if (!isAccountUsable()) {
+            throw new IllegalStateException(
+                    "User account is not usable"
+            );
+        }
+    }
+
+    // Password validation
+    public void validatePasswordAvailable() {
+        if (passwordHash == null || passwordHash.isBlank()) {
+            throw new IllegalStateException(
+                    "User has no password configured"
+            );
+        }
+    }
+
+    // Spring Security compatible accessor names.
+    // No Spring dependency is required.
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return passwordHash;
+    }
+
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public boolean isCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    // Soft delete
+    public User softDelete(
+            String actor,
+            OffsetDateTime now
+    ) {
+        if (deleted) {
+            throw new IllegalStateException(
+                    "User is already deleted"
+            );
+        }
+
+        if (actor == null || actor.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Deleted by is required"
+            );
+        }
+
+        if (now == null) {
+            throw new IllegalArgumentException(
+                    "Deletion time is required"
+            );
+        }
+
+        return new User(
+                id,
+                uuid,
+                username,
+                email,
+                emailVerified,
+                passwordHash,
+                givenName,
+                familyName,
+                middleName,
+                nickname,
+                gender,
+                birthdate,
+                profileUrl,
+                pictureUrl,
+                websiteUrl,
+                zoneinfo,
+                locale,
+                phoneNumber,
+                phoneNumberVerified,
+                streetAddress,
+                locality,
+                region,
+                postalCode,
+                country,
+                enabled,
+                accountNonExpired,
+                accountNonLocked,
+                credentialsNonExpired,
+                failedLoginAttempts,
+                lastLoginAt,
+                passwordChangedAt,
+                true,
+                now,
+                actor,
+                createdAt,
+                createdBy,
+                now,
+                actor,
+                version + 1
+        );
+    }
+}
+
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/UserPermission.java ==========
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import kh.edu.istad.platform.iamdomaincore.enums.PermissionEffect;
+
+import java.time.OffsetDateTime;
+
+public record UserPermission(
+        Long id,
+        Long userId,
+        Long permissionId,
+        PermissionEffect effect,
+        OffsetDateTime assignedAt,
+        String assignedBy,
+        OffsetDateTime expiresAt,
+        OffsetDateTime revokedAt,
+        String revokedBy,
+        String reason
+) {
+
+    public UserPermission {
+        if (userId == null || userId <= 0) {
+            throw new IllegalArgumentException("User ID is required");
+        }
+
+        if (permissionId == null || permissionId <= 0) {
+            throw new IllegalArgumentException("Permission ID is required");
+        }
+
+        if (effect == null) {
+            throw new IllegalArgumentException("Permission effect is required");
+        }
+
+        if (assignedAt == null || assignedBy == null || assignedBy.isBlank()) {
+            throw new IllegalArgumentException("Assignment time and actor are required");
+        }
+
+        if (expiresAt != null && !expiresAt.isAfter(assignedAt)) {
+            throw new IllegalArgumentException("Expiry must be after assignment");
+        }
+
+        if ((revokedAt == null) != (revokedBy == null)) {
+            throw new IllegalArgumentException("Revocation time and actor must both be provided");
+        }
+
+        if (revokedBy != null && revokedBy.isBlank()) {
+            throw new IllegalArgumentException("Revocation actor cannot be blank");
+        }
+
+        if (reason != null && reason.length() > 255) {
+            throw new IllegalArgumentException("Reason must not exceed 255 characters");
+        }
+    }
+
+    public boolean isActiveAt(OffsetDateTime now) {
+        return revokedAt == null
+                && (expiresAt == null || expiresAt.isAfter(now));
+    }
+
+    public UserPermission revoke(
+            String actor,
+            OffsetDateTime now,
+            String reason
+    ) {
+        if (revokedAt != null) {
+            throw new IllegalStateException("Permission assignment is already revoked");
+        }
+
+        if (actor == null || actor.isBlank() || now == null) {
+            throw new IllegalArgumentException("Actor and timestamp are required");
+        }
+
+        if (now.isBefore(assignedAt)) {
+            throw new IllegalArgumentException("Revocation cannot precede assignment");
+        }
+
+        return new UserPermission(
+                id, userId, permissionId, effect,
+                assignedAt, assignedBy, expiresAt,
+                now, actor, reason
+        );
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/UserRole.java ==========
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import java.time.OffsetDateTime;
+
+public record UserRole(
+        Long id,
+        Long userId,
+        Long roleId,
+        OffsetDateTime assignedAt,
+        String assignedBy,
+        OffsetDateTime expiresAt,
+        OffsetDateTime revokedAt,
+        String revokedBy,
+        String reason
+) {
+
+    public UserRole {
+        if (userId == null || userId <= 0) {
+            throw new IllegalArgumentException("User ID is required");
+        }
+
+        if (roleId == null || roleId <= 0) {
+            throw new IllegalArgumentException("Role ID is required");
+        }
+
+        validateAssignment(assignedAt, assignedBy, expiresAt);
+        validateRevocation(revokedAt, revokedBy);
+        validateReason(reason);
+    }
+
+    public boolean isActiveAt(OffsetDateTime now) {
+        return revokedAt == null
+                && (expiresAt == null || expiresAt.isAfter(now));
+    }
+
+    public UserRole revoke(String actor, OffsetDateTime now, String reason) {
+        if (revokedAt != null) {
+            throw new IllegalStateException("Role assignment is already revoked");
+        }
+
+        if (actor == null || actor.isBlank() || now == null) {
+            throw new IllegalArgumentException("Actor and timestamp are required");
+        }
+
+        if (now.isBefore(assignedAt)) {
+            throw new IllegalArgumentException("Revocation cannot precede assignment");
+        }
+
+        return new UserRole(
+                id, userId, roleId,
+                assignedAt, assignedBy, expiresAt,
+                now, actor, reason
+        );
+    }
+
+    private static void validateAssignment(
+            OffsetDateTime assignedAt,
+            String assignedBy,
+            OffsetDateTime expiresAt
+    ) {
+        if (assignedAt == null || assignedBy == null || assignedBy.isBlank()) {
+            throw new IllegalArgumentException("Assignment time and actor are required");
+        }
+
+        if (expiresAt != null && !expiresAt.isAfter(assignedAt)) {
+            throw new IllegalArgumentException("Expiry must be after assignment");
+        }
+    }
+
+    private static void validateRevocation(
+            OffsetDateTime revokedAt,
+            String revokedBy
+    ) {
+        if ((revokedAt == null) != (revokedBy == null)) {
+            throw new IllegalArgumentException("Revocation time and actor must both be provided");
+        }
+
+        if (revokedBy != null && revokedBy.isBlank()) {
+            throw new IllegalArgumentException("Revocation actor cannot be blank");
+        }
+    }
+
+    private static void validateReason(String reason) {
+        if (reason != null && reason.length() > 255) {
+            throw new IllegalArgumentException("Reason must not exceed 255 characters");
+        }
+    }
+}
+
+========== PERSISTENCE ADAPTERS ==========
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/adapter/PermissionPersistenceAdapter.java ==========
+package kh.edu.istad.platform.iampersistence.adapter;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.PermissionRepository;
+import kh.edu.istad.platform.iamdomaincore.model.Permission;
+import kh.edu.istad.platform.iampersistence.entity.PermissionEntity;
+import kh.edu.istad.platform.iampersistence.repository.PermissionJpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public class PermissionPersistenceAdapter implements PermissionRepository {
+
+    private final PermissionJpaRepository repository;
+
+    public PermissionPersistenceAdapter(PermissionJpaRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public Permission save(Permission permission) {
+        PermissionEntity entity = repository.findByUuid(permission.uuid())
+                .orElseGet(PermissionEntity::new);
+
+        entity.uuid = permission.uuid();
+        entity.name = permission.name();
+        entity.resource = permission.resource();
+        entity.action = permission.action();
+        entity.description = permission.description();
+        entity.system = permission.system();
+        entity.active = permission.active();
+        entity.deleted = permission.deleted();
+        entity.deletedAt = permission.deletedAt();
+        entity.deletedBy = permission.deletedBy();
+        entity.createdAt = permission.createdAt();
+        entity.createdBy = permission.createdBy();
+        entity.updatedAt = permission.updatedAt();
+        entity.updatedBy = permission.updatedBy();
+
+        return toDomain(repository.save(entity));
+    }
+
+    @Override
+    public Optional<Permission> findById(Long id) {
+        return repository.findById(id).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<Permission> findByUuid(UUID uuid) {
+        return repository.findByUuid(uuid).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<Permission> findByName(String name) {
+        return repository.findByName(name).map(this::toDomain);
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return repository.existsByName(name);
+    }
+
+    private Permission toDomain(PermissionEntity entity) {
+        return new Permission(
+                entity.id,
+                entity.uuid,
+                entity.name,
+                entity.resource,
+                entity.action,
+                entity.description,
+                entity.system,
+                entity.active,
+                entity.deleted,
+                entity.deletedAt,
+                entity.deletedBy,
+                entity.createdAt,
+                entity.createdBy,
+                entity.updatedAt,
+                entity.updatedBy,
+                entity.version
+        );
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/adapter/RolePermissionPersistenceAdapter.java ==========
+package kh.edu.istad.platform.iampersistence.adapter;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.RolePermissionRepository;
+import kh.edu.istad.platform.iamdomaincore.model.RolePermission;
+import kh.edu.istad.platform.iampersistence.repository.RolePermissionJpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Repository
+public class RolePermissionPersistenceAdapter implements RolePermissionRepository {
+
+    private final RolePermissionJpaRepository repository;
+
+    public RolePermissionPersistenceAdapter(RolePermissionJpaRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RolePermission> findAllByRoleId(Long roleId) {
+        return repository.findAllByRole_Id(roleId)
+                .stream()
+                .map(entity -> new RolePermission(
+                        entity.id,
+                        entity.role.id,
+                        entity.permission.id,
+                        entity.assignedAt,
+                        entity.assignedBy,
+                        entity.expiresAt,
+                        entity.revokedAt,
+                        entity.revokedBy,
+                        entity.reason
+                ))
+                .toList();
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/adapter/RolePersistenceAdapter.java ==========
+package kh.edu.istad.platform.iampersistence.adapter;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.RoleRepository;
+import kh.edu.istad.platform.iamdomaincore.model.Role;
+import kh.edu.istad.platform.iampersistence.entity.RoleEntity;
+import kh.edu.istad.platform.iampersistence.repository.RoleJpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public class RolePersistenceAdapter implements RoleRepository {
+
+    private final RoleJpaRepository repository;
+
+    public RolePersistenceAdapter(RoleJpaRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public Role save(Role role) {
+        RoleEntity entity = repository.findByUuid(role.uuid())
+                .orElseGet(RoleEntity::new);
+
+        entity.uuid = role.uuid();
+        entity.name = role.name();
+        entity.description = role.description();
+        entity.system = role.system();
+        entity.active = role.active();
+        entity.deleted = role.deleted();
+        entity.deletedAt = role.deletedAt();
+        entity.deletedBy = role.deletedBy();
+        entity.createdAt = role.createdAt();
+        entity.createdBy = role.createdBy();
+        entity.updatedAt = role.updatedAt();
+        entity.updatedBy = role.updatedBy();
+
+        return toDomain(repository.save(entity));
+    }
+
+    @Override
+    public Optional<Role> findById(Long id) {
+        return repository.findById(id).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<Role> findByUuid(UUID uuid) {
+        return repository.findByUuid(uuid).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<Role> findByName(String name) {
+        return repository.findByName(name).map(this::toDomain);
+    }
+
+    @Override
+    public boolean existsByName(String name) {
+        return repository.existsByName(name);
+    }
+
+    private Role toDomain(RoleEntity entity) {
+        return new Role(
+                entity.id,
+                entity.uuid,
+                entity.name,
+                entity.description,
+                entity.system,
+                entity.active,
+                entity.deleted,
+                entity.deletedAt,
+                entity.deletedBy,
+                entity.createdAt,
+                entity.createdBy,
+                entity.updatedAt,
+                entity.updatedBy,
+                entity.version
+        );
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/adapter/UserPermissionPersistenceAdapter.java ==========
+package kh.edu.istad.platform.iampersistence.adapter;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserPermissionRepository;
+import kh.edu.istad.platform.iamdomaincore.model.UserPermission;
+import kh.edu.istad.platform.iampersistence.repository.UserPermissionJpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Repository
+public class UserPermissionPersistenceAdapter implements UserPermissionRepository {
+
+    private final UserPermissionJpaRepository repository;
+
+    public UserPermissionPersistenceAdapter(UserPermissionJpaRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserPermission> findAllByUserId(Long userId) {
+        return repository.findAllByUser_Id(userId)
+                .stream()
+                .map(entity -> new UserPermission(
+                        entity.id,
+                        entity.user.id,
+                        entity.permission.id,
+                        entity.effect,
+                        entity.assignedAt,
+                        entity.assignedBy,
+                        entity.expiresAt,
+                        entity.revokedAt,
+                        entity.revokedBy,
+                        entity.reason
+                ))
+                .toList();
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/adapter/UserPersistenceAdapter.java ==========
+package kh.edu.istad.platform.iampersistence.adapter;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
+import kh.edu.istad.platform.iamdomaincore.model.User;
+import kh.edu.istad.platform.iampersistence.entity.UserEntity;
+import kh.edu.istad.platform.iampersistence.repository.UserJpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public class UserPersistenceAdapter implements UserRepository {
+
+    private final UserJpaRepository repository;
+
+    public UserPersistenceAdapter(UserJpaRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public User save(User user) {
+        UserEntity entity = repository.findByUuid(user.uuid())
+                .orElseGet(UserEntity::new);
+
+        entity.uuid = user.uuid();
+        entity.username = user.username();
+        entity.email = user.email();
+        entity.emailVerified = user.emailVerified();
+        entity.passwordHash = user.passwordHash();
+
+        entity.givenName = user.givenName();
+        entity.familyName = user.familyName();
+        entity.middleName = user.middleName();
+        entity.nickname = user.nickname();
+        entity.gender = user.gender();
+        entity.birthdate = user.birthdate();
+        entity.profileUrl = user.profileUrl();
+        entity.pictureUrl = user.pictureUrl();
+        entity.websiteUrl = user.websiteUrl();
+        entity.zoneinfo = user.zoneinfo();
+        entity.locale = user.locale();
+
+        entity.phoneNumber = user.phoneNumber();
+        entity.phoneNumberVerified = user.phoneNumberVerified();
+
+        entity.streetAddress = user.streetAddress();
+        entity.locality = user.locality();
+        entity.region = user.region();
+        entity.postalCode = user.postalCode();
+        entity.country = user.country();
+
+        entity.enabled = user.enabled();
+        entity.accountNonExpired = user.accountNonExpired();
+        entity.accountNonLocked = user.accountNonLocked();
+        entity.credentialsNonExpired = user.credentialsNonExpired();
+
+        entity.failedLoginAttempts = user.failedLoginAttempts();
+        entity.lastLoginAt = user.lastLoginAt();
+        entity.passwordChangedAt = user.passwordChangedAt();
+
+        entity.deleted = user.deleted();
+        entity.deletedAt = user.deletedAt();
+        entity.deletedBy = user.deletedBy();
+
+        entity.createdAt = user.createdAt();
+        entity.createdBy = user.createdBy();
+        entity.updatedAt = user.updatedAt();
+        entity.updatedBy = user.updatedBy();
+
+        return toDomain(repository.save(entity));
+    }
+
+    @Override
+    public Optional<User> findByUuid(UUID uuid) {
+        return repository.findByUuid(uuid).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return repository.findByUsername(username).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return repository.findByEmail(email).map(this::toDomain);
+    }
+
+    @Override
+    public Optional<User> findByUsernameOrEmail(String usernameOrEmail) {
+        return repository.findByUsernameOrEmail(usernameOrEmail)
+                .map(this::toDomain);
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return repository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return repository.existsByEmail(email);
+    }
+
+    private User toDomain(UserEntity entity) {
+        return new User(
+                entity.id,
+                entity.uuid,
+                entity.username,
+                entity.email,
+                entity.emailVerified,
+                entity.passwordHash,
+                entity.givenName,
+                entity.familyName,
+                entity.middleName,
+                entity.nickname,
+                entity.gender,
+                entity.birthdate,
+                entity.profileUrl,
+                entity.pictureUrl,
+                entity.websiteUrl,
+                entity.zoneinfo,
+                entity.locale,
+                entity.phoneNumber,
+                entity.phoneNumberVerified,
+                entity.streetAddress,
+                entity.locality,
+                entity.region,
+                entity.postalCode,
+                entity.country,
+                entity.enabled,
+                entity.accountNonExpired,
+                entity.accountNonLocked,
+                entity.credentialsNonExpired,
+                entity.failedLoginAttempts,
+                entity.lastLoginAt,
+                entity.passwordChangedAt,
+                entity.deleted,
+                entity.deletedAt,
+                entity.deletedBy,
+                entity.createdAt,
+                entity.createdBy,
+                entity.updatedAt,
+                entity.updatedBy,
+                entity.version
+        );
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/adapter/UserRolePersistenceAdapter.java ==========
+package kh.edu.istad.platform.iampersistence.adapter;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserRoleRepository;
+import kh.edu.istad.platform.iamdomaincore.model.UserRole;
+import kh.edu.istad.platform.iampersistence.repository.UserRoleJpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Repository
+public class UserRolePersistenceAdapter implements UserRoleRepository {
+
+    private final UserRoleJpaRepository repository;
+
+    public UserRolePersistenceAdapter(UserRoleJpaRepository repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UserRole> findAllByUserId(Long userId) {
+        return repository.findAllByUser_Id(userId)
+                .stream()
+                .map(entity -> new UserRole(
+                        entity.id,
+                        entity.user.id,
+                        entity.role.id,
+                        entity.assignedAt,
+                        entity.assignedBy,
+                        entity.expiresAt,
+                        entity.revokedAt,
+                        entity.revokedBy,
+                        entity.reason
+                ))
+                .toList();
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/IdentityEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.time.OffsetDateTime;
+import java.util.Map;
+import java.util.UUID;
+
+@Entity
+@Table(
+    name = "iam_identities",
+    uniqueConstraints = {
+        @UniqueConstraint(
+            name = "uk_iam_identity_provider_subject",
+            columnNames = {"provider", "provider_subject"}
+        )
+    }
+)
+public class IdentityEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    public UUID uuid;
+
+    @Column(name = "user_id", nullable = false)
+    public Long userId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    public kh.edu.istad.platform.iamdomaincore.enums.IdentityProvider provider;
+
+    @Column(name = "provider_subject", nullable = false, length = 255)
+    public String providerSubject;
+
+    @Column(length = 255)
+    public String email;
+
+    @Column(nullable = false)
+    public boolean emailVerified;
+
+    @Column(length = 255)
+    public String displayName;
+
+    @Column(length = 100)
+    public String username;
+
+    @Column(length = 500)
+    public String pictureUrl;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    public Map<String, Object> attributes;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime linkedAt;
+
+    public OffsetDateTime lastLoginAt;
+
+    @Column(nullable = false)
+    public boolean deleted;
+
+    public OffsetDateTime deletedAt;
+
+    @Column(length = 100)
+    public String deletedBy;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime createdAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String createdBy;
+
+    @Column(nullable = false)
+    public OffsetDateTime updatedAt;
+
+    @Column(nullable = false, length = 100)
+    public String updatedBy;
+
+    @Version
+    @Column(nullable = false)
+    public long version;
+
+    protected IdentityEntity() {
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/PermissionEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = "iam_permissions")
+public class PermissionEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    public UUID uuid;
+
+    @Column(nullable = false, unique = true, length = 100)
+    public String name;
+
+    @Column(nullable = false, length = 50)
+    public String resource;
+
+    @Column(nullable = false, length = 50)
+    public String action;
+
+    @Column(length = 255)
+    public String description;
+
+    @Column(nullable = false)
+    public boolean system;
+
+    @Column(nullable = false)
+    public boolean active;
+
+    @Column(nullable = false)
+    public boolean deleted;
+
+    public OffsetDateTime deletedAt;
+
+    @Column(length = 100)
+    public String deletedBy;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime createdAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String createdBy;
+
+    @Column(nullable = false)
+    public OffsetDateTime updatedAt;
+
+    @Column(nullable = false, length = 100)
+    public String updatedBy;
+
+    @Version
+    @Column(nullable = false)
+    public long version;
+
+    public PermissionEntity() {
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/RoleEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = "iam_roles")
+public class RoleEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    public UUID uuid;
+
+    @Column(nullable = false, unique = true, length = 50)
+    public String name;
+
+    @Column(length = 255)
+    public String description;
+
+    @Column(nullable = false)
+    public boolean system;
+
+    @Column(nullable = false)
+    public boolean active;
+
+    @Column(nullable = false)
+    public boolean deleted;
+
+    public OffsetDateTime deletedAt;
+
+    @Column(length = 100)
+    public String deletedBy;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime createdAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String createdBy;
+
+    @Column(nullable = false)
+    public OffsetDateTime updatedAt;
+
+    @Column(nullable = false, length = 100)
+    public String updatedBy;
+
+    @Version
+    @Column(nullable = false)
+    public long version;
+
+    public RoleEntity() {
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/RolePermissionEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
+
+@Entity
+@Table(name = "iam_role_permissions")
+public class RolePermissionEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "role_id", nullable = false)
+    public RoleEntity role;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "permission_id", nullable = false)
+    public PermissionEntity permission;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime assignedAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String assignedBy;
+
+    public OffsetDateTime expiresAt;
+
+    public OffsetDateTime revokedAt;
+
+    @Column(length = 100)
+    public String revokedBy;
+
+    @Column(length = 255)
+    public String reason;
+
+    protected RolePermissionEntity() {
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/UserEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+@Entity
+@Table(name = "iam_users")
+public class UserEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    public UUID uuid;
+
+    @Column(nullable = false, unique = true, length = 100)
+    public String username;
+
+    @Column(nullable = false, unique = true, length = 255)
+    public String email;
+
+    @Column(nullable = false)
+    public boolean emailVerified;
+
+    @Column(nullable = false, length = 255)
+    public String passwordHash;
+
+    @Column(nullable = false, length = 100)
+    public String givenName;
+
+    @Column(nullable = false, length = 100)
+    public String familyName;
+
+    @Column(length = 100)
+    public String middleName;
+
+    @Column(length = 100)
+    public String nickname;
+
+    @Column(length = 30)
+    public String gender;
+
+    public LocalDate birthdate;
+
+    @Column(length = 500)
+    public String profileUrl;
+
+    @Column(length = 500)
+    public String pictureUrl;
+
+    @Column(length = 500)
+    public String websiteUrl;
+
+    @Column(length = 100)
+    public String zoneinfo;
+
+    @Column(length = 20)
+    public String locale;
+
+    @Column(length = 30)
+    public String phoneNumber;
+
+    @Column(nullable = false)
+    public boolean phoneNumberVerified;
+
+    @Column(length = 255)
+    public String streetAddress;
+
+    @Column(length = 100)
+    public String locality;
+
+    @Column(length = 100)
+    public String region;
+
+    @Column(length = 30)
+    public String postalCode;
+
+    @Column(length = 100)
+    public String country;
+
+    @Column(nullable = false)
+    public boolean enabled;
+
+    @Column(nullable = false)
+    public boolean accountNonExpired;
+
+    @Column(nullable = false)
+    public boolean accountNonLocked;
+
+    @Column(nullable = false)
+    public boolean credentialsNonExpired;
+
+    @Column(nullable = false)
+    public int failedLoginAttempts;
+
+    public OffsetDateTime lastLoginAt;
+
+    public OffsetDateTime passwordChangedAt;
+
+    @Column(nullable = false)
+    public boolean deleted;
+
+    public OffsetDateTime deletedAt;
+
+    @Column(length = 100)
+    public String deletedBy;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime createdAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String createdBy;
+
+    @Column(nullable = false)
+    public OffsetDateTime updatedAt;
+
+    @Column(nullable = false, length = 100)
+    public String updatedBy;
+
+    @Version
+    @Column(nullable = false)
+    public long version;
+
+    public UserEntity() {
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/UserPermissionEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import kh.edu.istad.platform.iamdomaincore.enums.PermissionEffect;
+
+import java.time.OffsetDateTime;
+
+@Entity
+@Table(name = "iam_user_permissions")
+public class UserPermissionEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    public UserEntity user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "permission_id", nullable = false)
+    public PermissionEntity permission;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10)
+    public PermissionEffect effect;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime assignedAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String assignedBy;
+
+    public OffsetDateTime expiresAt;
+
+    public OffsetDateTime revokedAt;
+
+    @Column(length = 100)
+    public String revokedBy;
+
+    @Column(length = 255)
+    public String reason;
+
+    protected UserPermissionEntity() {
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/entity/UserRoleEntity.java ==========
+package kh.edu.istad.platform.iampersistence.entity;
+
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
+
+@Entity
+@Table(name = "iam_user_roles")
+public class UserRoleEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    public UserEntity user;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "role_id", nullable = false)
+    public RoleEntity role;
+
+    @Column(nullable = false, updatable = false)
+    public OffsetDateTime assignedAt;
+
+    @Column(nullable = false, updatable = false, length = 100)
+    public String assignedBy;
+
+    public OffsetDateTime expiresAt;
+
+    public OffsetDateTime revokedAt;
+
+    @Column(length = 100)
+    public String revokedBy;
+
+    @Column(length = 255)
+    public String reason;
+
+    protected UserRoleEntity() {
+    }
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/IdentityJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iamdomaincore.enums.IdentityProvider;
+import kh.edu.istad.platform.iampersistence.entity.IdentityEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+public interface IdentityJpaRepository extends JpaRepository<IdentityEntity, Long> {
+
+    Optional<IdentityEntity> findByUuid(UUID uuid);
+
+    Optional<IdentityEntity> findByProviderAndProviderSubjectAndDeletedFalse(
+            IdentityProvider provider,
+            String providerSubject
+    );
+
+    List<IdentityEntity> findAllByUserIdAndDeletedFalse(Long userId);
+
+    boolean existsByUserIdAndProviderAndDeletedFalse(
+            Long userId,
+            IdentityProvider provider
+    );
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/PermissionJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iampersistence.entity.PermissionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface PermissionJpaRepository extends JpaRepository<PermissionEntity, Long> {
+
+    Optional<PermissionEntity> findByUuid(UUID uuid);
+
+    Optional<PermissionEntity> findByName(String name);
+
+    boolean existsByName(String name);
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/RoleJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iampersistence.entity.RoleEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface RoleJpaRepository extends JpaRepository<RoleEntity, Long> {
+
+    Optional<RoleEntity> findByUuid(UUID uuid);
+
+    Optional<RoleEntity> findByName(String name);
+
+    boolean existsByName(String name);
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/RolePermissionJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iampersistence.entity.RolePermissionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface RolePermissionJpaRepository
+        extends JpaRepository<RolePermissionEntity, Long> {
+
+    List<RolePermissionEntity> findAllByRole_Id(Long roleId);
+
+    List<RolePermissionEntity> findAllByRole_IdAndRevokedAtIsNull(Long roleId);
+
+    Optional<RolePermissionEntity> findByRole_IdAndPermission_IdAndRevokedAtIsNull(
+            Long roleId,
+            Long permissionId
+    );
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/UserJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iampersistence.entity.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
+
+    Optional<UserEntity> findByUuid(UUID uuid);
+
+    Optional<UserEntity> findByUsername(String username);
+
+    Optional<UserEntity> findByEmail(String email);
+
+    @Query("""
+            select u
+            from UserEntity u
+            where u.username = :value or u.email = :value
+            """)
+    Optional<UserEntity> findByUsernameOrEmail(@Param("value") String value);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/UserPermissionJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iampersistence.entity.UserPermissionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface UserPermissionJpaRepository
+        extends JpaRepository<UserPermissionEntity, Long> {
+
+    List<UserPermissionEntity> findAllByUser_Id(Long userId);
+
+    List<UserPermissionEntity> findAllByUser_IdAndRevokedAtIsNull(Long userId);
+
+    Optional<UserPermissionEntity> findByUser_IdAndPermission_IdAndRevokedAtIsNull(
+            Long userId,
+            Long permissionId
+    );
+}
+
+
+========== microservices/iam-service/iam-persistence/src/main/java/kh/edu/istad/platform/iampersistence/repository/UserRoleJpaRepository.java ==========
+package kh.edu.istad.platform.iampersistence.repository;
+
+import kh.edu.istad.platform.iampersistence.entity.UserRoleEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+public interface UserRoleJpaRepository extends JpaRepository<UserRoleEntity, Long> {
+
+    List<UserRoleEntity> findAllByUser_Id(Long userId);
+
+    List<UserRoleEntity> findAllByUser_IdAndRevokedAtIsNull(Long userId);
+
+    Optional<UserRoleEntity> findByUser_IdAndRole_IdAndRevokedAtIsNull(
+            Long userId,
+            Long roleId
+    );
+}
+
+
+========== EXISTING SERVICE CONFIGURATION ==========
+
+
+========== microservices/iam-service/iam-main/src/main/java/kh/edu/istad/platform/iammain/IamMainApplication.java ==========
+package kh.edu.istad.platform.iammain;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+@SpringBootApplication(scanBasePackages = "kh.edu.istad.platform")
+@EntityScan(basePackages = "kh.edu.istad.platform.iampersistence.entity")
+@EnableJpaRepositories(basePackages = "kh.edu.istad.platform.iampersistence.repository")
+public class IamMainApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(IamMainApplication.class, args);
+    }
+}
+
+
+========== microservices/iam-service/iam-main/src/main/java/kh/edu/istad/platform/iammain/config/IamApplicationConfig.java ==========
+package kh.edu.istad.platform.iammain.config;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.*;
+import kh.edu.istad.platform.iamapplicationservice.service.user.*;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class IamApplicationConfig {
+
+    @Bean
+    public RegisterUserUseCase registerUserUseCase(
+            UserRepository userRepository,
+            PasswordHasher passwordHasher,
+            CurrentActorProvider currentActorProvider
+    ) {
+        return new RegisterUserService(
+                userRepository,
+                passwordHasher,
+                currentActorProvider
+        );
+    }
+
+    @Bean
+    public GetUserAuthoritiesUseCase getUserAuthoritiesUseCase(
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            PermissionRepository permissionRepository,
+            UserRoleRepository userRoleRepository,
+            UserPermissionRepository userPermissionRepository,
+            RolePermissionRepository rolePermissionRepository
+    ) {
+        return new GetUserAuthoritiesService(
+                userRepository,
+                roleRepository,
+                permissionRepository,
+                userRoleRepository,
+                userPermissionRepository,
+                rolePermissionRepository
+        );
+    }
+
+    @Bean
+    public LoadUserForAuthenticationUseCase loadUserForAuthenticationUseCase(
+            UserRepository userRepository,
+            GetUserAuthoritiesUseCase getUserAuthoritiesUseCase
+    ) {
+        return new LoadUserForAuthenticationService(
+                userRepository,
+                getUserAuthoritiesUseCase
+        );
+    }
+
+    @Bean
+    public RecordLoginAttemptUseCase recordLoginAttemptUseCase(
+            UserRepository userRepository,
+            CurrentActorProvider currentActorProvider
+    ) {
+        return new RecordLoginAttemptService(
+                userRepository,
+                currentActorProvider
+        );
+    }
+}

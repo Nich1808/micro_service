@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-iam-tables
+      author: istad
+      changes:
+        - sqlFile:
+            path: ddl/001-create-iam-tables.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: false

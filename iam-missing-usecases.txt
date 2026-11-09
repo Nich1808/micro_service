@@ -1,0 +1,1266 @@
+========== 26 MISSING USE CASES ==========
+
+========== FindOrProvisionFederatedUserUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.identity;
+
+import kh.edu.istad.platform.iamapplicationservice.command.identity.FederatedIdentityCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.user.AuthUserResult;
+
+public interface FindOrProvisionFederatedUserUseCase {
+    AuthUserResult execute(FederatedIdentityCommand command);
+}
+
+========== LinkIdentityUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.identity;
+
+import kh.edu.istad.platform.iamapplicationservice.command.identity.FederatedIdentityCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.identity.IdentityResult;
+import java.util.UUID;
+
+public interface LinkIdentityUseCase {
+    IdentityResult execute(UUID userUuid, FederatedIdentityCommand command);
+}
+
+========== ListUserIdentitiesUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.identity;
+
+import kh.edu.istad.platform.iamapplicationservice.result.identity.IdentityResult;
+import java.util.List;
+import java.util.UUID;
+
+public interface ListUserIdentitiesUseCase {
+    List<IdentityResult> execute(UUID userUuid);
+}
+
+========== UnlinkIdentityUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.identity;
+
+import java.util.UUID;
+
+public interface UnlinkIdentityUseCase {
+    void execute(UUID userUuid, UUID identityUuid);
+}
+
+========== ActivatePermissionUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import java.util.UUID;
+
+public interface ActivatePermissionUseCase {
+    void execute(UUID permissionUuid);
+}
+
+========== CreatePermissionUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import kh.edu.istad.platform.iamapplicationservice.command.permission.CreatePermissionCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.permission.PermissionResult;
+
+public interface CreatePermissionUseCase {
+    PermissionResult execute(CreatePermissionCommand command);
+}
+
+========== DeactivatePermissionUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import java.util.UUID;
+
+public interface DeactivatePermissionUseCase {
+    void execute(UUID permissionUuid);
+}
+
+========== DeletePermissionUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import java.util.UUID;
+
+public interface DeletePermissionUseCase {
+    void execute(UUID permissionUuid);
+}
+
+========== GetPermissionUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import kh.edu.istad.platform.iamapplicationservice.result.permission.PermissionResult;
+import java.util.UUID;
+
+public interface GetPermissionUseCase {
+    PermissionResult execute(UUID permissionUuid);
+}
+
+========== ListPermissionsUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import kh.edu.istad.platform.iamapplicationservice.query.permission.PermissionFilterQuery;
+import kh.edu.istad.platform.iamapplicationservice.result.common.PageResult;
+import kh.edu.istad.platform.iamapplicationservice.result.permission.PermissionResult;
+
+public interface ListPermissionsUseCase {
+    PageResult<PermissionResult> execute(PermissionFilterQuery query);
+}
+
+========== UpdatePermissionUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.permission;
+
+import kh.edu.istad.platform.iamapplicationservice.command.permission.UpdatePermissionCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.permission.PermissionResult;
+
+public interface UpdatePermissionUseCase {
+    PermissionResult execute(UpdatePermissionCommand command);
+}
+
+========== ActivateRoleUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import java.util.UUID;
+
+public interface ActivateRoleUseCase {
+    void execute(UUID roleUuid);
+}
+
+========== AssignPermissionsToRoleUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import kh.edu.istad.platform.iamapplicationservice.command.role.AssignPermissionsToRoleCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.role.PermissionAssignmentResult;
+import java.util.List;
+
+public interface AssignPermissionsToRoleUseCase {
+    List<PermissionAssignmentResult> execute(AssignPermissionsToRoleCommand command);
+}
+
+========== CreateRoleUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import kh.edu.istad.platform.iamapplicationservice.command.role.CreateRoleCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.role.RoleResult;
+
+public interface CreateRoleUseCase {
+    RoleResult execute(CreateRoleCommand command);
+}
+
+========== DeactivateRoleUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import java.util.UUID;
+
+public interface DeactivateRoleUseCase {
+    void execute(UUID roleUuid);
+}
+
+========== DeleteRoleUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import java.util.UUID;
+
+public interface DeleteRoleUseCase {
+    void execute(UUID roleUuid);
+}
+
+========== GetRoleUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import kh.edu.istad.platform.iamapplicationservice.result.role.RoleResult;
+import java.util.UUID;
+
+public interface GetRoleUseCase {
+    RoleResult execute(UUID roleUuid);
+}
+
+========== ListRolesUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import kh.edu.istad.platform.iamapplicationservice.query.role.RoleFilterQuery;
+import kh.edu.istad.platform.iamapplicationservice.result.common.PageResult;
+import kh.edu.istad.platform.iamapplicationservice.result.role.RoleSummary;
+
+public interface ListRolesUseCase {
+    PageResult<RoleSummary> execute(RoleFilterQuery query);
+}
+
+========== RevokePermissionFromRoleUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import java.util.UUID;
+
+public interface RevokePermissionFromRoleUseCase {
+    void execute(UUID roleUuid, UUID permissionUuid, String reason);
+}
+
+========== UpdateRoleUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.role;
+
+import kh.edu.istad.platform.iamapplicationservice.command.role.UpdateRoleCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.role.RoleResult;
+
+public interface UpdateRoleUseCase {
+    RoleResult execute(UpdateRoleCommand command);
+}
+
+========== AssignRolesToUserUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.AssignRolesToUserCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.user.RoleAssignmentResult;
+import java.util.List;
+
+public interface AssignRolesToUserUseCase {
+    List<RoleAssignmentResult> execute(AssignRolesToUserCommand command);
+}
+
+========== GrantPermissionsToUserUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.GrantPermissionsToUserCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.user.PermissionGrantResult;
+import java.util.List;
+
+public interface GrantPermissionsToUserUseCase {
+    List<PermissionGrantResult> execute(GrantPermissionsToUserCommand command);
+}
+
+========== ListUsersUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.query.user.UserFilterQuery;
+import kh.edu.istad.platform.iamapplicationservice.result.common.PageResult;
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserSummary;
+
+public interface ListUsersUseCase {
+    PageResult<UserSummary> execute(UserFilterQuery query);
+}
+
+========== RevokePermissionFromUserUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import java.util.UUID;
+
+public interface RevokePermissionFromUserUseCase {
+    void execute(UUID userUuid, UUID permissionUuid, String reason);
+}
+
+========== RevokeRoleFromUserUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import java.util.UUID;
+
+public interface RevokeRoleFromUserUseCase {
+    void execute(UUID userUuid, UUID roleUuid, String reason);
+}
+
+========== UpdateUserProfileUseCase ==========
+package kh.edu.istad.platform.iamapplicationservice.usecase.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.UpdateUserProfileCommand;
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserResult;
+
+public interface UpdateUserProfileUseCase {
+    UserResult execute(UpdateUserProfileCommand command);
+}
+
+========== EXISTING SERVICES ==========
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/ChangePasswordService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.ChangePasswordCommand;
+import kh.edu.istad.platform.iamapplicationservice.port.out.CurrentActorProvider;
+import kh.edu.istad.platform.iamapplicationservice.port.out.PasswordHasher;
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.ChangePasswordUseCase;
+import kh.edu.istad.platform.iamdomaincore.model.User;
+
+import java.time.OffsetDateTime;
+
+public class ChangePasswordService implements ChangePasswordUseCase {
+
+    private final UserRepository repository;
+    private final PasswordHasher passwordHasher;
+    private final CurrentActorProvider actorProvider;
+
+    public ChangePasswordService(
+            UserRepository repository,
+            PasswordHasher passwordHasher,
+            CurrentActorProvider actorProvider
+    ) {
+        this.repository = repository;
+        this.passwordHasher = passwordHasher;
+        this.actorProvider = actorProvider;
+    }
+
+    @Override
+    public void execute(ChangePasswordCommand command) {
+        if (command == null) {
+            throw new IllegalArgumentException("Change password command is required");
+        }
+
+        if (command.currentPassword() == null || command.currentPassword().isBlank()) {
+            throw new IllegalArgumentException("Current password is required");
+        }
+
+        if (command.newPassword() == null || command.newPassword().isBlank()) {
+            throw new IllegalArgumentException("New password is required");
+        }
+
+        User user = UserStateSupport.requireActiveUser(
+                repository, command.userUuid()
+        );
+
+        user.validatePasswordAvailable();
+
+        if (!passwordHasher.matches(
+                command.currentPassword(), user.passwordHash()
+        )) {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
+
+        String passwordHash = passwordHasher.hash(command.newPassword());
+
+        if (passwordHash == null || passwordHash.isBlank()) {
+            throw new IllegalStateException("Password hashing failed");
+        }
+
+        String actor = actorProvider.getCurrentActor();
+
+        if (actor == null || actor.isBlank()) {
+            throw new IllegalStateException("Current actor is required");
+        }
+
+        repository.save(UserPasswordSupport.updatePassword(
+                user, passwordHash, actor, OffsetDateTime.now()
+        ));
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/CreateUserService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.CreateUserCommand;
+import kh.edu.istad.platform.iamapplicationservice.port.out.CurrentActorProvider;
+import kh.edu.istad.platform.iamapplicationservice.port.out.PasswordHasher;
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserResult;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.CreateUserUseCase;
+import kh.edu.istad.platform.iamdomaincore.model.User;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Locale;
+
+public class CreateUserService implements CreateUserUseCase {
+
+    private final UserRepository userRepository;
+    private final PasswordHasher passwordHasher;
+    private final CurrentActorProvider currentActorProvider;
+
+    public CreateUserService(
+            UserRepository userRepository,
+            PasswordHasher passwordHasher,
+            CurrentActorProvider currentActorProvider
+    ) {
+        this.userRepository = userRepository;
+        this.passwordHasher = passwordHasher;
+        this.currentActorProvider = currentActorProvider;
+    }
+
+    @Override
+    public UserResult execute(CreateUserCommand command) {
+        if (command == null) {
+            throw new IllegalArgumentException("Create user command is required");
+        }
+
+        String username = command.username().trim();
+        String email = command.email().trim().toLowerCase(Locale.ROOT);
+
+        if (userRepository.existsByUsername(username)) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
+        if (command.rawPassword() == null || command.rawPassword().isBlank()) {
+            throw new IllegalArgumentException("Password is required");
+        }
+
+        String actor = currentActorProvider.getCurrentActor();
+        OffsetDateTime now = OffsetDateTime.now();
+
+        User user = new User(
+                null, null,
+                username, email, false,
+                passwordHasher.hash(command.rawPassword()),
+                command.givenName(), command.familyName(),
+                null, null, null, null, null, null, null, null,
+                "en",
+                null, false,
+                null, null, null, null, null,
+                true, true, true, true,
+                0, null, null,
+                false, null, null,
+                now, actor, now, actor,
+                0
+        );
+
+        User saved = userRepository.save(user);
+
+        return new UserResult(
+                saved.uuid(),
+                saved.username(),
+                saved.email(),
+                saved.emailVerified(),
+                saved.name(),
+                saved.locale(),
+                saved.enabled(),
+                List.of(),
+                saved.createdAt(),
+                saved.updatedAt()
+        );
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/DeleteUserService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.*;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.DeleteUserUseCase;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public class DeleteUserService implements DeleteUserUseCase {
+
+    private final UserRepository repository;
+    private final CurrentActorProvider actorProvider;
+
+    public DeleteUserService(
+            UserRepository repository,
+            CurrentActorProvider actorProvider
+    ) {
+        this.repository = repository;
+        this.actorProvider = actorProvider;
+    }
+
+    @Override
+    public void execute(UUID userUuid) {
+        var user = UserStateSupport.requireActiveUser(repository, userUuid);
+
+        repository.save(user.softDelete(
+                actorProvider.getCurrentActor(),
+                OffsetDateTime.now()
+        ));
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/DisableUserService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.*;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.DisableUserUseCase;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public class DisableUserService implements DisableUserUseCase {
+
+    private final UserRepository repository;
+    private final CurrentActorProvider actorProvider;
+
+    public DisableUserService(
+            UserRepository repository,
+            CurrentActorProvider actorProvider
+    ) {
+        this.repository = repository;
+        this.actorProvider = actorProvider;
+    }
+
+    @Override
+    public void execute(UUID userUuid) {
+        var user = UserStateSupport.requireActiveUser(repository, userUuid);
+
+        if (user.enabled()) {
+            repository.save(UserStateSupport.changeStatus(
+                    user, false, user.accountNonLocked(),
+                    actorProvider.getCurrentActor(), OffsetDateTime.now()
+            ));
+        }
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/EnableUserService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.*;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.EnableUserUseCase;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public class EnableUserService implements EnableUserUseCase {
+
+    private final UserRepository repository;
+    private final CurrentActorProvider actorProvider;
+
+    public EnableUserService(
+            UserRepository repository,
+            CurrentActorProvider actorProvider
+    ) {
+        this.repository = repository;
+        this.actorProvider = actorProvider;
+    }
+
+    @Override
+    public void execute(UUID userUuid) {
+        var user = UserStateSupport.requireActiveUser(repository, userUuid);
+
+        if (!user.enabled()) {
+            repository.save(UserStateSupport.changeStatus(
+                    user, true, user.accountNonLocked(),
+                    actorProvider.getCurrentActor(), OffsetDateTime.now()
+            ));
+        }
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/GetUserAuthoritiesService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.*;
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserAuthoritiesResult;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.GetUserAuthoritiesUseCase;
+import kh.edu.istad.platform.iamdomaincore.enums.PermissionEffect;
+import kh.edu.istad.platform.iamdomaincore.model.Permission;
+import kh.edu.istad.platform.iamdomaincore.model.Role;
+import kh.edu.istad.platform.iamdomaincore.model.User;
+
+import java.time.OffsetDateTime;
+import java.util.*;
+
+public class GetUserAuthoritiesService implements GetUserAuthoritiesUseCase {
+
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PermissionRepository permissionRepository;
+    private final UserRoleRepository userRoleRepository;
+    private final UserPermissionRepository userPermissionRepository;
+    private final RolePermissionRepository rolePermissionRepository;
+
+    public GetUserAuthoritiesService(
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            PermissionRepository permissionRepository,
+            UserRoleRepository userRoleRepository,
+            UserPermissionRepository userPermissionRepository,
+            RolePermissionRepository rolePermissionRepository
+    ) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.permissionRepository = permissionRepository;
+        this.userRoleRepository = userRoleRepository;
+        this.userPermissionRepository = userPermissionRepository;
+        this.rolePermissionRepository = rolePermissionRepository;
+    }
+
+    @Override
+    public UserAuthoritiesResult execute(UUID userUuid) {
+        User user = userRepository.findByUuid(userUuid)
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
+
+        OffsetDateTime now = OffsetDateTime.now();
+
+        Map<Long, Role> activeRoles = new LinkedHashMap<>();
+        List<UserAuthoritiesResult.RoleAuthority> roleResults = new ArrayList<>();
+        Set<String> effective = new TreeSet<>();
+
+        userRoleRepository.findAllByUserId(user.id()).stream()
+                .filter(assignment -> assignment.isActiveAt(now))
+                .forEach(assignment -> roleRepository.findById(assignment.roleId())
+                        .filter(Role::isAssignable)
+                        .ifPresent(role -> {
+                            activeRoles.put(role.id(), role);
+                            roleResults.add(new UserAuthoritiesResult.RoleAuthority(
+                                    role.uuid(), role.name(), assignment.expiresAt()
+                            ));
+                        }));
+
+        for (Role role : activeRoles.values()) {
+            rolePermissionRepository.findAllByRoleId(role.id()).stream()
+                    .filter(assignment -> assignment.isActiveAt(now))
+                    .forEach(assignment -> permissionRepository
+                            .findById(assignment.permissionId())
+                            .filter(Permission::isAssignable)
+                            .ifPresent(permission -> effective.add(permission.name())));
+        }
+
+        Map<String, PermissionEffect> directEffects = new LinkedHashMap<>();
+        List<UserAuthoritiesResult.DirectPermission> directResults = new ArrayList<>();
+
+        userPermissionRepository.findAllByUserId(user.id()).stream()
+                .filter(assignment -> assignment.isActiveAt(now))
+                .forEach(assignment -> permissionRepository
+                        .findById(assignment.permissionId())
+                        .filter(Permission::isAssignable)
+                        .ifPresent(permission -> {
+                            directEffects.merge(
+                                    permission.name(),
+                                    assignment.effect(),
+                                    (oldEffect, newEffect) ->
+                                            oldEffect == PermissionEffect.DENY
+                                                    || newEffect == PermissionEffect.DENY
+                                                    ? PermissionEffect.DENY
+                                                    : PermissionEffect.GRANT
+                            );
+                        }));
+
+        directEffects.forEach((name, effect) -> {
+            directResults.add(
+                    new UserAuthoritiesResult.DirectPermission(name, effect)
+            );
+
+            if (effect == PermissionEffect.GRANT) {
+                effective.add(name);
+            } else {
+                effective.remove(name);
+            }
+        });
+
+        return new UserAuthoritiesResult(
+                roleResults,
+                directResults,
+                new ArrayList<>(effective)
+        );
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/GetUserService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserResult;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.GetUserUseCase;
+import kh.edu.istad.platform.iamdomaincore.model.User;
+
+import java.util.List;
+import java.util.UUID;
+
+public class GetUserService implements GetUserUseCase {
+
+    private final UserRepository userRepository;
+
+    public GetUserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public UserResult execute(UUID userUuid) {
+        User user = userRepository.findByUuid(userUuid)
+                .filter(u -> !u.deleted())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        return new UserResult(
+                user.uuid(),
+                user.username(),
+                user.email(),
+                user.emailVerified(),
+                user.name(),
+                user.locale(),
+                user.enabled(),
+                List.of(),
+                user.createdAt(),
+                user.updatedAt()
+        );
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/LoadUserForAuthenticationService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
+import kh.edu.istad.platform.iamapplicationservice.result.user.AuthUserResult;
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserAuthoritiesResult;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.GetUserAuthoritiesUseCase;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.LoadUserForAuthenticationUseCase;
+import kh.edu.istad.platform.iamdomaincore.model.User;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
+
+public class LoadUserForAuthenticationService
+        implements LoadUserForAuthenticationUseCase {
+
+    private final UserRepository userRepository;
+    private final GetUserAuthoritiesUseCase getUserAuthoritiesUseCase;
+
+    public LoadUserForAuthenticationService(
+            UserRepository userRepository,
+            GetUserAuthoritiesUseCase getUserAuthoritiesUseCase
+    ) {
+        this.userRepository = userRepository;
+        this.getUserAuthoritiesUseCase = getUserAuthoritiesUseCase;
+    }
+
+    @Override
+    public AuthUserResult execute(String usernameOrEmail) {
+        if (usernameOrEmail == null || usernameOrEmail.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Username or email is required"
+            );
+        }
+
+        User user = userRepository.findByUsernameOrEmail(
+                usernameOrEmail.trim()
+        ).orElseThrow(() ->
+                new NoSuchElementException("User not found"));
+
+        UserAuthoritiesResult userAuthorities =
+                getUserAuthoritiesUseCase.execute(user.uuid());
+
+        LinkedHashSet<String> authorities = new LinkedHashSet<>();
+
+        userAuthorities.roles().forEach(role ->
+                authorities.add("ROLE_" + role.name()));
+
+        authorities.addAll(userAuthorities.effectivePermissions());
+
+        return new AuthUserResult(
+                user.uuid(),
+                user.username(),
+                user.passwordHash(),
+                user.enabled() && !user.deleted(),
+                user.accountNonExpired(),
+                user.accountNonLocked(),
+                user.credentialsNonExpired(),
+                new ArrayList<>(authorities)
+        );
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/LockUserService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.*;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.LockUserUseCase;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public class LockUserService implements LockUserUseCase {
+
+    private final UserRepository repository;
+    private final CurrentActorProvider actorProvider;
+
+    public LockUserService(
+            UserRepository repository,
+            CurrentActorProvider actorProvider
+    ) {
+        this.repository = repository;
+        this.actorProvider = actorProvider;
+    }
+
+    @Override
+    public void execute(UUID userUuid) {
+        var user = UserStateSupport.requireActiveUser(repository, userUuid);
+
+        if (user.accountNonLocked()) {
+            repository.save(UserStateSupport.changeStatus(
+                    user, user.enabled(), false,
+                    actorProvider.getCurrentActor(), OffsetDateTime.now()
+            ));
+        }
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/RecordLoginAttemptService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.CurrentActorProvider;
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.RecordLoginAttemptUseCase;
+import kh.edu.istad.platform.iamdomaincore.model.User;
+
+import java.time.OffsetDateTime;
+
+public class RecordLoginAttemptService
+        implements RecordLoginAttemptUseCase {
+
+    private final UserRepository userRepository;
+    private final CurrentActorProvider currentActorProvider;
+
+    public RecordLoginAttemptService(
+            UserRepository userRepository,
+            CurrentActorProvider currentActorProvider
+    ) {
+        this.userRepository = userRepository;
+        this.currentActorProvider = currentActorProvider;
+    }
+
+    @Override
+    public void execute(String usernameOrEmail, boolean success) {
+        if (usernameOrEmail == null || usernameOrEmail.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Username or email is required"
+            );
+        }
+
+        userRepository.findByUsernameOrEmail(usernameOrEmail.trim())
+                .filter(user -> !user.deleted())
+                .ifPresent(user -> {
+                    OffsetDateTime now = OffsetDateTime.now();
+                    String actor = currentActorProvider.getCurrentActor();
+
+                    int failedAttempts = success
+                            ? 0
+                            : Math.addExact(user.failedLoginAttempts(), 1);
+
+                    OffsetDateTime lastLoginAt = success
+                            ? now
+                            : user.lastLoginAt();
+
+                    User updatedUser = new User(
+                            user.id(), user.uuid(),
+                            user.username(), user.email(),
+                            user.emailVerified(), user.passwordHash(),
+                            user.givenName(), user.familyName(),
+                            user.middleName(), user.nickname(),
+                            user.gender(), user.birthdate(),
+                            user.profileUrl(), user.pictureUrl(),
+                            user.websiteUrl(), user.zoneinfo(),
+                            user.locale(),
+                            user.phoneNumber(), user.phoneNumberVerified(),
+                            user.streetAddress(), user.locality(),
+                            user.region(), user.postalCode(),
+                            user.country(),
+                            user.enabled(),
+                            user.accountNonExpired(),
+                            user.accountNonLocked(),
+                            user.credentialsNonExpired(),
+                            failedAttempts,
+                            lastLoginAt,
+                            user.passwordChangedAt(),
+                            user.deleted(),
+                            user.deletedAt(),
+                            user.deletedBy(),
+                            user.createdAt(),
+                            user.createdBy(),
+                            now,
+                            actor,
+                            user.version() + 1
+                    );
+
+                    userRepository.save(updatedUser);
+                });
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/RegisterUserService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.RegisterUserCommand;
+import kh.edu.istad.platform.iamapplicationservice.port.out.CurrentActorProvider;
+import kh.edu.istad.platform.iamapplicationservice.port.out.PasswordHasher;
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
+import kh.edu.istad.platform.iamapplicationservice.result.user.UserResult;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.RegisterUserUseCase;
+import kh.edu.istad.platform.iamdomaincore.model.User;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.Locale;
+
+public class RegisterUserService implements RegisterUserUseCase {
+
+    private final UserRepository userRepository;
+    private final PasswordHasher passwordHasher;
+    private final CurrentActorProvider currentActorProvider;
+
+    public RegisterUserService(
+            UserRepository userRepository,
+            PasswordHasher passwordHasher,
+            CurrentActorProvider currentActorProvider
+    ) {
+        this.userRepository = userRepository;
+        this.passwordHasher = passwordHasher;
+        this.currentActorProvider = currentActorProvider;
+    }
+
+    @Override
+    public UserResult execute(RegisterUserCommand command) {
+
+        if (command == null) {
+            throw new IllegalArgumentException("Register command is required");
+        }
+
+        String username = command.username().trim();
+        String email = command.email().trim().toLowerCase(Locale.ROOT);
+
+        if (userRepository.existsByUsername(username)) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
+        if (command.rawPassword() == null || command.rawPassword().isBlank()) {
+            throw new IllegalArgumentException("Password is required");
+        }
+
+        String passwordHash = passwordHasher.hash(command.rawPassword());
+
+        if (passwordHash == null || passwordHash.isBlank()) {
+            throw new IllegalStateException("Password hashing failed");
+        }
+
+        String actor = currentActorProvider.getCurrentActor();
+
+        if (actor == null || actor.isBlank()) {
+            throw new IllegalStateException("Current actor is required");
+        }
+
+        OffsetDateTime now = OffsetDateTime.now();
+
+        User user = new User(
+                null, null, username, email, false, passwordHash,
+                command.givenName(), command.familyName(),
+                null, null, null, null, null, null, null, null,
+                "en", null, false, null, null, null, null, null,
+                true, true, true, true,
+                0, null, null, false, null, null,
+                now, actor, now, actor, 0
+        );
+
+        User savedUser = userRepository.save(user);
+
+        return new UserResult(
+                savedUser.uuid(),
+                savedUser.username(),
+                savedUser.email(),
+                savedUser.emailVerified(),
+                savedUser.name(),
+                savedUser.locale(),
+                savedUser.enabled(),
+                List.of(),
+                savedUser.createdAt(),
+                savedUser.updatedAt()
+        );
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/ResetUserPasswordService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.command.user.ResetUserPasswordCommand;
+import kh.edu.istad.platform.iamapplicationservice.port.out.CurrentActorProvider;
+import kh.edu.istad.platform.iamapplicationservice.port.out.PasswordHasher;
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.ResetUserPasswordUseCase;
+import kh.edu.istad.platform.iamdomaincore.model.User;
+
+import java.time.OffsetDateTime;
+
+public class ResetUserPasswordService implements ResetUserPasswordUseCase {
+
+    private final UserRepository repository;
+    private final PasswordHasher passwordHasher;
+    private final CurrentActorProvider actorProvider;
+
+    public ResetUserPasswordService(
+            UserRepository repository,
+            PasswordHasher passwordHasher,
+            CurrentActorProvider actorProvider
+    ) {
+        this.repository = repository;
+        this.passwordHasher = passwordHasher;
+        this.actorProvider = actorProvider;
+    }
+
+    @Override
+    public void execute(ResetUserPasswordCommand command) {
+        if (command == null) {
+            throw new IllegalArgumentException("Reset password command is required");
+        }
+
+        if (command.newPassword() == null || command.newPassword().isBlank()) {
+            throw new IllegalArgumentException("New password is required");
+        }
+
+        User user = UserStateSupport.requireActiveUser(
+                repository, command.userUuid()
+        );
+
+        String passwordHash = passwordHasher.hash(command.newPassword());
+
+        if (passwordHash == null || passwordHash.isBlank()) {
+            throw new IllegalStateException("Password hashing failed");
+        }
+
+        String actor = actorProvider.getCurrentActor();
+
+        if (actor == null || actor.isBlank()) {
+            throw new IllegalStateException("Current actor is required");
+        }
+
+        repository.save(UserPasswordSupport.updatePassword(
+                user, passwordHash, actor, OffsetDateTime.now()
+        ));
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/UnlockUserService.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamapplicationservice.port.out.*;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.UnlockUserUseCase;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+public class UnlockUserService implements UnlockUserUseCase {
+
+    private final UserRepository repository;
+    private final CurrentActorProvider actorProvider;
+
+    public UnlockUserService(
+            UserRepository repository,
+            CurrentActorProvider actorProvider
+    ) {
+        this.repository = repository;
+        this.actorProvider = actorProvider;
+    }
+
+    @Override
+    public void execute(UUID userUuid) {
+        var user = UserStateSupport.requireActiveUser(repository, userUuid);
+
+        if (!user.accountNonLocked()) {
+            repository.save(UserStateSupport.changeStatus(
+                    user, user.enabled(), true,
+                    actorProvider.getCurrentActor(), OffsetDateTime.now()
+            ));
+        }
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/UserPasswordSupport.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamdomaincore.model.User;
+
+import java.time.OffsetDateTime;
+
+final class UserPasswordSupport {
+
+    private UserPasswordSupport() {}
+
+    static User updatePassword(
+            User user,
+            String passwordHash,
+            String actor,
+            OffsetDateTime now
+    ) {
+        return new User(
+                user.id(), user.uuid(),
+                user.username(), user.email(), user.emailVerified(),
+                passwordHash,
+                user.givenName(), user.familyName(),
+                user.middleName(), user.nickname(), user.gender(),
+                user.birthdate(), user.profileUrl(), user.pictureUrl(),
+                user.websiteUrl(), user.zoneinfo(), user.locale(),
+                user.phoneNumber(), user.phoneNumberVerified(),
+                user.streetAddress(), user.locality(), user.region(),
+                user.postalCode(), user.country(),
+                user.enabled(), user.accountNonExpired(),
+                user.accountNonLocked(), user.credentialsNonExpired(),
+                user.failedLoginAttempts(),
+                user.lastLoginAt(), now,
+                user.deleted(), user.deletedAt(), user.deletedBy(),
+                user.createdAt(), user.createdBy(),
+                now, actor,
+                user.version() + 1
+        );
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/service/user/UserStateSupport.java ==========
+package kh.edu.istad.platform.iamapplicationservice.service.user;
+
+import kh.edu.istad.platform.iamdomaincore.model.User;
+
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
+final class UserStateSupport {
+
+    private UserStateSupport() {}
+
+    static User requireActiveUser(
+            kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository repository,
+            UUID uuid
+    ) {
+        if (uuid == null) {
+            throw new IllegalArgumentException("User UUID is required");
+        }
+
+        return repository.findByUuid(uuid)
+                .filter(user -> !user.deleted())
+                .orElseThrow(() ->
+                        new IllegalArgumentException("User not found"));
+    }
+
+    static User changeStatus(
+            User user,
+            boolean enabled,
+            boolean accountNonLocked,
+            String actor,
+            OffsetDateTime now
+    ) {
+        return new User(
+                user.id(), user.uuid(),
+                user.username(), user.email(), user.emailVerified(),
+                user.passwordHash(),
+                user.givenName(), user.familyName(),
+                user.middleName(), user.nickname(), user.gender(),
+                user.birthdate(), user.profileUrl(), user.pictureUrl(),
+                user.websiteUrl(), user.zoneinfo(), user.locale(),
+                user.phoneNumber(), user.phoneNumberVerified(),
+                user.streetAddress(), user.locality(), user.region(),
+                user.postalCode(), user.country(),
+                enabled,
+                user.accountNonExpired(),
+                accountNonLocked,
+                user.credentialsNonExpired(),
+                user.failedLoginAttempts(),
+                user.lastLoginAt(), user.passwordChangedAt(),
+                user.deleted(), user.deletedAt(), user.deletedBy(),
+                user.createdAt(), user.createdBy(),
+                now, actor,
+                user.version() + 1
+        );
+    }
+}
+
+========== OUTPUT PORTS ==========
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/CurrentActorProvider.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+public interface CurrentActorProvider {
+
+    String getCurrentActor();
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/PasswordHasher.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+public interface PasswordHasher {
+
+    String hash(String rawPassword);
+
+    boolean matches(String rawPassword, String encodedPassword);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/PermissionRepository.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+import kh.edu.istad.platform.iamdomaincore.model.Permission;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface PermissionRepository {
+
+    Permission save(Permission permission);
+
+    Optional<Permission> findById(Long id);
+
+    Optional<Permission> findByUuid(UUID uuid);
+
+    Optional<Permission> findByName(String name);
+
+    boolean existsByName(String name);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/RolePermissionRepository.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+import kh.edu.istad.platform.iamdomaincore.model.RolePermission;
+
+import java.util.List;
+
+public interface RolePermissionRepository {
+
+    List<RolePermission> findAllByRoleId(Long roleId);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/RoleRepository.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+import kh.edu.istad.platform.iamdomaincore.model.Role;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface RoleRepository {
+
+    Role save(Role role);
+
+    Optional<Role> findById(Long id);
+
+    Optional<Role> findByUuid(UUID uuid);
+
+    Optional<Role> findByName(String name);
+
+    boolean existsByName(String name);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/UserPermissionRepository.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+import kh.edu.istad.platform.iamdomaincore.model.UserPermission;
+
+import java.util.List;
+
+public interface UserPermissionRepository {
+
+    List<UserPermission> findAllByUserId(Long userId);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/UserRepository.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+import kh.edu.istad.platform.iamdomaincore.model.User;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public interface UserRepository {
+
+    User save(User user);
+
+    Optional<User> findByUuid(UUID uuid);
+
+    Optional<User> findByUsername(String username);
+
+    Optional<User> findByEmail(String email);
+
+    Optional<User> findByUsernameOrEmail(String usernameOrEmail);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
+}
+
+========== microservices/iam-service/iam-domain/iam-application-service/src/main/java/kh/edu/istad/platform/iamapplicationservice/port/out/UserRoleRepository.java ==========
+package kh.edu.istad.platform.iamapplicationservice.port.out;
+
+import kh.edu.istad.platform.iamdomaincore.model.UserRole;
+
+import java.util.List;
+
+public interface UserRoleRepository {
+
+    List<UserRole> findAllByUserId(Long userId);
+}

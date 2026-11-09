@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+}
+
+group = 'kh.edu.istad'
+version = '0.0.1-SNAPSHOT'
+description = 'iam-main'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-liquibase'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation project(':iam-domain:iam-domain-core')
+    implementation project(':iam-domain:iam-application-service')
+    implementation project(':iam-persistence')
+    implementation project(':iam-infrastructure')
+    implementation project(':iam-rest-api')
+    implementation project(':iam-web')
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

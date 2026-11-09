@@ -1,0 +1,1066 @@
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/enums/IdentityProvider.java ==========
+package kh.edu.istad.platform.iamdomaincore.enums;
+
+public enum IdentityProvider {
+    GOOGLE,
+    GITHUB,
+    FACEBOOK,
+    TELEGRAM
+}
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/enums/PermissionEffect.java ==========
+package kh.edu.istad.platform.iamdomaincore.enums;
+
+public enum PermissionEffect {
+    GRANT,
+    DENY
+}
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/Identity.java ==========
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import kh.edu.istad.platform.iamdomaincore.enums.IdentityProvider;
+
+import java.time.OffsetDateTime;
+import java.util.Map;
+import java.util.UUID;
+
+public record Identity(
+        Long id,
+        UUID uuid,
+        Long userId,
+        IdentityProvider provider,
+        String providerSubject,
+        String email,
+        boolean emailVerified,
+        String displayName,
+        String username,
+        String pictureUrl,
+        Map<String, Object> attributes,
+        OffsetDateTime linkedAt,
+        OffsetDateTime lastLoginAt,
+        boolean deleted,
+        OffsetDateTime deletedAt,
+        String deletedBy,
+        OffsetDateTime createdAt,
+        String createdBy,
+        OffsetDateTime updatedAt,
+        String updatedBy,
+        long version
+) {
+
+    public Identity {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+
+        if (userId == null || userId <= 0) {
+            throw new IllegalArgumentException(
+                    "User ID is required"
+            );
+        }
+
+        if (provider == null) {
+            throw new IllegalArgumentException(
+                    "Identity provider is required"
+            );
+        }
+
+        if (providerSubject == null || providerSubject.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Provider subject is required"
+            );
+        }
+
+        providerSubject = providerSubject.trim();
+
+        if (providerSubject.length() > 255) {
+            throw new IllegalArgumentException(
+                    "Provider subject must not exceed 255 characters"
+            );
+        }
+
+        if (linkedAt == null) {
+            throw new IllegalArgumentException(
+                    "Linked time is required"
+            );
+        }
+
+        if (createdAt == null || updatedAt == null) {
+            throw new IllegalArgumentException(
+                    "Created time and updated time are required"
+            );
+        }
+
+        if (createdBy == null || createdBy.isBlank()
+                || updatedBy == null || updatedBy.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Created by and updated by are required"
+            );
+        }
+
+        if (version < 0) {
+            throw new IllegalArgumentException(
+                    "Version cannot be negative"
+            );
+        }
+
+        if (email != null) {
+            email = email.trim().toLowerCase();
+        }
+
+        if (deleted) {
+            if (deletedAt == null) {
+                throw new IllegalArgumentException(
+                        "Deleted time is required"
+                );
+            }
+
+            if (deletedBy == null || deletedBy.isBlank()) {
+                throw new IllegalArgumentException(
+                        "Deleted by is required"
+                );
+            }
+        } else if (deletedAt != null || deletedBy != null) {
+            throw new IllegalArgumentException(
+                    "Active identity cannot have deletion metadata"
+            );
+        }
+
+        attributes = attributes == null
+                ? Map.of()
+                : Map.copyOf(attributes);
+    }
+
+    public void validateUsable() {
+        if (deleted) {
+            throw new IllegalStateException(
+                    "Deleted identity cannot be used"
+            );
+        }
+    }
+
+    public Identity recordLogin(OffsetDateTime now) {
+        validateUsable();
+
+        if (now == null) {
+            throw new IllegalArgumentException(
+                    "Login timestamp is required"
+            );
+        }
+
+        return new Identity(
+                id, uuid, userId, provider, providerSubject,
+                email, emailVerified, displayName, username,
+                pictureUrl, attributes,
+                linkedAt, now,
+                false, null, null,
+                createdAt, createdBy,
+                now, updatedBy,
+                version + 1
+        );
+    }
+
+    public Identity softDelete(
+            String actor,
+            OffsetDateTime now
+    ) {
+        validateUsable();
+        validateActorAndTime(actor, now);
+
+        return new Identity(
+                id, uuid, userId, provider, providerSubject,
+                email, emailVerified, displayName, username,
+                pictureUrl, attributes,
+                linkedAt, lastLoginAt,
+                true, now, actor,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    private static void validateActorAndTime(
+            String actor,
+            OffsetDateTime now
+    ) {
+        if (actor == null || actor.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Actor is required"
+            );
+        }
+
+        if (now == null) {
+            throw new IllegalArgumentException(
+                    "Timestamp is required"
+            );
+        }
+    }
+}
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/Permission.java ==========
+
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import java.time.OffsetDateTime;
+import java.util.Locale;
+import java.util.UUID;
+
+public record Permission(
+        Long id,
+        UUID uuid,
+        String name,
+        String resource,
+        String action,
+        String description,
+        boolean system,
+        boolean active,
+        boolean deleted,
+        OffsetDateTime deletedAt,
+        String deletedBy,
+        OffsetDateTime createdAt,
+        String createdBy,
+        OffsetDateTime updatedAt,
+        String updatedBy,
+        long version
+) {
+
+    public Permission {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+
+        resource = normalize(resource, "Resource");
+        action = normalize(action, "Action");
+
+        if (resource.length() > 50 || action.length() > 50) {
+            throw new IllegalArgumentException(
+                    "Resource and action must not exceed 50 characters"
+            );
+        }
+
+        String expectedName = resource + ":" + action;
+
+        if (name == null || name.isBlank()) {
+            name = expectedName;
+        } else {
+            name = name.trim().toLowerCase(Locale.ROOT);
+        }
+
+        if (!name.equals(expectedName)) {
+            throw new IllegalArgumentException(
+                    "Permission name must follow resource:action format"
+            );
+        }
+
+        if (name.length() > 100) {
+            throw new IllegalArgumentException(
+                    "Permission name must not exceed 100 characters"
+            );
+        }
+
+        if (createdAt == null || updatedAt == null) {
+            throw new IllegalArgumentException(
+                    "Created time and updated time are required"
+            );
+        }
+
+        if (createdBy == null || createdBy.isBlank()
+                || updatedBy == null || updatedBy.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Created by and updated by are required"
+            );
+        }
+
+        if (version < 0) {
+            throw new IllegalArgumentException(
+                    "Version cannot be negative"
+            );
+        }
+
+        if (deleted && deletedAt == null) {
+            throw new IllegalArgumentException(
+                    "Deleted time is required"
+            );
+        }
+    }
+
+    public String authority() {
+        return name;
+    }
+
+    public boolean isAssignable() {
+        return active && !deleted;
+    }
+
+    public void validateAssignable() {
+        if (!isAssignable()) {
+            throw new IllegalStateException(
+                    "Inactive or deleted permission cannot be assigned"
+            );
+        }
+    }
+
+    public void validateModifiable() {
+        if (system) {
+            throw new IllegalStateException(
+                    "System permission cannot be modified"
+            );
+        }
+
+        if (deleted) {
+            throw new IllegalStateException(
+                    "Deleted permission cannot be modified"
+            );
+        }
+    }
+
+    public void validateDeletable() {
+        validateModifiable();
+    }
+
+    public Permission activate(String actor, OffsetDateTime now) {
+        validateModifiable();
+        validateActorAndTime(actor, now);
+
+        return new Permission(
+                id, uuid, name, resource, action, description,
+                system, true, false,
+                null, null,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    public Permission deactivate(String actor, OffsetDateTime now) {
+        validateModifiable();
+        validateActorAndTime(actor, now);
+
+        return new Permission(
+                id, uuid, name, resource, action, description,
+                system, false, false,
+                null, null,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    public Permission softDelete(String actor, OffsetDateTime now) {
+        validateDeletable();
+        validateActorAndTime(actor, now);
+
+        return new Permission(
+                id, uuid, name, resource, action, description,
+                system, false, true,
+                now, actor,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    private static String normalize(String value, String field) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(field + " is required");
+        }
+
+        return value.trim().toLowerCase(Locale.ROOT);
+    }
+
+    private static void validateActorAndTime(
+            String actor,
+            OffsetDateTime now
+    ) {
+        if (actor == null || actor.isBlank()) {
+            throw new IllegalArgumentException("Actor is required");
+        }
+
+        if (now == null) {
+            throw new IllegalArgumentException("Timestamp is required");
+        }
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/Role.java ==========
+
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import java.time.OffsetDateTime;
+import java.util.Locale;
+import java.util.UUID;
+
+public record Role(
+        Long id,
+        UUID uuid,
+        String name,
+        String description,
+        boolean system,
+        boolean active,
+        boolean deleted,
+        OffsetDateTime deletedAt,
+        String deletedBy,
+        OffsetDateTime createdAt,
+        String createdBy,
+        OffsetDateTime updatedAt,
+        String updatedBy,
+        long version
+) {
+
+    public Role {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Role name is required");
+        }
+
+        name = name.trim().toUpperCase(Locale.ROOT);
+
+        if (name.length() > 50) {
+            throw new IllegalArgumentException(
+                    "Role name must not exceed 50 characters"
+            );
+        }
+
+        if (createdAt == null || updatedAt == null) {
+            throw new IllegalArgumentException(
+                    "Created time and updated time are required"
+            );
+        }
+
+        if (createdBy == null || createdBy.isBlank()
+                || updatedBy == null || updatedBy.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Created by and updated by are required"
+            );
+        }
+
+        if (version < 0) {
+            throw new IllegalArgumentException(
+                    "Version cannot be negative"
+            );
+        }
+
+        if (deleted && deletedAt == null) {
+            throw new IllegalArgumentException(
+                    "Deleted time is required"
+            );
+        }
+    }
+
+    public String authority() {
+        return "ROLE_" + name;
+    }
+
+    public boolean isAssignable() {
+        return active && !deleted;
+    }
+
+    public void validateAssignable() {
+        if (!isAssignable()) {
+            throw new IllegalStateException(
+                    "Inactive or deleted role cannot be assigned"
+            );
+        }
+    }
+
+    public void validateModifiable() {
+        if (system) {
+            throw new IllegalStateException(
+                    "System role cannot be modified"
+            );
+        }
+
+        if (deleted) {
+            throw new IllegalStateException(
+                    "Deleted role cannot be modified"
+            );
+        }
+    }
+
+    public void validateDeletable() {
+        validateModifiable();
+    }
+
+    public Role activate(String actor, OffsetDateTime now) {
+        validateModifiable();
+        validateActorAndTime(actor, now);
+
+        return new Role(
+                id, uuid, name, description,
+                system, true, false,
+                null, null,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    public Role deactivate(String actor, OffsetDateTime now) {
+        validateModifiable();
+        validateActorAndTime(actor, now);
+
+        return new Role(
+                id, uuid, name, description,
+                system, false, false,
+                null, null,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    public Role softDelete(String actor, OffsetDateTime now) {
+        validateDeletable();
+        validateActorAndTime(actor, now);
+
+        return new Role(
+                id, uuid, name, description,
+                system, false, true,
+                now, actor,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
+    private static void validateActorAndTime(
+            String actor,
+            OffsetDateTime now
+    ) {
+        if (actor == null || actor.isBlank()) {
+            throw new IllegalArgumentException("Actor is required");
+        }
+
+        if (now == null) {
+            throw new IllegalArgumentException("Timestamp is required");
+        }
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/RolePermission.java ==========
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import java.time.OffsetDateTime;
+
+public record RolePermission(
+        Long id,
+        Long roleId,
+        Long permissionId,
+        OffsetDateTime assignedAt,
+        String assignedBy,
+        OffsetDateTime expiresAt,
+        OffsetDateTime revokedAt,
+        String revokedBy,
+        String reason
+) {
+
+    public RolePermission {
+        if (roleId == null || roleId <= 0) {
+            throw new IllegalArgumentException("Role ID is required");
+        }
+
+        if (permissionId == null || permissionId <= 0) {
+            throw new IllegalArgumentException("Permission ID is required");
+        }
+
+        if (assignedAt == null || assignedBy == null || assignedBy.isBlank()) {
+            throw new IllegalArgumentException("Assignment time and actor are required");
+        }
+
+        if (expiresAt != null && !expiresAt.isAfter(assignedAt)) {
+            throw new IllegalArgumentException("Expiry must be after assignment");
+        }
+
+        if ((revokedAt == null) != (revokedBy == null)) {
+            throw new IllegalArgumentException("Revocation time and actor must both be provided");
+        }
+
+        if (revokedBy != null && revokedBy.isBlank()) {
+            throw new IllegalArgumentException("Revocation actor cannot be blank");
+        }
+
+        if (reason != null && reason.length() > 255) {
+            throw new IllegalArgumentException("Reason must not exceed 255 characters");
+        }
+    }
+
+    public boolean isActiveAt(OffsetDateTime now) {
+        return revokedAt == null
+                && (expiresAt == null || expiresAt.isAfter(now));
+    }
+
+    public RolePermission revoke(
+            String actor,
+            OffsetDateTime now,
+            String reason
+    ) {
+        if (revokedAt != null) {
+            throw new IllegalStateException("Permission assignment is already revoked");
+        }
+
+        if (actor == null || actor.isBlank() || now == null) {
+            throw new IllegalArgumentException("Actor and timestamp are required");
+        }
+
+        if (now.isBefore(assignedAt)) {
+            throw new IllegalArgumentException("Revocation cannot precede assignment");
+        }
+
+        return new RolePermission(
+                id, roleId, permissionId,
+                assignedAt, assignedBy, expiresAt,
+                now, actor, reason
+        );
+    }
+}
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/User.java ==========
+
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.util.Locale;
+import java.util.UUID;
+
+public record User(
+        Long id,
+        UUID uuid,
+        String username,
+        String email,
+        boolean emailVerified,
+        String passwordHash,
+
+        String givenName,
+        String familyName,
+        String middleName,
+        String nickname,
+        String gender,
+        LocalDate birthdate,
+        String profileUrl,
+        String pictureUrl,
+        String websiteUrl,
+        String zoneinfo,
+        String locale,
+
+        String phoneNumber,
+        boolean phoneNumberVerified,
+
+        String streetAddress,
+        String locality,
+        String region,
+        String postalCode,
+        String country,
+
+        boolean enabled,
+        boolean accountNonExpired,
+        boolean accountNonLocked,
+        boolean credentialsNonExpired,
+
+        int failedLoginAttempts,
+        OffsetDateTime lastLoginAt,
+        OffsetDateTime passwordChangedAt,
+
+        boolean deleted,
+        OffsetDateTime deletedAt,
+        String deletedBy,
+
+        OffsetDateTime createdAt,
+        String createdBy,
+        OffsetDateTime updatedAt,
+        String updatedBy,
+
+        long version
+) {
+
+    public User {
+        // UUID
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+
+        // Username
+        if (username == null || username.isBlank()) {
+            throw new IllegalArgumentException("Username is required");
+        }
+
+        username = username.trim();
+
+        if (username.length() > 50) {
+            throw new IllegalArgumentException(
+                    "Username must not exceed 50 characters"
+            );
+        }
+
+        // Email
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+
+        email = email.trim().toLowerCase(Locale.ROOT);
+
+        if (email.length() > 255 ||
+                !email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+            throw new IllegalArgumentException("Invalid email address");
+        }
+
+        // Password
+        if (passwordHash != null && passwordHash.isBlank()) {
+            passwordHash = null;
+        }
+
+        // Profile
+        if (givenName == null || givenName.isBlank()) {
+            throw new IllegalArgumentException("Given name is required");
+        }
+
+        if (familyName == null || familyName.isBlank()) {
+            throw new IllegalArgumentException("Family name is required");
+        }
+
+        givenName = givenName.trim();
+        familyName = familyName.trim();
+
+        // Locale
+        if (locale == null || locale.isBlank()) {
+            locale = "en";
+        } else {
+            locale = locale.trim().toLowerCase(Locale.ROOT);
+        }
+
+        if (!locale.equals("en") && !locale.equals("km")) {
+            throw new IllegalArgumentException(
+                    "Locale must be en or km"
+            );
+        }
+
+        // Security
+        if (failedLoginAttempts < 0) {
+            throw new IllegalArgumentException(
+                    "Failed login attempts cannot be negative"
+            );
+        }
+
+        if (version < 0) {
+            throw new IllegalArgumentException(
+                    "Version cannot be negative"
+            );
+        }
+
+        // Soft delete
+        if (deleted) {
+            if (deletedAt == null) {
+                throw new IllegalArgumentException(
+                        "Deleted time is required"
+                );
+            }
+
+            if (deletedBy == null || deletedBy.isBlank()) {
+                throw new IllegalArgumentException(
+                        "Deleted by is required"
+                );
+            }
+        } else if (deletedAt != null || deletedBy != null) {
+            throw new IllegalArgumentException(
+                    "Active user cannot have deletion metadata"
+            );
+        }
+    }
+
+    // Full name
+    public String name() {
+        return (givenName + " " + familyName).trim();
+    }
+
+    // Account status
+    public boolean isAccountUsable() {
+        return !deleted
+                && enabled
+                && accountNonExpired
+                && accountNonLocked
+                && credentialsNonExpired;
+    }
+
+    public boolean isEnabled() {
+        return enabled && !deleted;
+    }
+
+    public void validateAccountUsable() {
+        if (!isAccountUsable()) {
+            throw new IllegalStateException(
+                    "User account is not usable"
+            );
+        }
+    }
+
+    // Password validation
+    public void validatePasswordAvailable() {
+        if (passwordHash == null || passwordHash.isBlank()) {
+            throw new IllegalStateException(
+                    "User has no password configured"
+            );
+        }
+    }
+
+    // Spring Security compatible accessor names.
+    // No Spring dependency is required.
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return passwordHash;
+    }
+
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public boolean isCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    // Soft delete
+    public User softDelete(
+            String actor,
+            OffsetDateTime now
+    ) {
+        if (deleted) {
+            throw new IllegalStateException(
+                    "User is already deleted"
+            );
+        }
+
+        if (actor == null || actor.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Deleted by is required"
+            );
+        }
+
+        if (now == null) {
+            throw new IllegalArgumentException(
+                    "Deletion time is required"
+            );
+        }
+
+        return new User(
+                id,
+                uuid,
+                username,
+                email,
+                emailVerified,
+                passwordHash,
+                givenName,
+                familyName,
+                middleName,
+                nickname,
+                gender,
+                birthdate,
+                profileUrl,
+                pictureUrl,
+                websiteUrl,
+                zoneinfo,
+                locale,
+                phoneNumber,
+                phoneNumberVerified,
+                streetAddress,
+                locality,
+                region,
+                postalCode,
+                country,
+                enabled,
+                accountNonExpired,
+                accountNonLocked,
+                credentialsNonExpired,
+                failedLoginAttempts,
+                lastLoginAt,
+                passwordChangedAt,
+                true,
+                now,
+                actor,
+                createdAt,
+                createdBy,
+                now,
+                actor,
+                version + 1
+        );
+    }
+}
+
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/UserPermission.java ==========
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import kh.edu.istad.platform.iamdomaincore.enums.PermissionEffect;
+
+import java.time.OffsetDateTime;
+
+public record UserPermission(
+        Long id,
+        Long userId,
+        Long permissionId,
+        PermissionEffect effect,
+        OffsetDateTime assignedAt,
+        String assignedBy,
+        OffsetDateTime expiresAt,
+        OffsetDateTime revokedAt,
+        String revokedBy,
+        String reason
+) {
+
+    public UserPermission {
+        if (userId == null || userId <= 0) {
+            throw new IllegalArgumentException("User ID is required");
+        }
+
+        if (permissionId == null || permissionId <= 0) {
+            throw new IllegalArgumentException("Permission ID is required");
+        }
+
+        if (effect == null) {
+            throw new IllegalArgumentException("Permission effect is required");
+        }
+
+        if (assignedAt == null || assignedBy == null || assignedBy.isBlank()) {
+            throw new IllegalArgumentException("Assignment time and actor are required");
+        }
+
+        if (expiresAt != null && !expiresAt.isAfter(assignedAt)) {
+            throw new IllegalArgumentException("Expiry must be after assignment");
+        }
+
+        if ((revokedAt == null) != (revokedBy == null)) {
+            throw new IllegalArgumentException("Revocation time and actor must both be provided");
+        }
+
+        if (revokedBy != null && revokedBy.isBlank()) {
+            throw new IllegalArgumentException("Revocation actor cannot be blank");
+        }
+
+        if (reason != null && reason.length() > 255) {
+            throw new IllegalArgumentException("Reason must not exceed 255 characters");
+        }
+    }
+
+    public boolean isActiveAt(OffsetDateTime now) {
+        return revokedAt == null
+                && (expiresAt == null || expiresAt.isAfter(now));
+    }
+
+    public UserPermission revoke(
+            String actor,
+            OffsetDateTime now,
+            String reason
+    ) {
+        if (revokedAt != null) {
+            throw new IllegalStateException("Permission assignment is already revoked");
+        }
+
+        if (actor == null || actor.isBlank() || now == null) {
+            throw new IllegalArgumentException("Actor and timestamp are required");
+        }
+
+        if (now.isBefore(assignedAt)) {
+            throw new IllegalArgumentException("Revocation cannot precede assignment");
+        }
+
+        return new UserPermission(
+                id, userId, permissionId, effect,
+                assignedAt, assignedBy, expiresAt,
+                now, actor, reason
+        );
+    }
+}
+========== microservices/iam-service/iam-domain/iam-domain-core/src/main/java/kh/edu/istad/platform/iamdomaincore/model/UserRole.java ==========
+package kh.edu.istad.platform.iamdomaincore.model;
+
+import java.time.OffsetDateTime;
+
+public record UserRole(
+        Long id,
+        Long userId,
+        Long roleId,
+        OffsetDateTime assignedAt,
+        String assignedBy,
+        OffsetDateTime expiresAt,
+        OffsetDateTime revokedAt,
+        String revokedBy,
+        String reason
+) {
+
+    public UserRole {
+        if (userId == null || userId <= 0) {
+            throw new IllegalArgumentException("User ID is required");
+        }
+
+        if (roleId == null || roleId <= 0) {
+            throw new IllegalArgumentException("Role ID is required");
+        }
+
+        validateAssignment(assignedAt, assignedBy, expiresAt);
+        validateRevocation(revokedAt, revokedBy);
+        validateReason(reason);
+    }
+
+    public boolean isActiveAt(OffsetDateTime now) {
+        return revokedAt == null
+                && (expiresAt == null || expiresAt.isAfter(now));
+    }
+
+    public UserRole revoke(String actor, OffsetDateTime now, String reason) {
+        if (revokedAt != null) {
+            throw new IllegalStateException("Role assignment is already revoked");
+        }
+
+        if (actor == null || actor.isBlank() || now == null) {
+            throw new IllegalArgumentException("Actor and timestamp are required");
+        }
+
+        if (now.isBefore(assignedAt)) {
+            throw new IllegalArgumentException("Revocation cannot precede assignment");
+        }
+
+        return new UserRole(
+                id, userId, roleId,
+                assignedAt, assignedBy, expiresAt,
+                now, actor, reason
+        );
+    }
+
+    private static void validateAssignment(
+            OffsetDateTime assignedAt,
+            String assignedBy,
+            OffsetDateTime expiresAt
+    ) {
+        if (assignedAt == null || assignedBy == null || assignedBy.isBlank()) {
+            throw new IllegalArgumentException("Assignment time and actor are required");
+        }
+
+        if (expiresAt != null && !expiresAt.isAfter(assignedAt)) {
+            throw new IllegalArgumentException("Expiry must be after assignment");
+        }
+    }
+
+    private static void validateRevocation(
+            OffsetDateTime revokedAt,
+            String revokedBy
+    ) {
+        if ((revokedAt == null) != (revokedBy == null)) {
+            throw new IllegalArgumentException("Revocation time and actor must both be provided");
+        }
+
+        if (revokedBy != null && revokedBy.isBlank()) {
+            throw new IllegalArgumentException("Revocation actor cannot be blank");
+        }
+    }
+
+    private static void validateReason(String reason) {
+        if (reason != null && reason.length() > 255) {
+            throw new IllegalArgumentException("Reason must not exceed 255 characters");
+        }
+    }
+}
