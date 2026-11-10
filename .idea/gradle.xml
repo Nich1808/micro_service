@@ -98,7 +98,6 @@
             <option value="$PROJECT_DIR$/microservices/order-service/order-service-persistence" />
           </set>
         </option>
-        <option name="myGradleHome" value="" />
       </GradleProjectSettings>
     </option>
   </component>
