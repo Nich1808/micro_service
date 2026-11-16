@@ -1,6 +1,12 @@
 server:
   port: 9092
+  forward-headers-strategy: framework
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9026
   application:
     name: order-service
   profiles:

@@ -1,6 +1,12 @@
 server:
   port: 9090
+  forward-headers-strategy: framework
 spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9026
   application:
     name: business-service
   profiles:
@@ -12,8 +18,4 @@ spring:
         prefer-ip-address: true
         service-name: ${spring.application.name}
         instance-id: ${spring.application.name}-${random.value}
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:9026
+

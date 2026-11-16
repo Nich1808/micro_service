@@ -17,6 +17,7 @@ spring:
         webflux:
           default-filters:
             - SaveSession
+            - TokenRelay=
           discovery:
             locator:
               enabled: true
@@ -35,10 +36,11 @@ spring:
                 - Path=/jph/**
               filters:
                 - RewritePath=/jph/?(?<segment>.*), /$\{segment}
-            - id: nextjs
-              uri: http://localhost:3000
-              predicates:
-                - Path=/**
+          trusted-proxies: ".*"
+  #            - id: nextjs
+#              uri: http://localhost:3000
+#              predicates:
+#                - Path=/**
 
   security:
     oauth2:
@@ -71,3 +73,25 @@ management:
   endpoint:
     gateway:
       access: read_only
+
+scalar:
+  enabled: true
+  sources:
+    - title: Order Service
+      url: /order-service/v3/api-docs
+    - title: Business Service
+      url: /business-service/v3/api-docs
+    - title: Customer Service
+      url: /customer-service/v3/api-docs
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Order Service
+        url: /order-service/v3/api-docs
+      - name: Business Service
+        url: /business-service/v3/api-docs
+      - name: Customer Service
+        url: /customer-service/v3/api-docs
+    csrf:
+      enabled: true
