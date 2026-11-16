@@ -127,6 +127,25 @@ public record Role(
         );
     }
 
+    public Role withDetails(
+            String newName,
+            String description,
+            String actor,
+            OffsetDateTime now
+    ) {
+        validateModifiable();
+        validateActorAndTime(actor, now);
+
+        return new Role(
+                id, uuid, newName, description,
+                system, active, false,
+                null, null,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
     public Role softDelete(String actor, OffsetDateTime now) {
         validateDeletable();
         validateActorAndTime(actor, now);

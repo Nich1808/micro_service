@@ -35,6 +35,6 @@ public class RolePermissionEntity {
     @Column(length = 255)
     public String reason;
 
-    protected RolePermissionEntity() {
+    public RolePermissionEntity() {
     }
 }

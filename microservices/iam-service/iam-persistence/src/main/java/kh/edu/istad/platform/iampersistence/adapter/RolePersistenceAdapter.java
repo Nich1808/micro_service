@@ -4,8 +4,10 @@ import kh.edu.istad.platform.iamapplicationservice.port.out.RoleRepository;
 import kh.edu.istad.platform.iamdomaincore.model.Role;
 import kh.edu.istad.platform.iampersistence.entity.RoleEntity;
 import kh.edu.istad.platform.iampersistence.repository.RoleJpaRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -52,6 +54,22 @@ public class RolePersistenceAdapter implements RoleRepository {
     @Override
     public Optional<Role> findByName(String name) {
         return repository.findByName(name).map(this::toDomain);
+    }
+
+    @Override
+    public List<Role> findAll(int page, int size, String sort) {
+        return repository.findAllByDeletedFalse(
+                        PageRequest.of(page, size, SortSupport.roleSort(sort))
+                )
+                .getContent()
+                .stream()
+                .map(this::toDomain)
+                .toList();
+    }
+
+    @Override
+    public long count() {
+        return repository.countByDeletedFalse();
     }
 
     @Override

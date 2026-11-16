@@ -4,8 +4,10 @@ import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
 import kh.edu.istad.platform.iamdomaincore.model.User;
 import kh.edu.istad.platform.iampersistence.entity.UserEntity;
 import kh.edu.istad.platform.iampersistence.repository.UserJpaRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -72,6 +74,11 @@ public class UserPersistenceAdapter implements UserRepository {
     }
 
     @Override
+    public Optional<User> findById(Long id) {
+        return repository.findById(id).map(this::toDomain);
+    }
+
+    @Override
     public Optional<User> findByUuid(UUID uuid) {
         return repository.findByUuid(uuid).map(this::toDomain);
     }
@@ -90,6 +97,22 @@ public class UserPersistenceAdapter implements UserRepository {
     public Optional<User> findByUsernameOrEmail(String usernameOrEmail) {
         return repository.findByUsernameOrEmail(usernameOrEmail)
                 .map(this::toDomain);
+    }
+
+    @Override
+    public List<User> findAll(int page, int size, String sort) {
+        return repository.findAllByDeletedFalse(
+                        PageRequest.of(page, size, SortSupport.userSort(sort))
+                )
+                .getContent()
+                .stream()
+                .map(this::toDomain)
+                .toList();
+    }
+
+    @Override
+    public long count() {
+        return repository.countByDeletedFalse();
     }
 
     @Override

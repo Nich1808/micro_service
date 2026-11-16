@@ -146,6 +146,26 @@ public record Permission(
         );
     }
 
+    public Permission redefine(
+            String newResource,
+            String newAction,
+            String newDescription,
+            String actor,
+            OffsetDateTime now
+    ) {
+        validateModifiable();
+        validateActorAndTime(actor, now);
+
+        return new Permission(
+                id, uuid, null, newResource, newAction, newDescription,
+                system, active, false,
+                null, null,
+                createdAt, createdBy,
+                now, actor,
+                version + 1
+        );
+    }
+
     public Permission softDelete(String actor, OffsetDateTime now) {
         validateDeletable();
         validateActorAndTime(actor, now);

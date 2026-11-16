@@ -21,13 +21,13 @@ public class RoleEntity {
     @Column(length = 255)
     public String description;
 
-    @Column(nullable = false)
+    @Column(name = "is_system", nullable = false)
     public boolean system;
 
-    @Column(nullable = false)
+    @Column(name = "is_active", nullable = false)
     public boolean active;
 
-    @Column(nullable = false)
+    @Column(name = "is_deleted", nullable = false)
     public boolean deleted;
 
     public OffsetDateTime deletedAt;
@@ -50,6 +50,10 @@ public class RoleEntity {
     @Version
     @Column(nullable = false)
     public long version;
+
+    public Long getId() {
+        return id;
+    }
 
     public RoleEntity() {
     }

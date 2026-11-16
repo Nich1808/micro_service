@@ -4,8 +4,10 @@ import kh.edu.istad.platform.iamapplicationservice.port.out.PermissionRepository
 import kh.edu.istad.platform.iamdomaincore.model.Permission;
 import kh.edu.istad.platform.iampersistence.entity.PermissionEntity;
 import kh.edu.istad.platform.iampersistence.repository.PermissionJpaRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,6 +56,22 @@ public class PermissionPersistenceAdapter implements PermissionRepository {
     @Override
     public Optional<Permission> findByName(String name) {
         return repository.findByName(name).map(this::toDomain);
+    }
+
+    @Override
+    public List<Permission> findAll(int page, int size, String sort) {
+        return repository.findAllByDeletedFalse(
+                        PageRequest.of(page, size, SortSupport.permissionSort(sort))
+                )
+                .getContent()
+                .stream()
+                .map(this::toDomain)
+                .toList();
+    }
+
+    @Override
+    public long count() {
+        return repository.countByDeletedFalse();
     }
 
     @Override

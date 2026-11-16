@@ -22,7 +22,7 @@ public class UserPermissionEntity {
     public PermissionEntity permission;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 5)
     public PermissionEffect effect;
 
     @Column(nullable = false, updatable = false)
@@ -41,6 +41,6 @@ public class UserPermissionEntity {
     @Column(length = 255)
     public String reason;
 
-    protected UserPermissionEntity() {
+    public UserPermissionEntity() {
     }
 }

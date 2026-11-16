@@ -16,7 +16,7 @@ public class UserEntity {
     @Column(nullable = false, unique = true, updatable = false)
     public UUID uuid;
 
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(nullable = false, unique = true, length = 50)
     public String username;
 
     @Column(nullable = false, unique = true, length = 255)
@@ -25,7 +25,7 @@ public class UserEntity {
     @Column(nullable = false)
     public boolean emailVerified;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255)
     public String passwordHash;
 
     @Column(nullable = false, length = 100)
@@ -40,7 +40,7 @@ public class UserEntity {
     @Column(length = 100)
     public String nickname;
 
-    @Column(length = 30)
+    @Column(length = 20)
     public String gender;
 
     public LocalDate birthdate;
@@ -54,31 +54,31 @@ public class UserEntity {
     @Column(length = 500)
     public String websiteUrl;
 
-    @Column(length = 100)
+    @Column(length = 50)
     public String zoneinfo;
 
-    @Column(length = 20)
+    @Column(nullable = false, length = 10)
     public String locale;
 
-    @Column(length = 30)
+    @Column(length = 20)
     public String phoneNumber;
 
     @Column(nullable = false)
     public boolean phoneNumberVerified;
 
-    @Column(length = 255)
+    @Column(name = "address_street_address", length = 255)
     public String streetAddress;
 
-    @Column(length = 100)
+    @Column(name = "address_locality", length = 100)
     public String locality;
 
-    @Column(length = 100)
+    @Column(name = "address_region", length = 100)
     public String region;
 
-    @Column(length = 30)
+    @Column(name = "address_postal_code", length = 20)
     public String postalCode;
 
-    @Column(length = 100)
+    @Column(name = "address_country", length = 2)
     public String country;
 
     @Column(nullable = false)
@@ -100,7 +100,7 @@ public class UserEntity {
 
     public OffsetDateTime passwordChangedAt;
 
-    @Column(nullable = false)
+    @Column(name = "is_deleted", nullable = false)
     public boolean deleted;
 
     public OffsetDateTime deletedAt;
@@ -123,6 +123,10 @@ public class UserEntity {
     @Version
     @Column(nullable = false)
     public long version;
+
+    public Long getId() {
+        return id;
+    }
 
     public UserEntity() {
     }

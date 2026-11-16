@@ -35,6 +35,6 @@ public class UserRoleEntity {
     @Column(length = 255)
     public String reason;
 
-    protected UserRoleEntity() {
+    public UserRoleEntity() {
     }
 }

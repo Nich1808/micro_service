@@ -1,6 +1,8 @@
 package kh.edu.istad.platform.iampersistence.repository;
 
 import kh.edu.istad.platform.iampersistence.entity.PermissionEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -11,6 +13,10 @@ public interface PermissionJpaRepository extends JpaRepository<PermissionEntity,
     Optional<PermissionEntity> findByUuid(UUID uuid);
 
     Optional<PermissionEntity> findByName(String name);
+
+    Page<PermissionEntity> findAllByDeletedFalse(Pageable pageable);
+
+    long countByDeletedFalse();
 
     boolean existsByName(String name);
 }

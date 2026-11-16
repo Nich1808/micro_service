@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot'
     id 'io.spring.dependency-management'
+    id 'gg.jte.gradle' version '3.2.5'
 }
 
 group = 'kh.edu.istad'
@@ -23,12 +24,27 @@ dependencies {
     implementation project(':iam-domain:iam-application-service')
 
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // JTE: templates are precompiled so the engine also works inside a fat jar.
+    implementation 'gg.jte:jte:3.2.5'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+jte {
+    generate()
+    sourceDirectory = file('src/main/resources/jte').toPath()
+    contentType = gg.jte.ContentType.Html
+}
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+bootJar {
+    enabled = false
 }

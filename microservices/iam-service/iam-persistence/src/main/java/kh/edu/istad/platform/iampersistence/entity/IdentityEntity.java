@@ -31,7 +31,7 @@ public class IdentityEntity {
     public Long userId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 20)
     public kh.edu.istad.platform.iamdomaincore.enums.IdentityProvider provider;
 
     @Column(name = "provider_subject", nullable = false, length = 255)
@@ -43,7 +43,7 @@ public class IdentityEntity {
     @Column(nullable = false)
     public boolean emailVerified;
 
-    @Column(length = 255)
+    @Column(length = 150)
     public String displayName;
 
     @Column(length = 100)
@@ -61,7 +61,7 @@ public class IdentityEntity {
 
     public OffsetDateTime lastLoginAt;
 
-    @Column(nullable = false)
+    @Column(name = "is_deleted", nullable = false)
     public boolean deleted;
 
     public OffsetDateTime deletedAt;

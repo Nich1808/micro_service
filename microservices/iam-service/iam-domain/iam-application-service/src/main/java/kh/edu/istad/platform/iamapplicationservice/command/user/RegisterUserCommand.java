@@ -5,6 +5,12 @@ public record RegisterUserCommand(
         String email,
         String rawPassword,
         String givenName,
-        String familyName
+        String familyName,
+        String locale
 ) {
+    public RegisterUserCommand {
+        if (locale == null || locale.isBlank()) {
+            locale = "en";
+        }
+    }
 }

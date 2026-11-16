@@ -68,7 +68,7 @@ public class RegisterUserService implements RegisterUserUseCase {
                 null, null, username, email, false, passwordHash,
                 command.givenName(), command.familyName(),
                 null, null, null, null, null, null, null, null,
-                "en", null, false, null, null, null, null, null,
+                command.locale(), null, false, null, null, null, null, null,
                 true, true, true, true,
                 0, null, null, false, null, null,
                 now, actor, now, actor, 0

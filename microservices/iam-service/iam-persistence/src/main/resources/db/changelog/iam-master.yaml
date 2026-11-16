@@ -8,3 +8,15 @@ databaseChangeLog:
             relativeToChangelogFile: true
             splitStatements: true
             stripComments: false
+
+  - include:
+      file: ddl/002-align-schema-with-spec.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: ddl/003-seed-core-data.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: ddl/004-create-authorization-server-tables.sql
+      relativeToChangelogFile: true
