@@ -59,6 +59,7 @@ public class SessionTrackingFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         return path.startsWith("/css/")
+                || path.startsWith("/images/")
                 || path.startsWith("/js/")
                 || path.startsWith("/assets/")
                 || path.startsWith("/actuator/")

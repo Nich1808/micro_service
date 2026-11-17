@@ -16,11 +16,8 @@
 <main class="page">
     <div class="meta">
         <div class="brand">
-            <span class="brand__mark">D</span>
-            <span>
-                <span class="brand__name">${messages.get("app.name")}</span><br>
-                <span class="brand__tagline">${messages.get("app.tagline")}</span>
-            </span>
+            <img class="brand__logo" src="/images/logo.png" alt="${messages.get("app.name")}">
+            <span class="brand__tagline">${messages.get("app.tagline")}</span>
         </div>
         <nav class="lang">
             @if(messages.isEnglish())

@@ -14,8 +14,7 @@
 <body>
 <main class="page centered">
     <div class="brand">
-        <span class="brand__mark">D</span>
-        <span class="brand__name">${messages.get("app.name")}</span>
+        <img class="brand__logo" src="/images/logo.png" alt="${messages.get("app.name")}">
     </div>
 
     <section class="card">

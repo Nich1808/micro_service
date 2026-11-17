@@ -72,7 +72,7 @@ public class RegisteredClientSeeder implements ApplicationRunner {
         registeredClientRepository.save(RegisteredClient
                 .withId(UUID.randomUUID().toString())
                 .clientId("oidc-client")
-                .clientName("Demonic Web")
+                .clientName("Sernic Web")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)

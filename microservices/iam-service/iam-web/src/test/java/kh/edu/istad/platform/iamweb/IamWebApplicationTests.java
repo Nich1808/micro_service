@@ -64,7 +64,7 @@ class IamWebApplicationTests {
         ));
 
         assertTrue(html.contains("Sign in"), html);
-        assertTrue(html.contains("Demonic"), "New brand name should render");
+        assertTrue(html.contains("Sernic"), "New brand name should render");
         assertTrue(html.contains("/oauth2/authorization/google"), html);
         assertFalse(html.contains("login.title"), "Bundle key leaked into markup");
     }

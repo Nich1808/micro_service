@@ -11,7 +11,7 @@ export type Lang = 'en' | 'km';
 
 const dictionaries: Record<Lang, Record<string, string>> = {
   en: {
-    'app.name': 'Demonic',
+    'app.name': 'Sernic',
     'app.tagline': 'Manage your account and security',
     'nav.account': 'Account',
     'nav.profile': 'Profile',
@@ -68,8 +68,8 @@ const dictionaries: Record<Lang, Record<string, string>> = {
     'common.yes': 'Yes',
     'common.no': 'No',
     'login.title': 'Sign in',
-    'login.subtitle': 'Continue with your Demonic account',
-    'login.action': 'Sign in with Demonic',
+    'login.subtitle': 'Continue with your Sernic account',
+    'login.action': 'Sign in with Sernic',
     'callback.working': 'Completing sign-in…',
     'callback.error': 'We could not complete the sign-in.',
     'profile.title': 'Profile',
@@ -149,7 +149,7 @@ const dictionaries: Record<Lang, Record<string, string>> = {
     'deactivate.done': 'Your account has been deactivated.',
   },
   km: {
-    'app.name': 'Demonic',
+    'app.name': 'Sernic',
     'app.tagline': 'គ្រប់គ្រងគណនី និងសុវត្ថិភាពរបស់អ្នក',
     'nav.account': 'គណនី',
     'nav.profile': 'ប្រវត្តិរូប',
@@ -206,8 +206,8 @@ const dictionaries: Record<Lang, Record<string, string>> = {
     'common.yes': 'បាទ/ចាស',
     'common.no': 'ទេ',
     'login.title': 'ចូលគណនី',
-    'login.subtitle': 'បន្តជាមួយគណនី Demonic របស់អ្នក',
-    'login.action': 'ចូលដោយ Demonic',
+    'login.subtitle': 'បន្តជាមួយគណនី Sernic របស់អ្នក',
+    'login.action': 'ចូលដោយ Sernic',
     'callback.working': 'កំពុងបញ្ចប់ការចូល…',
     'callback.error': 'យើងមិនអាចបញ្ចប់ការចូលបានទេ។',
     'profile.title': 'ប្រវត្តិរូប',

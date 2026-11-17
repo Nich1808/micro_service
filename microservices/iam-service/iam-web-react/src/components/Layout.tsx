@@ -47,8 +47,7 @@ export function Layout() {
       <header className="topbar">
         <div className="topbar__inner">
           <div className="brand">
-            <span className="brand__mark">D</span>
-            <span>{t('app.name')}</span>
+            <img className="brand__logo" src="/images/logo.png" alt={t('app.name')} />
           </div>
 
           <div className="spacer" />

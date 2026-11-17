@@ -88,7 +88,7 @@ class ConsentControllerTest {
                 .andExpect(model().attribute(
                         "scopes", List.of("openid", "profile", "email")))
                 .andExpect(model().attribute("state", STATE))
-                .andExpect(model().attribute("clientName", "Demonic Web"));
+                .andExpect(model().attribute("clientName", "Sernic Web"));
     }
 
     @Test
@@ -130,7 +130,7 @@ class ConsentControllerTest {
         when(clientRegistryQuery.findByClientId(CLIENT_ID))
                 .thenReturn(Optional.of(new ClientRegistryQuery.ClientDetails(
                         CLIENT_ID,
-                        "Demonic Web",
+                        "Sernic Web",
                         registeredScopes
                 )));
     }

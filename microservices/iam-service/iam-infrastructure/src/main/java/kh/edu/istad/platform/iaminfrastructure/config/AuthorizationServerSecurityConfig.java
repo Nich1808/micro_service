@@ -82,6 +82,7 @@ public class AuthorizationServerSecurityConfig {
                         "/login",
                         "/register",
                         "/css/**",
+                        "/images/**",
                         "/js/**",
                         "/assets/**",
                         "/error",

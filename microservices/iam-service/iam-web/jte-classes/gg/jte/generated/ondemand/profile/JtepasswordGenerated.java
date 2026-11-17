@@ -4,7 +4,7 @@ import kh.edu.istad.platform.iamweb.i18n.Messages;
 @javax.annotation.processing.Generated("gg.jte.TemplateEngine")
 public final class JtepasswordGenerated {
 	public static final String JTE_NAME = "profile/password.jte";
-	public static final int[] JTE_LINE_INFO = {0,0,0,0,0,0,0,0,6,6,6,6,6,6,6,6,6,10,10,10,10,10,10,17,17,17,21,21,21,22,22,22,24,24,25,25,25,26,26,28,28,29,29,29,30,30,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,36,36,36,40,40,40,44,44,44,49,49,49,50,50,50,57,0,0,1,2,3,4,0,0,0};
+	public static final int[] JTE_LINE_INFO = {0,0,0,0,0,0,0,0,6,6,6,6,6,6,6,6,6,10,10,10,10,10,10,16,16,16,16,16,16,16,16,16,20,20,20,21,21,21,23,23,24,24,24,25,25,27,27,28,28,28,29,29,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,35,35,35,39,39,39,43,43,43,48,48,48,49,49,49,56,0,0,1,2,3,4,0,0,0};
 	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, Messages messages, boolean changed, String error, org.springframework.security.web.csrf.CsrfToken csrfToken) {
 		jteOutput.writeContent("<!DOCTYPE html>\r\n<html");
 		var __jte_html_attribute_0 = messages.language();
@@ -21,10 +21,16 @@ public final class JtepasswordGenerated {
 		jteOutput.writeContent(" · ");
 		jteOutput.setContext("title", null);
 		jteOutput.writeUserContent(messages.get("app.name"));
-		jteOutput.writeContent("</title>\r\n    <link rel=\"stylesheet\" href=\"/css/app.css\">\r\n</head>\r\n<body>\r\n<main class=\"page centered\">\r\n    <div class=\"brand\">\r\n        <span class=\"brand__mark\">D</span>\r\n        <span class=\"brand__name\">");
-		jteOutput.setContext("span", null);
-		jteOutput.writeUserContent(messages.get("app.name"));
-		jteOutput.writeContent("</span>\r\n    </div>\r\n\r\n    <section class=\"card\">\r\n        <h1>");
+		jteOutput.writeContent("</title>\r\n    <link rel=\"stylesheet\" href=\"/css/app.css\">\r\n</head>\r\n<body>\r\n<main class=\"page centered\">\r\n    <div class=\"brand\">\r\n        <img class=\"brand__logo\" src=\"/images/logo.png\"");
+		var __jte_html_attribute_1 = messages.get("app.name");
+		if (gg.jte.runtime.TemplateUtils.isAttributeRendered(__jte_html_attribute_1)) {
+			jteOutput.writeContent(" alt=\"");
+			jteOutput.setContext("img", "alt");
+			jteOutput.writeUserContent(__jte_html_attribute_1);
+			jteOutput.setContext("img", null);
+			jteOutput.writeContent("\"");
+		}
+		jteOutput.writeContent(">\r\n    </div>\r\n\r\n    <section class=\"card\">\r\n        <h1>");
 		jteOutput.setContext("h1", null);
 		jteOutput.writeUserContent(messages.get("password.title"));
 		jteOutput.writeContent("</h1>\r\n        <p class=\"subtitle\">");
@@ -45,19 +51,19 @@ public final class JtepasswordGenerated {
 			jteOutput.writeContent("</div>\r\n        ");
 		}
 		jteOutput.writeContent("\r\n\r\n        <form method=\"post\" action=\"/profile/password\">\r\n            <input type=\"hidden\"");
-		var __jte_html_attribute_1 = csrfToken.getParameterName();
-		if (gg.jte.runtime.TemplateUtils.isAttributeRendered(__jte_html_attribute_1)) {
+		var __jte_html_attribute_2 = csrfToken.getParameterName();
+		if (gg.jte.runtime.TemplateUtils.isAttributeRendered(__jte_html_attribute_2)) {
 			jteOutput.writeContent(" name=\"");
 			jteOutput.setContext("input", "name");
-			jteOutput.writeUserContent(__jte_html_attribute_1);
+			jteOutput.writeUserContent(__jte_html_attribute_2);
 			jteOutput.setContext("input", null);
 			jteOutput.writeContent("\"");
 		}
-		var __jte_html_attribute_2 = csrfToken.getToken();
-		if (gg.jte.runtime.TemplateUtils.isAttributeRendered(__jte_html_attribute_2)) {
+		var __jte_html_attribute_3 = csrfToken.getToken();
+		if (gg.jte.runtime.TemplateUtils.isAttributeRendered(__jte_html_attribute_3)) {
 			jteOutput.writeContent(" value=\"");
 			jteOutput.setContext("input", "value");
-			jteOutput.writeUserContent(__jte_html_attribute_2);
+			jteOutput.writeUserContent(__jte_html_attribute_3);
 			jteOutput.setContext("input", null);
 			jteOutput.writeContent("\"");
 		}

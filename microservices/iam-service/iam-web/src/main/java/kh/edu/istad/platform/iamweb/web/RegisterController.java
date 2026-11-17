@@ -1,6 +1,5 @@
 package kh.edu.istad.platform.iamweb.web;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -35,14 +34,13 @@ public class RegisterController {
     }
 
     @GetMapping("/register")
-    public String form(HttpServletRequest request, Model model) {
+    public String form(Model model) {
         if (!model.containsAttribute("form")) {
             model.addAttribute("form", new RegisterForm("", "", "", "", "", "", "en"));
         }
 
         model.addAttribute("messages", messages);
         model.addAttribute("errors", Map.of());
-        model.addAttribute("path", request.getRequestURI());
 
         return "register";
     }
@@ -51,7 +49,6 @@ public class RegisterController {
     public String submit(
             @Valid @ModelAttribute("form") RegisterForm form,
             BindingResult bindingResult,
-            HttpServletRequest request,
             Model model,
             RedirectAttributes redirectAttributes
     ) {
@@ -83,7 +80,6 @@ public class RegisterController {
 
         model.addAttribute("messages", messages);
         model.addAttribute("errors", errors);
-        model.addAttribute("path", request.getRequestURI());
 
         return "register";
     }

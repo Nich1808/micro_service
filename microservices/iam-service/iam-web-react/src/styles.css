@@ -1,12 +1,12 @@
 :root {
-  --bg: #f6f7fb;
+  --bg: #f3f7f6;
   --surface: #ffffff;
   --surface-muted: #f1f3f9;
   --border: #e2e6ef;
   --text: #141b2d;
   --muted: #667089;
-  --brand: #534AB7;
-  --brand-soft: #EDEBFA;
+  --brand: #4b83fc;
+  --brand-soft: #e8f0fe;
   --danger: #b42318;
   --danger-soft: #fdeceb;
   --ok: #067647;
@@ -97,17 +97,10 @@ p {
   font-weight: 700;
 }
 
-.brand__mark {
-  width: 34px;
+.brand__logo {
+  display: block;
   height: 34px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0;
-  background: linear-gradient(135deg, var(--brand), #8B82D9);
+  width: auto;
 }
 
 .spacer {
@@ -342,7 +335,7 @@ button {
 
 .alert--info {
   background: var(--brand-soft);
-  color: #2E2765;
+  color: #2b5fd0;
   border-color: #D5D1F0;
 }
 
@@ -478,6 +471,118 @@ button {
   flex-direction: column;
   gap: 10px;
   align-items: flex-start;
+}
+
+/* ---------- auth splash (matches the JTE login/register look) ---------- */
+
+.auth-stage {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 9vh 20px 60px;
+}
+
+.auth-stage__orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.auth-stage__orb--a {
+  width: 300px;
+  height: 300px;
+  top: -96px;
+  left: -84px;
+  background: var(--brand-soft);
+  opacity: 0.55;
+}
+
+.auth-stage__orb--b {
+  width: 138px;
+  height: 138px;
+  top: 118px;
+  left: 8px;
+  background: #74a0f9;
+}
+
+.auth-stage__orb--c {
+  width: 268px;
+  height: 268px;
+  bottom: -72px;
+  right: -56px;
+  background: #74a0f9;
+  opacity: 0.9;
+}
+
+.auth-stage__orb--d {
+  width: 132px;
+  height: 132px;
+  bottom: 8px;
+  right: 188px;
+  background: var(--brand-soft);
+}
+
+.auth-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 460px;
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 44px 40px 40px;
+  box-shadow:
+    0 28px 64px rgba(75, 131, 252, 0.18),
+    0 2px 10px rgba(28, 35, 51, 0.04);
+}
+
+.auth-panel .hero {
+  align-items: center;
+  text-align: center;
+}
+
+.auth-panel__title {
+  color: var(--brand);
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.auth-panel__subtitle {
+  color: #a9b1cc;
+  margin: 0;
+}
+
+.auth-panel__submit {
+  display: block;
+  margin: 26px auto 0;
+  min-width: 230px;
+  padding: 14px 42px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 0 12px 26px rgba(75, 131, 252, 0.38);
+}
+
+@media (max-width: 640px) {
+  .auth-stage__orb--a {
+    width: 220px;
+    height: 220px;
+    top: -110px;
+    left: -70px;
+  }
+
+  .auth-stage__orb--c {
+    width: 190px;
+    height: 190px;
+  }
+
+  .auth-stage__orb--d {
+    display: none;
+  }
 }
 
 .mono {
@@ -701,7 +806,7 @@ button {
 }
 
 .ov-bar__seg--active {
-  background: linear-gradient(90deg, var(--brand), #7C72D6);
+  background: linear-gradient(90deg, var(--brand), #74a0f9);
 }
 
 .ov-bar__seg--restricted {
