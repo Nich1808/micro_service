@@ -236,6 +236,7 @@ public final class ApiMapper {
                 summary.email(),
                 summary.name(),
                 summary.enabled(),
+                summary.accountNonLocked(),
                 summary.createdAt()
         );
     }

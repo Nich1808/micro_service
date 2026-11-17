@@ -172,7 +172,15 @@
       "Bash(curl -s -o /dev/null -w \"css:%{http_code}\\\\n\" http://localhost:9026/css/app.css)",
       "Bash(curl -s http://localhost:9026/css/app.css)",
       "Bash(curl -s http://localhost:5173/src/styles.css)",
-      "Bash(PGPASSWORD=qwerqwer psql -h localhost -p 9543 -U iteuser -d db_iam -t -c \"select u.username, u.email, r.name from iam_users u left join iam_user_roles ur on ur.user_id=u.id and ur.revoked_at is null left join iam_roles r on r.id=ur.role_id;\")"
+      "Bash(PGPASSWORD=qwerqwer psql -h localhost -p 9543 -U iteuser -d db_iam -t -c \"select u.username, u.email, r.name from iam_users u left join iam_user_roles ur on ur.user_id=u.id and ur.revoked_at is null left join iam_roles r on r.id=ur.role_id;\")",
+      "Bash(netstat -ano)",
+      "Bash(tasklist //FI 'IMAGENAME eq node.exe')",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" -X OPTIONS http://localhost:9026/api/me -H \"Origin: http://localhost:5173\" -H \"Access-Control-Request-Method: GET\" -H \"Access-Control-Request-Headers: authorization\")",
+      "Bash(curl -s -i -X OPTIONS http://localhost:9026/oauth2/token -H \"Origin: http://localhost:5173\" -H \"Access-Control-Request-Method: POST\" -H \"Access-Control-Request-Headers: content-type\")",
+      "Bash(grep -n \"''admin.overview''\\\\|''admin.overviewSub''\\\\|''admin.recentActivity''\" src/i18n/index.tsx)",
+      "Bash(grep -n \"''nav.settings''\" src/i18n/index.tsx)",
+      "Bash(npx playwright:*)",
+      "Bash(python -c \"import playwright; print\\(''''py playwright ok''''\\)\")"
     ]
   }
 }

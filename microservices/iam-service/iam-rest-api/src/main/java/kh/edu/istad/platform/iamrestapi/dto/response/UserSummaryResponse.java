@@ -9,6 +9,7 @@ public record UserSummaryResponse(
         String email,
         String name,
         boolean enabled,
+        boolean accountNonLocked,
         OffsetDateTime createdAt
 ) {
 }

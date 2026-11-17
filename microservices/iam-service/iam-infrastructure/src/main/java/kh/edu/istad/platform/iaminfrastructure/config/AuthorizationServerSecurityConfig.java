@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
@@ -43,6 +44,9 @@ public class AuthorizationServerSecurityConfig {
 
         http
                 .securityMatcher(authorizationServer.getEndpointsMatcher())
+                // The browser dashboard exchanges the authorization code from its own
+                // origin, so the token/revocation endpoints must answer CORS preflights.
+                .cors(Customizer.withDefaults())
                 .with(authorizationServer, server -> server
                         .authorizationEndpoint(endpoint -> endpoint
                                 .consentPage("/oauth2/consent"))

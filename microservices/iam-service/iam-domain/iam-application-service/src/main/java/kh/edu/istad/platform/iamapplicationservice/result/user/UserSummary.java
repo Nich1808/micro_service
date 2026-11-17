@@ -9,5 +9,6 @@ public record UserSummary(
         String email,
         String name,
         boolean enabled,
+        boolean accountNonLocked,
         OffsetDateTime createdAt
 ) {}

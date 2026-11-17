@@ -31,6 +31,7 @@ public class ListUsersService implements ListUsersUseCase {
                         user.email(),
                         user.name(),
                         user.enabled(),
+                        user.accountNonLocked(),
                         user.createdAt()
                 ))
                 .toList();

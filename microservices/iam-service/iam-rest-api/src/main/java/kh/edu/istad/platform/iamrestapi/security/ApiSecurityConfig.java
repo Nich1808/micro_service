@@ -57,8 +57,9 @@ public class ApiSecurityConfig {
     }
 
     /**
-     * The React dashboard is served from its own origin, so the API opts into CORS for the
-     * origins listed in {@code iam.web.allowed-origins}.
+     * The React dashboard is served from its own origin, so the API and the authorization
+     * server endpoints opt into CORS for the origins listed in
+     * {@code iam.web.allowed-origins}.
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource(
@@ -82,6 +83,14 @@ public class ApiSecurityConfig {
         UrlBasedCorsConfigurationSource source =
                 new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", configuration);
+
+        // The dashboard is a browser SPA: the authorization-code exchange, token
+        // refresh and the discovery/JWKS documents are fetched cross-origin too.
+        source.registerCorsConfiguration("/oauth2/**", configuration);
+        source.registerCorsConfiguration("/.well-known/**", configuration);
+        source.registerCorsConfiguration("/userinfo", configuration);
+        source.registerCorsConfiguration("/connect/**", configuration);
+
         return source;
     }
 
