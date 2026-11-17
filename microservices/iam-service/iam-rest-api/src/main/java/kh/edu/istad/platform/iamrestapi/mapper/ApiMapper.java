@@ -20,6 +20,9 @@ import kh.edu.istad.platform.iamapplicationservice.result.user.PermissionGrantRe
 import kh.edu.istad.platform.iamapplicationservice.result.user.RoleAssignmentResult;
 import kh.edu.istad.platform.iamapplicationservice.result.user.UserAuthoritiesResult;
 import kh.edu.istad.platform.iamapplicationservice.result.user.UserResult;
+import kh.edu.istad.platform.iamapplicationservice.result.security.AccountActivityResult;
+import kh.edu.istad.platform.iamapplicationservice.result.security.LoginAttemptResult;
+import kh.edu.istad.platform.iamapplicationservice.result.session.UserSessionResult;
 import kh.edu.istad.platform.iamapplicationservice.result.user.UserSummary;
 import kh.edu.istad.platform.iamrestapi.dto.request.AddressRequest;
 import kh.edu.istad.platform.iamrestapi.dto.request.AssignPermissionsToRoleRequest;
@@ -41,6 +44,9 @@ import kh.edu.istad.platform.iamrestapi.dto.response.RoleAssignmentResponse;
 import kh.edu.istad.platform.iamrestapi.dto.response.RoleResponse;
 import kh.edu.istad.platform.iamrestapi.dto.response.RoleSummaryResponse;
 import kh.edu.istad.platform.iamrestapi.dto.response.UserAuthoritiesResponse;
+import kh.edu.istad.platform.iamrestapi.dto.response.AccountActivityResponse;
+import kh.edu.istad.platform.iamrestapi.dto.response.LoginAttemptResponse;
+import kh.edu.istad.platform.iamrestapi.dto.response.UserSessionResponse;
 import kh.edu.istad.platform.iamrestapi.dto.response.UserResponse;
 import kh.edu.istad.platform.iamrestapi.dto.response.UserSummaryResponse;
 
@@ -101,6 +107,8 @@ public final class ApiMapper {
     ) {
         return new UpdateUserProfileCommand(
                 userUuid,
+                request.username(),
+                request.email(),
                 request.givenName(),
                 request.familyName(),
                 request.middleName(),
@@ -331,6 +339,49 @@ public final class ApiMapper {
                         page.page().totalElements(),
                         page.page().totalPages()
                 )
+        );
+    }
+
+    public static UserSessionResponse toResponse(UserSessionResult result) {
+        return new UserSessionResponse(
+                result.uuid(),
+                result.device(),
+                result.browser(),
+                result.operatingSystem(),
+                result.ipAddress(),
+                result.location(),
+                result.createdAt(),
+                result.lastActivityAt(),
+                result.expiresAt(),
+                result.current()
+        );
+    }
+
+    public static LoginAttemptResponse toResponse(LoginAttemptResult result) {
+        return new LoginAttemptResponse(
+                result.uuid(),
+                result.successful(),
+                result.failureReason(),
+                result.identifier(),
+                result.ipAddress(),
+                result.device(),
+                result.browser(),
+                result.operatingSystem(),
+                result.location(),
+                result.attemptedAt(),
+                result.suspicious()
+        );
+    }
+
+    public static AccountActivityResponse toResponse(AccountActivityResult result) {
+        return new AccountActivityResponse(
+                result.uuid(),
+                result.type(),
+                result.description(),
+                result.ipAddress(),
+                result.userAgent(),
+                result.actor(),
+                result.createdAt()
         );
     }
 }

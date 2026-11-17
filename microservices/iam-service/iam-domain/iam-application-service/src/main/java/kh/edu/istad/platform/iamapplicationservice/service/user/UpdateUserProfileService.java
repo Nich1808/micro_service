@@ -1,26 +1,33 @@
 package kh.edu.istad.platform.iamapplicationservice.service.user;
 
 import kh.edu.istad.platform.iamapplicationservice.command.user.UpdateUserProfileCommand;
+import kh.edu.istad.platform.iamapplicationservice.port.out.AccountActivityRepository;
 import kh.edu.istad.platform.iamapplicationservice.port.out.CurrentActorProvider;
 import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
 import kh.edu.istad.platform.iamapplicationservice.result.user.UserResult;
+import kh.edu.istad.platform.iamapplicationservice.service.security.ActivitySupport;
 import kh.edu.istad.platform.iamapplicationservice.usecase.user.UpdateUserProfileUseCase;
+import kh.edu.istad.platform.iamdomaincore.enums.ActivityType;
 import kh.edu.istad.platform.iamdomaincore.model.User;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Locale;
 
 public class UpdateUserProfileService implements UpdateUserProfileUseCase {
 
     private final UserRepository userRepository;
     private final CurrentActorProvider actorProvider;
+    private final AccountActivityRepository accountActivityRepository;
 
     public UpdateUserProfileService(
             UserRepository userRepository,
-            CurrentActorProvider actorProvider
+            CurrentActorProvider actorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
         this.userRepository = userRepository;
         this.actorProvider = actorProvider;
+        this.accountActivityRepository = accountActivityRepository;
     }
 
     @Override
@@ -41,11 +48,14 @@ public class UpdateUserProfileService implements UpdateUserProfileUseCase {
             throw new IllegalStateException("Current actor is required");
         }
 
+        String username = resolveUsername(user, command.username());
+        String email = resolveEmail(user, command.email());
+
         OffsetDateTime now = OffsetDateTime.now();
 
         User updated = new User(
                 user.id(), user.uuid(),
-                user.username(), user.email(), user.emailVerified(), user.passwordHash(),
+                username, email, user.emailVerified(), user.passwordHash(),
                 or(command.givenName(), user.givenName()),
                 or(command.familyName(), user.familyName()),
                 or(command.middleName(), user.middleName()),
@@ -79,6 +89,14 @@ public class UpdateUserProfileService implements UpdateUserProfileUseCase {
 
         User saved = userRepository.save(updated);
 
+        ActivitySupport.record(
+                accountActivityRepository,
+                saved.id(),
+                ActivityType.PROFILE_UPDATED,
+                "Profile details updated",
+                actor
+        );
+
         return new UserResult(
                 saved.uuid(),
                 saved.username(),
@@ -91,6 +109,42 @@ public class UpdateUserProfileService implements UpdateUserProfileUseCase {
                 saved.createdAt(),
                 saved.updatedAt()
         );
+    }
+
+    private String resolveUsername(User user, String requested) {
+        if (requested == null || requested.isBlank()) {
+            return user.username();
+        }
+
+        String username = requested.trim();
+
+        if (username.equals(user.username())) {
+            return user.username();
+        }
+
+        if (userRepository.existsByUsername(username)) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+
+        return username;
+    }
+
+    private String resolveEmail(User user, String requested) {
+        if (requested == null || requested.isBlank()) {
+            return user.email();
+        }
+
+        String email = requested.trim().toLowerCase(Locale.ROOT);
+
+        if (email.equals(user.email())) {
+            return user.email();
+        }
+
+        if (userRepository.existsByEmail(email)) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
+        return email;
     }
 
     private static <T> T or(T value, T fallback) {

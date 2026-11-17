@@ -4,8 +4,8 @@
     --border: #e1e4ec;
     --text: #1c2333;
     --muted: #667085;
-    --brand: #1f4ed8;
-    --brand-dark: #17379b;
+    --brand: #534AB7;
+    --brand-dark: #3F378C;
     --danger: #b42318;
     --danger-bg: #fdecea;
     --ok: #067647;
@@ -68,11 +68,12 @@ a:hover {
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    background: linear-gradient(135deg, var(--brand), #6f8cf3);
+    background: linear-gradient(135deg, var(--brand), #8B82D9);
     color: #fff;
     display: grid;
     place-items: center;
     font-weight: 700;
+    font-size: 15px;
 }
 
 .brand__name {
@@ -129,7 +130,7 @@ select {
 input:focus,
 select:focus,
 button:focus-visible {
-    outline: 2px solid rgba(31, 78, 216, .35);
+    outline: 2px solid rgba(83, 74, 183, .35);
     outline-offset: 1px;
     border-color: var(--brand);
 }
@@ -309,8 +310,8 @@ dl.claims dd {
 }
 
 .chip {
-    background: #eef2ff;
-    color: #22307a;
+    background: #EDEBFA;
+    color: #2E2765;
     border-radius: 999px;
     padding: 4px 12px;
     font-size: 12px;

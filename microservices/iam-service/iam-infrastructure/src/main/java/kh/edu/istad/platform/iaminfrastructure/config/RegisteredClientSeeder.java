@@ -34,6 +34,7 @@ public class RegisteredClientSeeder implements ApplicationRunner {
     private final String webAppRedirectUri;
     private final String webAppPostLogoutRedirectUri;
     private final String dcrClientSecret;
+    private final String spaRedirectUri;
 
     public RegisteredClientSeeder(
             RegisteredClientRepository registeredClientRepository,
@@ -45,13 +46,16 @@ public class RegisteredClientSeeder implements ApplicationRunner {
                     + "http://127.0.0.1:8080/}")
             String webAppPostLogoutRedirectUri,
             @Value("${IAM_DCR_CLIENT_SECRET:dcr-secret}")
-            String dcrClientSecret
+            String dcrClientSecret,
+            @Value("${iam.bootstrap.spa.redirect-uri:http://localhost:5173/callback}")
+            String spaRedirectUri
     ) {
         this.registeredClientRepository = registeredClientRepository;
         this.passwordEncoder = passwordEncoder;
         this.webAppRedirectUri = webAppRedirectUri;
         this.webAppPostLogoutRedirectUri = webAppPostLogoutRedirectUri;
         this.dcrClientSecret = dcrClientSecret;
+        this.spaRedirectUri = spaRedirectUri;
     }
 
     @Override
@@ -68,11 +72,12 @@ public class RegisteredClientSeeder implements ApplicationRunner {
         registeredClientRepository.save(RegisteredClient
                 .withId(UUID.randomUUID().toString())
                 .clientId("oidc-client")
-                .clientName("ISTAD IAM Web")
+                .clientName("Demonic Web")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.NONE)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .redirectUri(webAppRedirectUri)
+                .redirectUri(spaRedirectUri)
                 .postLogoutRedirectUri(webAppPostLogoutRedirectUri)
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)

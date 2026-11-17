@@ -5,6 +5,7 @@ import kh.edu.istad.platform.iamapplicationservice.port.out.CurrentActorProvider
 import kh.edu.istad.platform.iamapplicationservice.port.out.PasswordHasher;
 import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
 import kh.edu.istad.platform.iamapplicationservice.result.user.UserResult;
+import kh.edu.istad.platform.iamapplicationservice.service.security.PasswordPolicy;
 import kh.edu.istad.platform.iamapplicationservice.usecase.user.RegisterUserUseCase;
 import kh.edu.istad.platform.iamdomaincore.model.User;
 
@@ -17,15 +18,18 @@ public class RegisterUserService implements RegisterUserUseCase {
     private final UserRepository userRepository;
     private final PasswordHasher passwordHasher;
     private final CurrentActorProvider currentActorProvider;
+    private final PasswordPolicy passwordPolicy;
 
     public RegisterUserService(
             UserRepository userRepository,
             PasswordHasher passwordHasher,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            PasswordPolicy passwordPolicy
     ) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
         this.currentActorProvider = currentActorProvider;
+        this.passwordPolicy = passwordPolicy;
     }
 
     @Override
@@ -49,6 +53,8 @@ public class RegisterUserService implements RegisterUserUseCase {
         if (command.rawPassword() == null || command.rawPassword().isBlank()) {
             throw new IllegalArgumentException("Password is required");
         }
+
+        passwordPolicy.validate(command.rawPassword());
 
         String passwordHash = passwordHasher.hash(command.rawPassword());
 

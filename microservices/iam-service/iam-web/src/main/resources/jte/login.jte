@@ -18,7 +18,7 @@
 <main class="page centered">
     <div class="meta">
         <div class="brand">
-            <span class="brand__mark">IS</span>
+            <span class="brand__mark">D</span>
             <span class="brand__name">${messages.get("app.name")}</span>
         </div>
         <nav class="lang">
@@ -65,7 +65,10 @@
         <div class="divider">${messages.get("login.or")}</div>
         <div class="social">
             @for(String provider : providers)
-            <a class="social__button" href="/oauth2/authorization/${provider}">${messages.get("login.continueWith", provider)}</a>
+            <a class="social__button" href="/oauth2/authorization/${provider}">
+                @template.partials.providerIcon(provider)
+                <span>${messages.get("login.continueWith", messages.providerLabel(provider))}</span>
+            </a>
             @endfor
         </div>
         @endif

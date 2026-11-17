@@ -1,13 +1,19 @@
 package kh.edu.istad.platform.iammain.config;
 
 import kh.edu.istad.platform.iamapplicationservice.port.out.*;
+import kh.edu.istad.platform.iamapplicationservice.service.admin.*;
 import kh.edu.istad.platform.iamapplicationservice.service.identity.*;
 import kh.edu.istad.platform.iamapplicationservice.service.permission.*;
 import kh.edu.istad.platform.iamapplicationservice.service.role.*;
+import kh.edu.istad.platform.iamapplicationservice.service.security.*;
+import kh.edu.istad.platform.iamapplicationservice.service.session.*;
 import kh.edu.istad.platform.iamapplicationservice.service.user.*;
+import kh.edu.istad.platform.iamapplicationservice.usecase.admin.*;
 import kh.edu.istad.platform.iamapplicationservice.usecase.identity.*;
 import kh.edu.istad.platform.iamapplicationservice.usecase.permission.*;
 import kh.edu.istad.platform.iamapplicationservice.usecase.role.*;
+import kh.edu.istad.platform.iamapplicationservice.usecase.security.*;
+import kh.edu.istad.platform.iamapplicationservice.usecase.session.*;
 import kh.edu.istad.platform.iamapplicationservice.usecase.user.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,15 +26,24 @@ public class IamApplicationConfig {
     // ------------------------------------------------------------------
 
     @Bean
+    public PasswordPolicy passwordPolicy(
+            SystemSettingsRepository systemSettingsRepository
+    ) {
+        return new PasswordPolicy(systemSettingsRepository);
+    }
+
+    @Bean
     public RegisterUserUseCase registerUserUseCase(
             UserRepository userRepository,
             PasswordHasher passwordHasher,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            PasswordPolicy passwordPolicy
     ) {
         return new RegisterUserService(
                 userRepository,
                 passwordHasher,
-                currentActorProvider
+                currentActorProvider,
+                passwordPolicy
         );
     }
 
@@ -38,14 +53,16 @@ public class IamApplicationConfig {
             PasswordHasher passwordHasher,
             CurrentActorProvider currentActorProvider,
             RoleRepository roleRepository,
-            UserRoleRepository userRoleRepository
+            UserRoleRepository userRoleRepository,
+            PasswordPolicy passwordPolicy
     ) {
         return new CreateUserService(
                 userRepository,
                 passwordHasher,
                 currentActorProvider,
                 roleRepository,
-                userRoleRepository
+                userRoleRepository,
+                passwordPolicy
         );
     }
 
@@ -62,11 +79,13 @@ public class IamApplicationConfig {
     @Bean
     public UpdateUserProfileUseCase updateUserProfileUseCase(
             UserRepository userRepository,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
         return new UpdateUserProfileService(
                 userRepository,
-                currentActorProvider
+                currentActorProvider,
+                accountActivityRepository
         );
     }
 
@@ -74,12 +93,16 @@ public class IamApplicationConfig {
     public ChangePasswordUseCase changePasswordUseCase(
             UserRepository userRepository,
             PasswordHasher passwordHasher,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository,
+            PasswordPolicy passwordPolicy
     ) {
         return new ChangePasswordService(
                 userRepository,
                 passwordHasher,
-                currentActorProvider
+                currentActorProvider,
+                accountActivityRepository,
+                passwordPolicy
         );
     }
 
@@ -87,12 +110,14 @@ public class IamApplicationConfig {
     public ResetUserPasswordUseCase resetUserPasswordUseCase(
             UserRepository userRepository,
             PasswordHasher passwordHasher,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            PasswordPolicy passwordPolicy
     ) {
         return new ResetUserPasswordService(
                 userRepository,
                 passwordHasher,
-                currentActorProvider
+                currentActorProvider,
+                passwordPolicy
         );
     }
 
@@ -169,10 +194,31 @@ public class IamApplicationConfig {
     @Bean
     public RecordLoginAttemptUseCase recordLoginAttemptUseCase(
             UserRepository userRepository,
-            CurrentActorProvider currentActorProvider
+            LoginAttemptRepository loginAttemptRepository,
+            CurrentActorProvider currentActorProvider,
+            SystemSettingsRepository systemSettingsRepository,
+            AccountActivityRepository accountActivityRepository
     ) {
         return new RecordLoginAttemptService(
                 userRepository,
+                loginAttemptRepository,
+                currentActorProvider,
+                systemSettingsRepository,
+                accountActivityRepository
+        );
+    }
+
+    @Bean
+    public DeactivateAccountUseCase deactivateAccountUseCase(
+            UserRepository userRepository,
+            UserSessionRepository userSessionRepository,
+            AccountActivityRepository accountActivityRepository,
+            CurrentActorProvider currentActorProvider
+    ) {
+        return new DeactivateAccountService(
+                userRepository,
+                userSessionRepository,
+                accountActivityRepository,
                 currentActorProvider
         );
     }
@@ -455,5 +501,149 @@ public class IamApplicationConfig {
                 getUserAuthoritiesUseCase,
                 currentActorProvider
         );
+    }
+
+    // ------------------------------------------------------------------
+    // Account security: sessions, login history, activity
+    // ------------------------------------------------------------------
+
+    @Bean
+    public ListUserSessionsUseCase listUserSessionsUseCase(
+            UserRepository userRepository,
+            UserSessionRepository userSessionRepository
+    ) {
+        return new ListUserSessionsService(
+                userRepository,
+                userSessionRepository
+        );
+    }
+
+    @Bean
+    public TerminateSessionUseCase terminateSessionUseCase(
+            UserRepository userRepository,
+            UserSessionRepository userSessionRepository,
+            AccountActivityRepository accountActivityRepository,
+            CurrentActorProvider currentActorProvider
+    ) {
+        return new TerminateSessionService(
+                userRepository,
+                userSessionRepository,
+                accountActivityRepository,
+                currentActorProvider
+        );
+    }
+
+    @Bean
+    public TerminateAllSessionsUseCase terminateAllSessionsUseCase(
+            UserRepository userRepository,
+            UserSessionRepository userSessionRepository,
+            AccountActivityRepository accountActivityRepository,
+            CurrentActorProvider currentActorProvider
+    ) {
+        return new TerminateAllSessionsService(
+                userRepository,
+                userSessionRepository,
+                accountActivityRepository,
+                currentActorProvider
+        );
+    }
+
+    @Bean
+    public ListLoginHistoryUseCase listLoginHistoryUseCase(
+            UserRepository userRepository,
+            LoginAttemptRepository loginAttemptRepository
+    ) {
+        return new ListLoginHistoryService(
+                userRepository,
+                loginAttemptRepository
+        );
+    }
+
+    @Bean
+    public ListAccountActivityUseCase listAccountActivityUseCase(
+            UserRepository userRepository,
+            AccountActivityRepository accountActivityRepository
+    ) {
+        return new ListAccountActivityService(
+                userRepository,
+                accountActivityRepository
+        );
+    }
+
+    // ------------------------------------------------------------------
+    // Administration: overview, audit logs, clients, system settings
+    // ------------------------------------------------------------------
+
+    @Bean
+    public AdminUseCases.GetAdminOverview getAdminOverview(
+            AdminStatisticsQuery adminStatisticsQuery
+    ) {
+        return new GetAdminOverviewService(adminStatisticsQuery);
+    }
+
+    @Bean
+    public AdminUseCases.ListAuditLogs listAuditLogs(
+            AccountActivityRepository accountActivityRepository
+    ) {
+        return new ListAuditLogsService(accountActivityRepository);
+    }
+
+    @Bean
+    public AdminUseCases.ListClients listClients(
+            ClientAdminRepository clientAdminRepository
+    ) {
+        return new ClientServices.ListClients(clientAdminRepository);
+    }
+
+    @Bean
+    public AdminUseCases.GetClient getClient(
+            ClientAdminRepository clientAdminRepository
+    ) {
+        return new ClientServices.GetClient(clientAdminRepository);
+    }
+
+    @Bean
+    public AdminUseCases.CreateClient createClient(
+            ClientAdminRepository clientAdminRepository,
+            PasswordHasher passwordHasher,
+            SystemSettingsRepository systemSettingsRepository
+    ) {
+        return new ClientServices.CreateClient(
+                clientAdminRepository,
+                passwordHasher,
+                systemSettingsRepository
+        );
+    }
+
+    @Bean
+    public AdminUseCases.UpdateClient updateClient(
+            ClientAdminRepository clientAdminRepository,
+            PasswordHasher passwordHasher
+    ) {
+        return new ClientServices.UpdateClient(
+                clientAdminRepository,
+                passwordHasher
+        );
+    }
+
+    @Bean
+    public AdminUseCases.DeleteClient deleteClient(
+            ClientAdminRepository clientAdminRepository
+    ) {
+        return new ClientServices.DeleteClient(clientAdminRepository);
+    }
+
+    @Bean
+    public AdminUseCases.GetSystemSettings getSystemSettings(
+            SystemSettingsRepository systemSettingsRepository
+    ) {
+        return new SystemSettingsServices.Get(systemSettingsRepository);
+    }
+
+    @Bean
+    public AdminUseCases.UpdateSystemSettings updateSystemSettings(
+            SystemSettingsRepository systemSettingsRepository
+    ) {
+        return new SystemSettingsServices.Update(systemSettingsRepository);
     }
 }

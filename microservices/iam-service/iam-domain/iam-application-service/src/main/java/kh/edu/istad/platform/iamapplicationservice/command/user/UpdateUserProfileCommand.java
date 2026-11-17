@@ -5,6 +5,8 @@ import java.util.UUID;
 
 public record UpdateUserProfileCommand(
         UUID userUuid,
+        String username,
+        String email,
         String givenName,
         String familyName,
         String middleName,

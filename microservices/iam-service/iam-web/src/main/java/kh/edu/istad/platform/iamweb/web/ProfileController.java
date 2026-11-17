@@ -64,6 +64,8 @@ public class ProfileController {
             try {
                 updateUserProfileUseCase.execute(new UpdateUserProfileCommand(
                         user.uuid(),
+                        null,
+                        null,
                         form.givenName(),
                         form.familyName(),
                         form.middleName(),

@@ -30,11 +30,25 @@ public class LinkAccountSuccessHandler implements AuthenticationSuccessHandler {
     private static final Log LOG = LogFactory.getLog(LinkAccountSuccessHandler.class);
 
     private final LinkIdentityUseCase linkIdentityUseCase;
+    private final String successRedirect;
+    private final String errorRedirect;
     private final AuthenticationSuccessHandler delegate =
             new SavedRequestAwareAuthenticationSuccessHandler();
 
-    public LinkAccountSuccessHandler(LinkIdentityUseCase linkIdentityUseCase) {
+    /**
+     * @param successRedirect where to send the browser after a successful link; use
+     *                        {@code {provider}} as a placeholder when the target is the
+     *                        React dashboard, e.g.
+     *                        {@code http://localhost:5173/accounts?linked={provider}}
+     */
+    public LinkAccountSuccessHandler(
+            LinkIdentityUseCase linkIdentityUseCase,
+            String successRedirect,
+            String errorRedirect
+    ) {
         this.linkIdentityUseCase = linkIdentityUseCase;
+        this.successRedirect = successRedirect;
+        this.errorRedirect = errorRedirect;
     }
 
     @Override
@@ -69,10 +83,10 @@ public class LinkAccountSuccessHandler implements AuthenticationSuccessHandler {
                     )
             );
 
-            redirect(response, "/profile/accounts?linked=" + provider);
+            redirect(response, successRedirect.replace("{provider}", provider));
         } catch (RuntimeException ex) {
             LOG.warn("Unable to link " + provider + " account", ex);
-            redirect(response, "/profile/accounts?error=" + provider);
+            redirect(response, errorRedirect.replace("{provider}", provider));
         } finally {
             LinkAccountSession.clear(session);
 

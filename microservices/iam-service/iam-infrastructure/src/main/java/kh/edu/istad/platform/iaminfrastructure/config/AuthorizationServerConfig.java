@@ -6,13 +6,19 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
+import kh.edu.istad.platform.iamapplicationservice.port.out.SystemSettingsRepository;
+import kh.edu.istad.platform.iamapplicationservice.port.out.UserSessionRepository;
 import kh.edu.istad.platform.iamapplicationservice.usecase.identity.FindOrProvisionFederatedUserUseCase;
 import kh.edu.istad.platform.iamapplicationservice.usecase.identity.LinkIdentityUseCase;
 import kh.edu.istad.platform.iamapplicationservice.usecase.user.LoadUserForAuthenticationUseCase;
+import kh.edu.istad.platform.iamapplicationservice.usecase.user.RecordLoginAttemptUseCase;
 import kh.edu.istad.platform.iaminfrastructure.federation.FederatedOidcUserService;
 import kh.edu.istad.platform.iaminfrastructure.federation.FederatedOAuth2UserService;
 import kh.edu.istad.platform.iaminfrastructure.federation.FederatedPrincipalFactory;
 import kh.edu.istad.platform.iaminfrastructure.federation.LinkAccountSuccessHandler;
+import kh.edu.istad.platform.iaminfrastructure.security.LoginFailureListener;
+import kh.edu.istad.platform.iaminfrastructure.security.LoginSuccessListener;
+import kh.edu.istad.platform.iaminfrastructure.security.SessionTrackingFilter;
 import kh.edu.istad.platform.iaminfrastructure.security.UseCaseUserDetailsService;
 import kh.edu.istad.platform.iaminfrastructure.token.IamTokenCustomizer;
 import org.springframework.beans.factory.annotation.Value;
@@ -143,9 +149,52 @@ public class AuthorizationServerConfig {
 
     @Bean
     public LinkAccountSuccessHandler linkAccountSuccessHandler(
-            LinkIdentityUseCase linkIdentityUseCase
+            LinkIdentityUseCase linkIdentityUseCase,
+            @Value("${iam.link.success-redirect:"
+                    + "${iam.bootstrap.spa.base-url:http://localhost:5173}"
+                    + "/accounts?linked={provider}}")
+            String successRedirect,
+            @Value("${iam.link.error-redirect:"
+                    + "${iam.bootstrap.spa.base-url:http://localhost:5173}"
+                    + "/accounts?error={provider}}")
+            String errorRedirect
     ) {
-        return new LinkAccountSuccessHandler(linkIdentityUseCase);
+        return new LinkAccountSuccessHandler(
+                linkIdentityUseCase,
+                successRedirect,
+                errorRedirect
+        );
+    }
+
+    // ------------------------------------------------------------------
+    // Account security: active sessions and login history
+    // ------------------------------------------------------------------
+
+    @Bean
+    public SessionTrackingFilter sessionTrackingFilter(
+            UserRepository userRepository,
+            UserSessionRepository userSessionRepository,
+            SystemSettingsRepository systemSettingsRepository
+    ) {
+        return new SessionTrackingFilter(
+                userRepository,
+                userSessionRepository,
+                systemSettingsRepository
+        );
+    }
+
+    @Bean
+    public LoginSuccessListener loginSuccessListener(
+            RecordLoginAttemptUseCase recordLoginAttemptUseCase
+    ) {
+        return new LoginSuccessListener(recordLoginAttemptUseCase);
+    }
+
+    @Bean
+    public LoginFailureListener loginFailureListener(
+            RecordLoginAttemptUseCase recordLoginAttemptUseCase
+    ) {
+        return new LoginFailureListener(recordLoginAttemptUseCase);
     }
 
     private static KeyPair generateRsaKey() {

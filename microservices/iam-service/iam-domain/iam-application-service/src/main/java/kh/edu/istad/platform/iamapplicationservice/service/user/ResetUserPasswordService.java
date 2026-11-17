@@ -4,6 +4,7 @@ import kh.edu.istad.platform.iamapplicationservice.command.user.ResetUserPasswor
 import kh.edu.istad.platform.iamapplicationservice.port.out.CurrentActorProvider;
 import kh.edu.istad.platform.iamapplicationservice.port.out.PasswordHasher;
 import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
+import kh.edu.istad.platform.iamapplicationservice.service.security.PasswordPolicy;
 import kh.edu.istad.platform.iamapplicationservice.usecase.user.ResetUserPasswordUseCase;
 import kh.edu.istad.platform.iamdomaincore.model.User;
 
@@ -14,15 +15,18 @@ public class ResetUserPasswordService implements ResetUserPasswordUseCase {
     private final UserRepository repository;
     private final PasswordHasher passwordHasher;
     private final CurrentActorProvider actorProvider;
+    private final PasswordPolicy passwordPolicy;
 
     public ResetUserPasswordService(
             UserRepository repository,
             PasswordHasher passwordHasher,
-            CurrentActorProvider actorProvider
+            CurrentActorProvider actorProvider,
+            PasswordPolicy passwordPolicy
     ) {
         this.repository = repository;
         this.passwordHasher = passwordHasher;
         this.actorProvider = actorProvider;
+        this.passwordPolicy = passwordPolicy;
     }
 
     @Override
@@ -38,6 +42,8 @@ public class ResetUserPasswordService implements ResetUserPasswordUseCase {
         User user = UserStateSupport.requireActiveUser(
                 repository, command.userUuid()
         );
+
+        passwordPolicy.validate(command.newPassword());
 
         String passwordHash = passwordHasher.hash(command.newPassword());
 

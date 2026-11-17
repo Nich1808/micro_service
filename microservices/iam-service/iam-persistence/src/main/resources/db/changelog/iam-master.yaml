@@ -20,3 +20,11 @@ databaseChangeLog:
   - include:
       file: ddl/004-create-authorization-server-tables.sql
       relativeToChangelogFile: true
+
+  - include:
+      file: ddl/005-create-account-security-tables.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: ddl/006-create-system-settings.sql
+      relativeToChangelogFile: true

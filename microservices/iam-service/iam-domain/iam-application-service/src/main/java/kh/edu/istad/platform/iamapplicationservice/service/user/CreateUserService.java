@@ -8,6 +8,7 @@ import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
 import kh.edu.istad.platform.iamapplicationservice.port.out.UserRoleRepository;
 import kh.edu.istad.platform.iamapplicationservice.result.role.RoleSummary;
 import kh.edu.istad.platform.iamapplicationservice.result.user.UserResult;
+import kh.edu.istad.platform.iamapplicationservice.service.security.PasswordPolicy;
 import kh.edu.istad.platform.iamapplicationservice.usecase.user.CreateUserUseCase;
 import kh.edu.istad.platform.iamdomaincore.model.Role;
 import kh.edu.istad.platform.iamdomaincore.model.User;
@@ -26,19 +27,22 @@ public class CreateUserService implements CreateUserUseCase {
     private final CurrentActorProvider currentActorProvider;
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
+    private final PasswordPolicy passwordPolicy;
 
     public CreateUserService(
             UserRepository userRepository,
             PasswordHasher passwordHasher,
             CurrentActorProvider currentActorProvider,
             RoleRepository roleRepository,
-            UserRoleRepository userRoleRepository
+            UserRoleRepository userRoleRepository,
+            PasswordPolicy passwordPolicy
     ) {
         this.userRepository = userRepository;
         this.passwordHasher = passwordHasher;
         this.currentActorProvider = currentActorProvider;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
+        this.passwordPolicy = passwordPolicy;
     }
 
     @Override
@@ -61,6 +65,8 @@ public class CreateUserService implements CreateUserUseCase {
         if (command.rawPassword() == null || command.rawPassword().isBlank()) {
             throw new IllegalArgumentException("Password is required");
         }
+
+        passwordPolicy.validate(command.rawPassword());
 
         List<Role> roles = resolveRoles(command.roleUuids());
 

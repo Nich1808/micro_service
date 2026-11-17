@@ -312,7 +312,58 @@ The suite runs without a database.
 
 ---
 
-## 9. Postman
+## 9. React dashboard (`iam-web-react`)
+
+A React 18 + TypeScript (Vite) front-end for the account area lives in
+`iam-web-react/`. It signs in through the authorization server with the
+authorization-code + PKCE flow and calls the REST API with the returned access token.
+
+```bash
+cd iam-web-react
+npm install
+npm run dev        # http://localhost:5173
+```
+
+Pages: sign in, profile (name, username, email, phone, picture, address), security &
+password, linked accounts, active sessions (device, browser, IP, last activity, terminate
+one or all), login history, account activity and account deactivation.
+
+Backend prerequisites:
+
+- register the SPA redirect URI on `oidc-client` — `iam.bootstrap.spa.redirect-uri`,
+  default `http://localhost:5173/callback`;
+- allow the dashboard origin through CORS — `iam.web.allowed-origins`, default
+  `http://localhost:3000,http://localhost:5173`.
+
+### Management (admin)
+
+The dashboard also exposes the administration area; the navigation only appears for
+tokens carrying an administrative authority, and every endpoint is guarded server-side.
+
+| Area | Endpoints |
+| --- | --- |
+| Overview | `GET /api/admin/overview` — users, active users, locked/disabled, roles, permissions, clients, active sessions, logins today, failed logins today, recent events |
+| Audit logs | `GET /api/admin/audit-logs?type&page&size` — system-wide activity trail, filtered by event type in SQL |
+| Clients | `GET/POST /api/admin/clients`, `GET/PUT/DELETE /api/admin/clients/{clientId}` |
+| System configuration | `GET/PATCH /api/admin/settings` — password policy, lockout, session expiry, token lifetimes, registration and social-login switches |
+| User administration | `/api/users…` (create, update, delete, enable, disable, lock, unlock, reset password, roles, permissions) |
+| User sessions | `GET/DELETE /api/users/{uuid}/sessions`, `DELETE /api/users/{uuid}/sessions/{sessionUuid}` |
+| User login history | `GET /api/users/{uuid}/login-history?page&size` — failures are flagged `suspicious` when three or more happen within 15 minutes |
+| Roles | `/api/roles…` (CRUD, activate/deactivate, assign/revoke permissions) |
+| Permissions | `/api/permissions…` (CRUD, activate/deactivate) |
+
+The security policy is stored in `iam_system_settings` (seeded with sensible defaults),
+edited through `PATCH /api/admin/settings`, and **enforced** at runtime:
+
+| Setting | Enforced by |
+| --- | --- |
+| Password length / uppercase / digit / symbol | `PasswordPolicy`, applied on register, create, change and reset |
+| Max failed attempts | `RecordLoginAttemptService` locks the account and writes an `ACCOUNT_LOCKED` activity |
+| Lockout minutes | lockout duration surfaced in the admin UI; unlock is an explicit admin action |
+| Session idle / absolute timeout | `SessionTrackingFilter` revokes expired sessions automatically |
+| Access / refresh token TTL | used as the default when a new OAuth2 client is registered |
+
+## 10. Postman
 
 Import `postman/iam-service.postman_collection.json`, then set the collection variables:
 

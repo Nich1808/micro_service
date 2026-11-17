@@ -18,6 +18,10 @@ import kh.edu.istad.platform.iamapplicationservice.usecase.user.ResetUserPasswor
 import kh.edu.istad.platform.iamapplicationservice.usecase.user.RevokePermissionFromUserUseCase;
 import kh.edu.istad.platform.iamapplicationservice.usecase.user.RevokeRoleFromUserUseCase;
 import kh.edu.istad.platform.iamapplicationservice.usecase.user.UnlockUserUseCase;
+import kh.edu.istad.platform.iamapplicationservice.usecase.security.ListLoginHistoryUseCase;
+import kh.edu.istad.platform.iamapplicationservice.usecase.session.ListUserSessionsUseCase;
+import kh.edu.istad.platform.iamapplicationservice.usecase.session.TerminateAllSessionsUseCase;
+import kh.edu.istad.platform.iamapplicationservice.usecase.session.TerminateSessionUseCase;
 import kh.edu.istad.platform.iamapplicationservice.usecase.user.UpdateUserProfileUseCase;
 import kh.edu.istad.platform.iamapplicationservice.command.user.ResetUserPasswordCommand;
 import kh.edu.istad.platform.iamrestapi.dto.request.AssignRolesToUserRequest;
@@ -26,11 +30,13 @@ import kh.edu.istad.platform.iamrestapi.dto.request.GrantPermissionsToUserReques
 import kh.edu.istad.platform.iamrestapi.dto.request.ResetPasswordRequest;
 import kh.edu.istad.platform.iamrestapi.dto.request.UpdateUserProfileRequest;
 import kh.edu.istad.platform.iamrestapi.dto.response.IdentityResponse;
+import kh.edu.istad.platform.iamrestapi.dto.response.LoginAttemptResponse;
 import kh.edu.istad.platform.iamrestapi.dto.response.PageResponse;
 import kh.edu.istad.platform.iamrestapi.dto.response.PermissionGrantResponse;
 import kh.edu.istad.platform.iamrestapi.dto.response.RoleAssignmentResponse;
 import kh.edu.istad.platform.iamrestapi.dto.response.UserAuthoritiesResponse;
 import kh.edu.istad.platform.iamrestapi.dto.response.UserResponse;
+import kh.edu.istad.platform.iamrestapi.dto.response.UserSessionResponse;
 import kh.edu.istad.platform.iamrestapi.dto.response.UserSummaryResponse;
 import kh.edu.istad.platform.iamrestapi.mapper.ApiMapper;
 import org.springframework.http.HttpStatus;
@@ -71,6 +77,10 @@ public class UserController {
     private final RevokePermissionFromUserUseCase revokePermissionFromUserUseCase;
     private final ListUserIdentitiesUseCase listUserIdentitiesUseCase;
     private final UnlinkIdentityUseCase unlinkIdentityUseCase;
+    private final ListUserSessionsUseCase listUserSessionsUseCase;
+    private final TerminateSessionUseCase terminateSessionUseCase;
+    private final TerminateAllSessionsUseCase terminateAllSessionsUseCase;
+    private final ListLoginHistoryUseCase listLoginHistoryUseCase;
 
     public UserController(
             CreateUserUseCase createUserUseCase,
@@ -89,7 +99,11 @@ public class UserController {
             GrantPermissionsToUserUseCase grantPermissionsToUserUseCase,
             RevokePermissionFromUserUseCase revokePermissionFromUserUseCase,
             ListUserIdentitiesUseCase listUserIdentitiesUseCase,
-            UnlinkIdentityUseCase unlinkIdentityUseCase
+            UnlinkIdentityUseCase unlinkIdentityUseCase,
+            ListUserSessionsUseCase listUserSessionsUseCase,
+            TerminateSessionUseCase terminateSessionUseCase,
+            TerminateAllSessionsUseCase terminateAllSessionsUseCase,
+            ListLoginHistoryUseCase listLoginHistoryUseCase
     ) {
         this.createUserUseCase = createUserUseCase;
         this.listUsersUseCase = listUsersUseCase;
@@ -108,6 +122,10 @@ public class UserController {
         this.revokePermissionFromUserUseCase = revokePermissionFromUserUseCase;
         this.listUserIdentitiesUseCase = listUserIdentitiesUseCase;
         this.unlinkIdentityUseCase = unlinkIdentityUseCase;
+        this.listUserSessionsUseCase = listUserSessionsUseCase;
+        this.terminateSessionUseCase = terminateSessionUseCase;
+        this.terminateAllSessionsUseCase = terminateAllSessionsUseCase;
+        this.listLoginHistoryUseCase = listLoginHistoryUseCase;
     }
 
     @PostMapping
@@ -269,5 +287,55 @@ public class UserController {
             @PathVariable UUID identityUuid
     ) {
         unlinkIdentityUseCase.execute(uuid, identityUuid);
+    }
+
+    // ------------------------------------------------------------------
+    // Administration of a user's sessions and login history
+    // ------------------------------------------------------------------
+
+    @GetMapping("/{uuid}/sessions")
+    @PreAuthorize("hasAuthority('user:read')")
+    public List<UserSessionResponse> userSessions(@PathVariable UUID uuid) {
+        return listUserSessionsUseCase
+                .execute(uuid, null)
+                .stream()
+                .map(ApiMapper::toResponse)
+                .toList();
+    }
+
+    @DeleteMapping("/{uuid}/sessions/{sessionUuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('user:update')")
+    public void terminateUserSession(
+            @PathVariable UUID uuid,
+            @PathVariable UUID sessionUuid
+    ) {
+        terminateSessionUseCase.execute(uuid, sessionUuid, "Terminated by an administrator");
+    }
+
+    @DeleteMapping("/{uuid}/sessions")
+    @PreAuthorize("hasAuthority('user:update')")
+    public TerminateAllUsersSessionsResponse terminateAllUserSessions(
+            @PathVariable UUID uuid
+    ) {
+        return new TerminateAllUsersSessionsResponse(
+                terminateAllSessionsUseCase.execute(uuid, null)
+        );
+    }
+
+    @GetMapping("/{uuid}/login-history")
+    @PreAuthorize("hasAuthority('user:read')")
+    public PageResponse<LoginAttemptResponse> userLoginHistory(
+            @PathVariable UUID uuid,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        return ApiMapper.toPageResponse(
+                listLoginHistoryUseCase.execute(uuid, page, size),
+                ApiMapper::toResponse
+        );
+    }
+
+    public record TerminateAllUsersSessionsResponse(int revoked) {
     }
 }

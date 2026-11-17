@@ -4,7 +4,7 @@ import kh.edu.istad.platform.iamweb.i18n.Messages;
 @javax.annotation.processing.Generated("gg.jte.TemplateEngine")
 public final class JteloginGenerated {
 	public static final String JTE_NAME = "login.jte";
-	public static final int[] JTE_LINE_INFO = {0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,13,13,13,13,13,13,21,21,21,24,24,25,25,25,25,25,25,25,26,26,26,26,26,26,26,27,27,28,28,28,28,28,28,28,29,29,29,29,29,29,29,30,30,35,35,35,36,36,36,38,38,39,39,39,40,40,42,42,43,43,43,44,44,46,46,47,47,47,48,48,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,53,53,53,57,57,57,60,60,60,63,63,64,64,64,66,66,67,67,67,67,67,67,67,68,68,70,70,74,74,74,75,75,75,80,0,0,1,2,3,4,5,6,7,0,0,0};
+	public static final int[] JTE_LINE_INFO = {0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,13,13,13,13,13,13,21,21,21,24,24,25,25,25,25,25,25,25,26,26,26,26,26,26,26,27,27,28,28,28,28,28,28,28,29,29,29,29,29,29,29,30,30,35,35,35,36,36,36,38,38,39,39,39,40,40,42,42,43,43,43,44,44,46,46,47,47,47,48,48,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,53,53,53,57,57,57,60,60,60,63,63,64,64,64,66,66,67,67,67,67,68,68,69,69,69,71,71,73,73,77,77,77,78,78,78,83,0,0,1,2,3,4,5,6,7,0,0,0};
 	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, Messages messages, java.util.List<String> providers, boolean error, boolean logout, boolean registered, String path, org.springframework.security.web.csrf.CsrfToken csrfToken) {
 		jteOutput.writeContent("<!DOCTYPE html>\r\n<html");
 		var __jte_html_attribute_0 = messages.language();
@@ -21,7 +21,7 @@ public final class JteloginGenerated {
 		jteOutput.writeContent(" · ");
 		jteOutput.setContext("title", null);
 		jteOutput.writeUserContent(messages.get("app.name"));
-		jteOutput.writeContent("</title>\r\n    <link rel=\"stylesheet\" href=\"/css/app.css\">\r\n</head>\r\n<body>\r\n<main class=\"page centered\">\r\n    <div class=\"meta\">\r\n        <div class=\"brand\">\r\n            <span class=\"brand__mark\">IS</span>\r\n            <span class=\"brand__name\">");
+		jteOutput.writeContent("</title>\r\n    <link rel=\"stylesheet\" href=\"/css/app.css\">\r\n</head>\r\n<body>\r\n<main class=\"page centered\">\r\n    <div class=\"meta\">\r\n        <div class=\"brand\">\r\n            <span class=\"brand__mark\">D</span>\r\n            <span class=\"brand__name\">");
 		jteOutput.setContext("span", null);
 		jteOutput.writeUserContent(messages.get("app.name"));
 		jteOutput.writeContent("</span>\r\n        </div>\r\n        <nav class=\"lang\">\r\n            ");
@@ -122,10 +122,12 @@ public final class JteloginGenerated {
 				jteOutput.setContext("a", "href");
 				jteOutput.writeUserContent(provider);
 				jteOutput.setContext("a", null);
-				jteOutput.writeContent("\">");
-				jteOutput.setContext("a", null);
-				jteOutput.writeUserContent(messages.get("login.continueWith", provider));
-				jteOutput.writeContent("</a>\r\n            ");
+				jteOutput.writeContent("\">\r\n                ");
+				gg.jte.generated.ondemand.partials.JteproviderIconGenerated.render(jteOutput, jteHtmlInterceptor, provider);
+				jteOutput.writeContent("\r\n                <span>");
+				jteOutput.setContext("span", null);
+				jteOutput.writeUserContent(messages.get("login.continueWith", messages.providerLabel(provider)));
+				jteOutput.writeContent("</span>\r\n            </a>\r\n            ");
 			}
 			jteOutput.writeContent("\r\n        </div>\r\n        ");
 		}

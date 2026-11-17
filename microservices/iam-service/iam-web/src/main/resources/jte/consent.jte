@@ -16,7 +16,7 @@
 <body>
 <main class="page centered">
     <div class="brand">
-        <span class="brand__mark">IS</span>
+        <span class="brand__mark">D</span>
         <span class="brand__name">${messages.get("app.name")}</span>
     </div>
 
