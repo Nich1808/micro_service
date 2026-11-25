@@ -1,0 +1,35 @@
+{
+  "name": "pg-orders-source",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+
+    "database.hostname": "cdc-postgres",
+    "database.port": "5432",
+    "database.user": "debezium",
+    "database.password": "dbz",
+    "database.dbname": "db_cdc",
+
+    "topic.prefix": "cdc",
+    "plugin.name": "pgoutput",
+    "publication.name": "cdc_publication",
+    "publication.autocreate.mode": "disabled",
+    "slot.name": "cdc_orders_slot",
+
+    "schema.include.list": "public",
+    "table.include.list": "public.customers,public.orders,public.order_items",
+
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+
+    "snapshot.mode": "initial",
+    "tombstones.on.delete": "true",
+    "decimal.handling.mode": "string",
+    "time.precision.mode": "adaptive_time_microseconds",
+    "heartbeat.interval.ms": "10000",
+    "topic.creation.default.partitions": "1",
+    "topic.creation.default.replication.factor": "1"
+  }
+}
