@@ -1,0 +1,38 @@
+import org.gradle.api.publish.PublishingExtension
+import org.gradle.api.publish.maven.MavenPublication
+
+plugins {
+    id 'maven-publish'
+}
+
+def nexusUrl = providers.gradleProperty('nexusUrl')
+        .orElse(providers.environmentVariable('NEXUS_URL'))
+        .getOrElse('http://localhost:8081')
+
+def nexusUsername = providers.environmentVariable('NEXUS_USERNAME')
+        .orElse(providers.gradleProperty('nexusUsername'))
+def nexusPassword = providers.environmentVariable('NEXUS_PASSWORD')
+        .orElse(providers.gradleProperty('nexusPassword'))
+
+def repositoryName = version.toString().endsWith('-SNAPSHOT') ? 'maven-snapshots' : 'maven-releases'
+
+extensions.configure(PublishingExtension) { publishing ->
+    publishing.repositories.maven { repo ->
+        repo.name = 'nexus'
+        repo.url = uri("${nexusUrl}/repository/${repositoryName}")
+        repo.allowInsecureProtocol = true
+        repo.credentials { credentials ->
+            credentials.username = nexusUsername.getOrNull()
+            credentials.password = nexusPassword.getOrNull()
+        }
+    }
+}
+
+pluginManager.withPlugin('java') {
+    extensions.configure(PublishingExtension) { publishing ->
+        publishing.publications.create('mavenJava', MavenPublication) { publication ->
+            publication.from(components.getByName('java'))
+            publication.artifactId = project.name
+        }
+    }
+}

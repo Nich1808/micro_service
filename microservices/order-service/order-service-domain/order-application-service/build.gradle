@@ -1,8 +1,10 @@
 plugins {
     id 'spring-common-conventions'
+    id 'nexus-publish-conventions'
 }
 
 dependencies {
+    api platform(libs.istad.common.bom)
     api 'io.projectreactor:reactor-core'
     api 'kh.edu.istad:order-domain-core'
 }

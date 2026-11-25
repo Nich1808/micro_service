@@ -1,13 +1,21 @@
 pluginManagement {
     repositories {
+        maven {
+            name = 'nexus'
+            url = uri('http://localhost:8081/repository/istad-public/')
+            allowInsecureProtocol = true
+        }
         gradlePluginPortal()
-        mavenCentral()
     }
 }
 
 dependencyResolutionManagement {
     repositories {
-        gradlePluginPortal()
+        maven {
+            name = 'nexus'
+            url = uri('http://localhost:8081/repository/istad-public/')
+            allowInsecureProtocol = true
+        }
         mavenCentral()
     }
 

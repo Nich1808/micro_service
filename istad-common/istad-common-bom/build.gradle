@@ -1,0 +1,46 @@
+plugins {
+    id 'java-platform'
+    id 'nexus-publish-conventions'
+}
+
+group = 'kh.edu.istad'
+version = '1.0.0'
+
+javaPlatform {
+    // Needed to import another platform (Spring Boot) instead of only declaring constraints.
+    allowDependencies()
+}
+
+dependencies {
+    // Re-export the Spring Boot dependency set so consumers only need this one BOM.
+    api platform('org.springframework.boot:spring-boot-dependencies:4.1.1')
+
+    constraints {
+        // Shared libraries
+        api 'kh.edu.istad:istad-common-domain:1.0.0'
+        api 'kh.edu.istad:istad-common-restapi:1.0.0'
+        api 'kh.edu.istad:istad-common-swagger:1.0.0'
+        api 'kh.edu.istad:istad-common-webflux:1.0.0'
+
+        // Order service libraries
+        api 'kh.edu.istad:order-domain-core:1.0.0'
+        api 'kh.edu.istad:order-application-service:1.0.0'
+        api 'kh.edu.istad:order-service-persistence:1.0.0'
+        api 'kh.edu.istad:order-service-client:1.0.0'
+
+        // Third-party versions shared by the services
+        api 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.0'
+        api 'org.springdoc:springdoc-openapi-starter-webmvc-api:3.2.0'
+        api 'org.springdoc:springdoc-openapi-starter-webflux-ui:3.2.0'
+        api 'org.springdoc:springdoc-openapi-starter-webflux-api:3.2.0'
+    }
+}
+
+publishing {
+    publications {
+        mavenBom(MavenPublication) {
+            from components.javaPlatform
+            artifactId = 'istad-common-bom'
+        }
+    }
+}

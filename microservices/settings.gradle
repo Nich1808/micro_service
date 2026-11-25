@@ -1,4 +1,13 @@
 dependencyResolutionManagement {
+    repositories {
+        maven {
+            name = 'nexus'
+            url = uri('http://localhost:8081/repository/istad-public/')
+            allowInsecureProtocol = true
+        }
+        mavenCentral()
+    }
+
     versionCatalogs {
         libs {
             from(files("../gradle/libs.versions.toml"))

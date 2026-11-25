@@ -1,3 +1,14 @@
+dependencyResolutionManagement {
+    repositories {
+        maven {
+            name = 'nexus'
+            url = uri('http://localhost:8081/repository/istad-public/')
+            allowInsecureProtocol = true
+        }
+        mavenCentral()
+    }
+}
+
 rootProject.name = 'istad-ite-platform'
 
 includeBuild 'istad-common'

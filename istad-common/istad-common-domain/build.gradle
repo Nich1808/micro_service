@@ -1,5 +1,6 @@
 plugins {
     id 'java-common-conventions'
+    id 'nexus-publish-conventions'
 }
 
 dependencies {

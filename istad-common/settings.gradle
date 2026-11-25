@@ -2,13 +2,22 @@ pluginManagement {
     includeBuild('../build-logic')
 
     repositories {
+        maven {
+            name = 'nexus'
+            url = uri('http://localhost:8081/repository/istad-public/')
+            allowInsecureProtocol = true
+        }
         gradlePluginPortal()
-        mavenCentral()
     }
 }
 
 dependencyResolutionManagement {
     repositories {
+        maven {
+            name = 'nexus'
+            url = uri('http://localhost:8081/repository/istad-public/')
+            allowInsecureProtocol = true
+        }
         mavenCentral()
     }
 
@@ -20,6 +29,7 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = 'istad-common'
+include 'istad-common-bom'
 include 'istad-common-domain'
 include 'istad-common-restapi'
 include 'istad-common-swagger'

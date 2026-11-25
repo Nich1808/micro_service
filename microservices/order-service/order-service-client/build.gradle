@@ -1,9 +1,11 @@
 plugins {
     id 'spring-common-conventions'
     id 'spring-cloud-common-conventions'
+    id 'nexus-publish-conventions'
 }
 
 dependencies {
+    implementation platform(libs.istad.common.bom)
     implementation "kh.edu.istad:order-application-service"
     implementation 'org.springframework.boot:spring-boot-starter-webclient'
     implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'

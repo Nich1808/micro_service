@@ -1,8 +1,10 @@
 plugins {
     id 'spring-boot-common-conventions'
+    id 'nexus-publish-conventions'
 }
 
 dependencies {
+    implementation platform(libs.istad.common.bom)
     implementation 'kh.edu.istad:istad-common-domain'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     testImplementation 'org.springframework.boot:spring-boot-starter-webflux-test'
