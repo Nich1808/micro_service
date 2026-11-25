@@ -1,10 +1,13 @@
 package kh.edu.istad.platform.iamapplicationservice.service.role;
 
+import kh.edu.istad.platform.iamapplicationservice.port.out.AccountActivityRepository;
 import kh.edu.istad.platform.iamapplicationservice.port.out.CurrentActorProvider;
 import kh.edu.istad.platform.iamapplicationservice.port.out.PermissionRepository;
 import kh.edu.istad.platform.iamapplicationservice.port.out.RolePermissionRepository;
 import kh.edu.istad.platform.iamapplicationservice.port.out.RoleRepository;
+import kh.edu.istad.platform.iamapplicationservice.service.security.ActivitySupport;
 import kh.edu.istad.platform.iamapplicationservice.usecase.role.RevokePermissionFromRoleUseCase;
+import kh.edu.istad.platform.iamdomaincore.enums.ActivityType;
 import kh.edu.istad.platform.iamdomaincore.model.Permission;
 import kh.edu.istad.platform.iamdomaincore.model.Role;
 import kh.edu.istad.platform.iamdomaincore.model.RolePermission;
@@ -18,17 +21,20 @@ public class RevokePermissionFromRoleService implements RevokePermissionFromRole
     private final PermissionRepository permissionRepository;
     private final RolePermissionRepository rolePermissionRepository;
     private final CurrentActorProvider actorProvider;
+    private final AccountActivityRepository accountActivityRepository;
 
     public RevokePermissionFromRoleService(
             RoleRepository roleRepository,
             PermissionRepository permissionRepository,
             RolePermissionRepository rolePermissionRepository,
-            CurrentActorProvider actorProvider
+            CurrentActorProvider actorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;
         this.rolePermissionRepository = rolePermissionRepository;
         this.actorProvider = actorProvider;
+        this.accountActivityRepository = accountActivityRepository;
     }
 
     @Override
@@ -57,6 +63,14 @@ public class RevokePermissionFromRoleService implements RevokePermissionFromRole
 
         rolePermissionRepository.save(
                 assignment.revoke(actor, OffsetDateTime.now(), reason)
+        );
+
+        ActivitySupport.record(
+                accountActivityRepository, null,
+                ActivityType.PERMISSION_REVOKED,
+                "Permission '" + permission.name() + "' revoked from role '"
+                        + role.name() + "'",
+                actor
         );
     }
 }

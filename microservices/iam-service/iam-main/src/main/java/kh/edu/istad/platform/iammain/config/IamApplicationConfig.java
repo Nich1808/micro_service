@@ -111,54 +111,71 @@ public class IamApplicationConfig {
             UserRepository userRepository,
             PasswordHasher passwordHasher,
             CurrentActorProvider currentActorProvider,
-            PasswordPolicy passwordPolicy
+            PasswordPolicy passwordPolicy,
+            AccountActivityRepository accountActivityRepository
     ) {
         return new ResetUserPasswordService(
                 userRepository,
                 passwordHasher,
                 currentActorProvider,
-                passwordPolicy
+                passwordPolicy,
+                accountActivityRepository
         );
     }
 
     @Bean
     public EnableUserUseCase enableUserUseCase(
             UserRepository userRepository,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
-        return new EnableUserService(userRepository, currentActorProvider);
+        return new EnableUserService(
+                userRepository, currentActorProvider, accountActivityRepository
+        );
     }
 
     @Bean
     public DisableUserUseCase disableUserUseCase(
             UserRepository userRepository,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
-        return new DisableUserService(userRepository, currentActorProvider);
+        return new DisableUserService(
+                userRepository, currentActorProvider, accountActivityRepository
+        );
     }
 
     @Bean
     public LockUserUseCase lockUserUseCase(
             UserRepository userRepository,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
-        return new LockUserService(userRepository, currentActorProvider);
+        return new LockUserService(
+                userRepository, currentActorProvider, accountActivityRepository
+        );
     }
 
     @Bean
     public UnlockUserUseCase unlockUserUseCase(
             UserRepository userRepository,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
-        return new UnlockUserService(userRepository, currentActorProvider);
+        return new UnlockUserService(
+                userRepository, currentActorProvider, accountActivityRepository
+        );
     }
 
     @Bean
     public DeleteUserUseCase deleteUserUseCase(
             UserRepository userRepository,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
-        return new DeleteUserService(userRepository, currentActorProvider);
+        return new DeleteUserService(
+                userRepository, currentActorProvider, accountActivityRepository
+        );
     }
 
     @Bean
@@ -228,13 +245,15 @@ public class IamApplicationConfig {
             UserRepository userRepository,
             RoleRepository roleRepository,
             UserRoleRepository userRoleRepository,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
         return new AssignRolesToUserService(
                 userRepository,
                 roleRepository,
                 userRoleRepository,
-                currentActorProvider
+                currentActorProvider,
+                accountActivityRepository
         );
     }
 
@@ -243,13 +262,15 @@ public class IamApplicationConfig {
             UserRepository userRepository,
             RoleRepository roleRepository,
             UserRoleRepository userRoleRepository,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
         return new RevokeRoleFromUserService(
                 userRepository,
                 roleRepository,
                 userRoleRepository,
-                currentActorProvider
+                currentActorProvider,
+                accountActivityRepository
         );
     }
 
@@ -258,13 +279,15 @@ public class IamApplicationConfig {
             UserRepository userRepository,
             PermissionRepository permissionRepository,
             UserPermissionRepository userPermissionRepository,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
         return new GrantPermissionsToUserService(
                 userRepository,
                 permissionRepository,
                 userPermissionRepository,
-                currentActorProvider
+                currentActorProvider,
+                accountActivityRepository
         );
     }
 
@@ -273,13 +296,15 @@ public class IamApplicationConfig {
             UserRepository userRepository,
             PermissionRepository permissionRepository,
             UserPermissionRepository userPermissionRepository,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
         return new RevokePermissionFromUserService(
                 userRepository,
                 permissionRepository,
                 userPermissionRepository,
-                currentActorProvider
+                currentActorProvider,
+                accountActivityRepository
         );
     }
 
@@ -349,13 +374,15 @@ public class IamApplicationConfig {
             RoleRepository roleRepository,
             PermissionRepository permissionRepository,
             RolePermissionRepository rolePermissionRepository,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
         return new AssignPermissionsToRoleService(
                 roleRepository,
                 permissionRepository,
                 rolePermissionRepository,
-                currentActorProvider
+                currentActorProvider,
+                accountActivityRepository
         );
     }
 
@@ -364,13 +391,15 @@ public class IamApplicationConfig {
             RoleRepository roleRepository,
             PermissionRepository permissionRepository,
             RolePermissionRepository rolePermissionRepository,
-            CurrentActorProvider currentActorProvider
+            CurrentActorProvider currentActorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
         return new RevokePermissionFromRoleService(
                 roleRepository,
                 permissionRepository,
                 rolePermissionRepository,
-                currentActorProvider
+                currentActorProvider,
+                accountActivityRepository
         );
     }
 
@@ -642,8 +671,11 @@ public class IamApplicationConfig {
 
     @Bean
     public AdminUseCases.UpdateSystemSettings updateSystemSettings(
-            SystemSettingsRepository systemSettingsRepository
+            SystemSettingsRepository systemSettingsRepository,
+            ClientAdminRepository clientAdminRepository
     ) {
-        return new SystemSettingsServices.Update(systemSettingsRepository);
+        return new SystemSettingsServices.Update(
+                systemSettingsRepository, clientAdminRepository
+        );
     }
 }

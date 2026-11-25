@@ -91,7 +91,40 @@ public class RecordLoginAttemptService implements RecordLoginAttemptUseCase {
                             command.userAgent(),
                             now
                     ));
+
+                    // Mirrored into the audit trail so administrators see sign-in
+                    // events next to the changes they make.
+                    ActivitySupport.record(
+                            accountActivityRepository,
+                            user.id(),
+                            command.successful()
+                                    ? ActivityType.LOGIN_SUCCEEDED
+                                    : ActivityType.LOGIN_FAILED,
+                            describe(command),
+                            identifier,
+                            command.ipAddress(),
+                            command.userAgent()
+                    );
                 });
+    }
+
+    private String describe(LoginAttemptCommand command) {
+        String outcome = command.successful() ? "Signed in" : "Failed sign-in";
+        String device = command.device();
+
+        if (command.browser() != null && !command.browser().isBlank()) {
+            device = device == null
+                    ? command.browser()
+                    : device + " · " + command.browser();
+        }
+
+        if (command.ipAddress() != null && !command.ipAddress().isBlank()) {
+            device = device == null
+                    ? command.ipAddress()
+                    : device + " from " + command.ipAddress();
+        }
+
+        return device == null ? outcome : outcome + " on " + device;
     }
 
     /**

@@ -1,6 +1,7 @@
 package kh.edu.istad.platform.iamapplicationservice.service.admin;
 
 import kh.edu.istad.platform.iamapplicationservice.command.admin.UpdateSystemSettingsCommand;
+import kh.edu.istad.platform.iamapplicationservice.port.out.ClientAdminRepository;
 import kh.edu.istad.platform.iamapplicationservice.port.out.SystemSettingsRepository;
 import kh.edu.istad.platform.iamapplicationservice.usecase.admin.AdminUseCases;
 
@@ -30,9 +31,14 @@ public final class SystemSettingsServices {
     public static final class Update implements AdminUseCases.UpdateSystemSettings {
 
         private final SystemSettingsRepository repository;
+        private final ClientAdminRepository clientAdminRepository;
 
-        public Update(SystemSettingsRepository repository) {
+        public Update(
+                SystemSettingsRepository repository,
+                ClientAdminRepository clientAdminRepository
+        ) {
             this.repository = repository;
+            this.clientAdminRepository = clientAdminRepository;
         }
 
         @Override
@@ -83,7 +89,54 @@ public final class SystemSettingsServices {
                                     : current.socialLoginEnabled()
                     );
 
-            return repository.save(next);
+            SystemSettingsRepository.SystemSettings saved = repository.save(next);
+
+            applyTokenLifetimes(saved);
+
+            return saved;
+        }
+
+        /**
+         * Token lifetimes are enforced by the authorization server per client, so the new
+         * policy is pushed onto every registered client; otherwise the setting would look
+         * saved while issued tokens kept the old lifetime.
+         */
+        private void applyTokenLifetimes(
+                SystemSettingsRepository.SystemSettings settings
+        ) {
+            if (clientAdminRepository == null) {
+                return;
+            }
+
+            long accessSeconds = settings.accessTokenTtlMinutes() * 60;
+            long refreshSeconds = settings.refreshTokenTtlDays() * 86_400;
+
+            for (ClientAdminRepository.ClientRecord client
+                    : clientAdminRepository.findAll()) {
+                Long currentAccess = client.accessTokenTtlSeconds();
+                Long currentRefresh = client.refreshTokenTtlSeconds();
+
+                if (currentAccess != null && currentAccess == accessSeconds
+                        && currentRefresh != null && currentRefresh == refreshSeconds) {
+                    continue;
+                }
+
+                clientAdminRepository.save(new ClientAdminRepository.ClientRecord(
+                        client.internalId(),
+                        client.clientId(),
+                        client.clientName(),
+                        client.authenticationMethods(),
+                        client.grantTypes(),
+                        client.redirectUris(),
+                        client.postLogoutRedirectUris(),
+                        client.scopes(),
+                        client.requireProofKey(),
+                        client.requireConsent(),
+                        accessSeconds,
+                        refreshSeconds,
+                        client.clientSecretHash()
+                ));
+            }
         }
 
         private static int positive(Integer value, int fallback, String field) {

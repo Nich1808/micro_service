@@ -187,7 +187,7 @@ class AdminServicesTest {
     @Test
     void updateAppliesOnlyTheProvidedFields() {
         FakeSettingsRepo repo = new FakeSettingsRepo();
-        SystemSettingsServices.Update service = new SystemSettingsServices.Update(repo);
+        SystemSettingsServices.Update service = new SystemSettingsServices.Update(repo, null);
 
         SystemSettingsRepository.SystemSettings updated = service.execute(
                 new UpdateSystemSettingsCommand(
@@ -206,7 +206,7 @@ class AdminServicesTest {
     @Test
     void negativeValuesAreRejected() {
         FakeSettingsRepo repo = new FakeSettingsRepo();
-        SystemSettingsServices.Update service = new SystemSettingsServices.Update(repo);
+        SystemSettingsServices.Update service = new SystemSettingsServices.Update(repo, null);
 
         assertThrows(IllegalArgumentException.class, () ->
                 service.execute(new UpdateSystemSettingsCommand(

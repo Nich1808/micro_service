@@ -17,7 +17,8 @@ public class AccountActivityEntity {
     @Column(nullable = false, unique = true, updatable = false)
     public UUID uuid;
 
-    @Column(name = "user_id", nullable = false)
+    /** Null for system-scoped events (role, permission, client or settings changes). */
+    @Column(name = "user_id")
     public Long userId;
 
     @Enumerated(EnumType.STRING)

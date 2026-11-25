@@ -1,11 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useI18n } from '../i18n';
 import { beginLogin } from '../lib/oidc';
 
+/**
+ * The dashboard has no sign-in form of its own: visitors are handed to the
+ * authorization server's login page. Signing in there sends the authorization
+ * code back to /callback, and the dashboard opens with a token.
+ */
 export function LoginPage() {
   const { t } = useI18n();
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
+  const started = useRef(false);
+
+  useEffect(() => {
+    if (started.current) {
+      return;
+    }
+
+    started.current = true;
+
+    beginLogin().catch(() => setFailed(true));
+  }, []);
+
+  const signIn = () => {
+    setFailed(false);
+    beginLogin().catch(() => setFailed(true));
+  };
 
   return (
     <main className="auth-stage">
@@ -25,31 +45,26 @@ export function LoginPage() {
           <p className="subtitle auth-panel__subtitle">{t('login.subtitle')}</p>
         </div>
 
-        {error ? (
-          <div className="alert alert--error" style={{ marginTop: 18 }}>
-            {error}
+        {failed ? (
+          <>
+            <div className="alert alert--error" style={{ marginTop: 18 }}>
+              {t('callback.error')}
+            </div>
+            <button
+              type="button"
+              className="btn auth-panel__submit"
+              style={{ marginTop: 26 }}
+              onClick={signIn}
+            >
+              {t('login.action')}
+            </button>
+          </>
+        ) : (
+          <div className="loading" style={{ marginTop: 26 }}>
+            <span className="spinner" />
+            {t('login.redirecting')}
           </div>
-        ) : null}
-
-        <button
-          type="button"
-          className="btn auth-panel__submit"
-          style={{ marginTop: 26 }}
-          disabled={busy}
-          onClick={async () => {
-            setBusy(true);
-            setError(null);
-
-            try {
-              await beginLogin();
-            } catch {
-              setError(t('callback.error'));
-              setBusy(false);
-            }
-          }}
-        >
-          {t('login.action')}
-        </button>
+        )}
       </section>
     </main>
   );

@@ -129,7 +129,7 @@ class IamUseCaseServicesTest {
         FakeUserPermissionRepository grants = new FakeUserPermissionRepository();
 
         GrantPermissionsToUserService service = new GrantPermissionsToUserService(
-                users, permissions, grants, actorProvider
+                users, permissions, grants, actorProvider, null
         );
 
         service.execute(new GrantPermissionsToUserCommand(
@@ -166,7 +166,7 @@ class IamUseCaseServicesTest {
         FakeUserPermissionRepository grants = new FakeUserPermissionRepository();
 
         GrantPermissionsToUserService service = new GrantPermissionsToUserService(
-                users, permissions, grants, actorProvider
+                users, permissions, grants, actorProvider, null
         );
 
         GrantPermissionsToUserCommand command = new GrantPermissionsToUserCommand(

@@ -1,12 +1,15 @@
 package kh.edu.istad.platform.iamapplicationservice.service.user;
 
 import kh.edu.istad.platform.iamapplicationservice.command.user.AssignRolesToUserCommand;
+import kh.edu.istad.platform.iamapplicationservice.port.out.AccountActivityRepository;
 import kh.edu.istad.platform.iamapplicationservice.port.out.CurrentActorProvider;
 import kh.edu.istad.platform.iamapplicationservice.port.out.RoleRepository;
 import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
 import kh.edu.istad.platform.iamapplicationservice.port.out.UserRoleRepository;
 import kh.edu.istad.platform.iamapplicationservice.result.user.RoleAssignmentResult;
+import kh.edu.istad.platform.iamapplicationservice.service.security.ActivitySupport;
 import kh.edu.istad.platform.iamapplicationservice.usecase.user.AssignRolesToUserUseCase;
+import kh.edu.istad.platform.iamdomaincore.enums.ActivityType;
 import kh.edu.istad.platform.iamdomaincore.model.Role;
 import kh.edu.istad.platform.iamdomaincore.model.User;
 import kh.edu.istad.platform.iamdomaincore.model.UserRole;
@@ -22,17 +25,20 @@ public class AssignRolesToUserService implements AssignRolesToUserUseCase {
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final CurrentActorProvider actorProvider;
+    private final AccountActivityRepository accountActivityRepository;
 
     public AssignRolesToUserService(
             UserRepository userRepository,
             RoleRepository roleRepository,
             UserRoleRepository userRoleRepository,
-            CurrentActorProvider actorProvider
+            CurrentActorProvider actorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.actorProvider = actorProvider;
+        this.accountActivityRepository = accountActivityRepository;
     }
 
     @Override
@@ -76,6 +82,13 @@ public class AssignRolesToUserService implements AssignRolesToUserUseCase {
                     null, null,
                     command.reason()
             ));
+
+            ActivitySupport.record(
+                    accountActivityRepository, user.id(),
+                    ActivityType.ROLE_ASSIGNED,
+                    "Role '" + role.name() + "' assigned to " + user.username(),
+                    actor
+            );
 
             results.add(new RoleAssignmentResult(
                     role.uuid(),

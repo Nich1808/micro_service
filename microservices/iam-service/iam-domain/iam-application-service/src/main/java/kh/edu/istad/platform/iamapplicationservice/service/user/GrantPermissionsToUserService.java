@@ -1,12 +1,15 @@
 package kh.edu.istad.platform.iamapplicationservice.service.user;
 
 import kh.edu.istad.platform.iamapplicationservice.command.user.GrantPermissionsToUserCommand;
+import kh.edu.istad.platform.iamapplicationservice.port.out.AccountActivityRepository;
 import kh.edu.istad.platform.iamapplicationservice.port.out.CurrentActorProvider;
 import kh.edu.istad.platform.iamapplicationservice.port.out.PermissionRepository;
 import kh.edu.istad.platform.iamapplicationservice.port.out.UserPermissionRepository;
 import kh.edu.istad.platform.iamapplicationservice.port.out.UserRepository;
 import kh.edu.istad.platform.iamapplicationservice.result.user.PermissionGrantResult;
+import kh.edu.istad.platform.iamapplicationservice.service.security.ActivitySupport;
 import kh.edu.istad.platform.iamapplicationservice.usecase.user.GrantPermissionsToUserUseCase;
+import kh.edu.istad.platform.iamdomaincore.enums.ActivityType;
 import kh.edu.istad.platform.iamdomaincore.enums.PermissionEffect;
 import kh.edu.istad.platform.iamdomaincore.model.Permission;
 import kh.edu.istad.platform.iamdomaincore.model.User;
@@ -24,17 +27,20 @@ public class GrantPermissionsToUserService implements GrantPermissionsToUserUseC
     private final PermissionRepository permissionRepository;
     private final UserPermissionRepository userPermissionRepository;
     private final CurrentActorProvider actorProvider;
+    private final AccountActivityRepository accountActivityRepository;
 
     public GrantPermissionsToUserService(
             UserRepository userRepository,
             PermissionRepository permissionRepository,
             UserPermissionRepository userPermissionRepository,
-            CurrentActorProvider actorProvider
+            CurrentActorProvider actorProvider,
+            AccountActivityRepository accountActivityRepository
     ) {
         this.userRepository = userRepository;
         this.permissionRepository = permissionRepository;
         this.userPermissionRepository = userPermissionRepository;
         this.actorProvider = actorProvider;
+        this.accountActivityRepository = accountActivityRepository;
     }
 
     @Override
@@ -90,6 +96,14 @@ public class GrantPermissionsToUserService implements GrantPermissionsToUserUseC
                     null, null,
                     command.reason()
             ));
+
+            ActivitySupport.record(
+                    accountActivityRepository, user.id(),
+                    ActivityType.PERMISSION_GRANTED,
+                    "Permission '" + permission.name() + "' " + saved.effect()
+                            + " for " + user.username(),
+                    actor
+            );
 
             results.add(new PermissionGrantResult(
                     permission.uuid(),

@@ -17,6 +17,18 @@ spring:
             client-secret: ${GOOGLE_CLIENT_SECRET}
             client-name: Google
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+          facebook:
+            provider: facebook
+            client-id: ${FACEBOOK_CLIENT_ID}
+            client-secret: ${FACEBOOK_CLIENT_SECRET}
+            client-name: Facebook
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+          telegram:
+            provider: google
+            client-id: ${TELEGRAM_CLIENT_ID}
+            client-secret: ${TELEGRAM_CLIENT_SECRET}
+            client-name: Telegram
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
 
 
       authorizationserver:
